@@ -1,0 +1,126 @@
+; ***************************************************************************************
+; ***************************************************************************************
+;
+;		Name : 		binary.words
+;		Author :	Paul Robson (paul@robsons.org.uk)
+;		Date : 		16th November 2018
+;		Purpose :	Binary operators
+;
+; ***************************************************************************************
+; ***************************************************************************************
+
+; @copies +
+		add 	hl,de
+; @end
+
+; ***************************************************************************************
+
+; @copies -
+		ld 		b,d
+		ld 		c,e
+		ex 		de,hl
+		xor 	a
+		sbc 	hl,de
+		ld 		d,b
+		ld 		e,c
+; @end
+
+; ***************************************************************************************
+
+; @word *
+		jp 		MULTMultiply16
+; @end
+
+; ***************************************************************************************
+
+; @word /
+		jp 		DIVDivide
+; @end
+
+; ***************************************************************************************
+
+; @word mod
+		jp 		DIVModulus
+; @end
+
+; ***************************************************************************************
+
+; @word and
+		ld 		a,h
+		and 	d
+		ld 		h,a
+		ld 		a,l
+		and 	e
+		ld 		l,a
+		ret
+; @end
+
+; ***************************************************************************************
+
+; @word xor
+		ld 		a,h
+		xor 		d
+		ld 		h,a
+		ld 		a,l
+		xor 	e
+		ld 		l,a
+		ret
+; @end
+
+; ***************************************************************************************
+
+; @word or
+		ld 		a,h
+		or 		d
+		ld 		h,a
+		ld 		a,l
+		or 		e
+		ld 		l,a
+		ret
+; @end
+
+
+; ***************************************************************************************
+
+; @word =
+		ld 		a,e
+		cp 		l
+		jr 		nz,__EqualFail
+		ld 		a,d
+		cp 		h
+		ld 		hl,$FFFF
+		ret 	z
+__EqualFail:
+		ld 		hl,0
+		ret
+
+; @end
+
+; ***************************************************************************************
+
+; @word < 	
+		ld 		a,d						; this is calculating true if B < A e.g. 4 7 < 
+		xor 	h 
+		add 	a,a 					; if the signs are different, check those.
+		jr 		c,__LessDifferentSigns
+
+		push 	de
+		ex 		de,hl 					; want to do B-A
+		sbc		hl,de 					; carry set if B-A < 0 e.g. B < A
+		pop 	de
+		jr 		c,__LessTrue
+
+__LessFalse:
+		ld 		hl,$0000
+		ret
+
+__LessDifferentSigns:
+		bit 	7,b 					; if B is +ve then B must be > A
+		jr 		z,__LessFalse
+
+__LessTrue:
+		ld 		hl,$FFFF
+		ret
+		
+; @end
+
