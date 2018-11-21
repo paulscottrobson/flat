@@ -83,7 +83,7 @@ __GFXWCExit:
 ; *********************************************************************************
 
 GFXWriteHexWord:
-		ld 		a,5
+		ld 		a,6 
 GFXWriteHexWordA:
 		push 	bc
 		push 	de

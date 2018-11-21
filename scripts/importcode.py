@@ -25,7 +25,7 @@ address = 0xC000
 #		Work through all the source
 #
 for f in sys.argv[1:]:
-	print("\tImporting file '{0}'".format(f))
+	start = address
 	src = [x if x.find("//") < 0 else x[:x.find("//")] for x in open(f).readlines()]
 	src = " ".join([x.replace("\t"," ").replace("\n"," ") for x in src])
 	src = [x for x in src.split(" ") if x != ""]
@@ -60,6 +60,7 @@ for f in sys.argv[1:]:
 		for c in xword:
 			image.write(page,address,ord(c))
 			address += 1
+	print("\tImported file '{0}' ${1:04x} to ${2:04x}".format(f,start,address-1))
 #		
 #		and write out
 #

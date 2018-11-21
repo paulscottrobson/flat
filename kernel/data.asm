@@ -22,7 +22,7 @@ SINextFreeCode: 									; +0 	Next Free Code Byte
 SINextFreeCodePage: 								; +4 	Next Free Code Byte Page
 		dw 		FirstCodePage,0
 SIBootCodeAddress:									; +8	Run from here
-		dw 		LOADBootstrap,0
+		dw 		StartSystem,0
 SIBootCodePage: 									; +12   Run page.
 		db		FirstCodePage,0,0,0
 SIPageUsage:										; +16 	Page Usage Table
@@ -46,9 +46,9 @@ PAGEStackPointer: 									; stack used for switching pages
 		dw 		0
 PAGEStackBase:
 		ds 		16
-ARegister:											; temp when doing things in the compiler.
+COMARegister:										; temp when doing things in the compiler.
 		dw 		0
-BRegister:
+COMBRegister:
 		dw 		0	
 ;
 ;			Display Information

@@ -23,23 +23,6 @@ en_flat_2b:
 
 ; ***************************************************************************************
 
-; =========== - copies ===========
-
-flatwordmarker_2d:
-    ld  b,en_flat_2d-st_flat_2d
-    call COMCopyFollowingCode
-st_flat_2d:
-  ld   b,d
-  ld   c,e
-  ex   de,hl
-  xor  a
-  sbc  hl,de
-  ld   d,b
-  ld   e,c
-en_flat_2d:
-
-; ***************************************************************************************
-
 ; =========== * word ===========
 
 flatwordmarker_2a:
@@ -47,26 +30,6 @@ flatwordmarker_2a:
 st_flat_2a:
   jp   MULTMultiply16
 en_flat_2a:
-
-; ***************************************************************************************
-
-; =========== / word ===========
-
-flatwordmarker_2f:
-    call COMCompileCallToFollowing
-st_flat_2f:
-  jp   DIVDivide
-en_flat_2f:
-
-; ***************************************************************************************
-
-; =========== mod word ===========
-
-flatwordmarker_6d_6f_64:
-    call COMCompileCallToFollowing
-st_flat_6d_6f_64:
-  jp   DIVModulus
-en_flat_6d_6f_64:
 
 ; ***************************************************************************************
 
@@ -484,11 +447,12 @@ en_flat_30_3c:
 
 ; ***************************************************************************************
 
-; =========== 0- word ===========
+; =========== - copies ===========
 
-flatwordmarker_30_2d:
-    call COMCompileCallToFollowing
-st_flat_30_2d:
+flatwordmarker_2d:
+    ld  b,en_flat_2d-st_flat_2d
+    call COMCopyFollowingCode
+st_flat_2d:
   ld  a,h
   cpl
   ld  h,a
@@ -496,8 +460,7 @@ st_flat_30_2d:
   cpl
   ld  l,a
   inc hl
-  ret
-en_flat_30_2d:
+en_flat_2d:
 
 ; ***************************************************************************************
 

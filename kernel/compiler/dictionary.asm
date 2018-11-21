@@ -35,6 +35,7 @@ __DICTAddGetLength:
 		call 	PAGESwitch
 
 		ld 		ix,$C000							; IX = Start of dictionary
+
 __DICTFindEndDictionary:
 		ld 		a,(ix+0) 							; follow down chain to the end
 		or 		a
@@ -43,6 +44,7 @@ __DICTFindEndDictionary:
 		ld 		d,0
 		add 	ix,de
 		jr 		__DICTFindEndDictionary
+
 __DICTCreateEntry:
 		ld 		a,b
 		add 	a,5
@@ -58,11 +60,12 @@ __DICTCreateEntry:
 		ld 		(ix+4),b 							; length (0..5)
 
 		ex 		de,hl 								; put name in DE
+		inc 	de 									; skip over tag.
 __DICTAddCopy:
 		ld 		a,(de) 								; copy byte over as 7 bit ASCII.
 		ld 		(ix+5),a
-		inc 	de
 		inc 	ix 									
+		inc 	de
 		djnz	__DICTAddCopy 						; until string is copied over.
 
 		ld 		(ix+5),0 							; write end of dictionary zero.
@@ -70,7 +73,7 @@ __DICTAddCopy:
 		call 	PAGERestore
 		pop 	ix 									; restore and exit
 		pop 	hl
-		pop 	de
+ 		pop 	de
 		pop 	bc
 		pop 	af
 		ret

@@ -12,6 +12,7 @@
 StackTop   = 	$7EF0 								; Top of stack
 EditBuffer = $7B08 									; 512 byte edit buffer (2 bytes either side)
 ErrorMessageBuffer = $7D10
+ExecuteCodeBuffer = $7D40 			
 
 DictionaryPage = $20 								; dictionary page
 BootstrapPage = $22 								; bootstrap page
@@ -40,7 +41,10 @@ Boot:	ld 		sp,(SIStack)						; reset Z80 Stack
 
 ErrorHandler: 										; arrive here with message in ASCII with bit 7 set following
 		jr 		ErrorHandler
-		
+
+StartSystem:
+		call 	LOADBootstrap
+		jp 		HaltZ80
 
 		include "support/paging.asm" 				; page switcher (not while executing)
 		include "support/farmemory.asm" 			; far memory routines
@@ -55,7 +59,9 @@ ErrorHandler: 										; arrive here with message in ASCII with bit 7 set follo
 		include "compiler/loader.asm"				; loads in bootstrap code
 		include "compiler/dictionary.asm"			; dictionary add/update routines.
 		include "compiler/utility.asm"				; utility functions
-		
+		include "compiler/constant.asm" 			; ASCII -> Int conversion
+		include "compiler/compiler.asm"				; actual compiler code.
+				
 		include "temp/__words.asm" 					; and the actual words
 
 AlternateFont:										; nicer font

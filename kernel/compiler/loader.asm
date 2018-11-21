@@ -51,13 +51,12 @@ __LOADBootLoop:
 		jr 		nz,__LOADBootLoop
 
 __LOADEnds:
-		di
-		halt
-		jr 		__LOADEnds
+		call 	PAGERestore 						; restore page
+		ret 										; and exit
 
 ; ********************************************************************************************************
 ;
-;									Process (compiling) the text at HL. 
+;									Process (compiling) the text at HL
 ; 
 ; ********************************************************************************************************
 
@@ -68,21 +67,19 @@ LOADScanBuffer:
 		push 	hl
 		push 	ix
 
+		ld 		b,h 								; HL -> BC
+		ld 		c,l
 __LOADScanLoop:
-		ld 		a,(hl) 								; look at tage
+		ld 		a,(bc) 								; look at tage
 		cp 		$FF 								; was it $FF ?
 		jr 		z,__LOADScanExit 					; if so, we are done.
 
-		db 		$DD,$01
-;		call	PROCESSWord
-		xor 	a
-
-		inc 	hl 									; skip tag to first character
-		jp 		c,ErrorHandler 						; report word as error if not done.
+		call 	COMCompileExecute 					; execute text at BC.
 
 __LOADNextWord: 									; look for the next bit 7 high.
-		inc 	hl
-		bit 	7,(hl)
+		inc 	bc 									; advance forward to next word.
+		ld 		a,(bc)
+		bit 	7,a
 		jr 		z,__LOADNextWord
 		jr 		__LOADScanLoop 
 
@@ -93,4 +90,3 @@ __LOADScanExit:
 		pop 	bc
 		pop 	af
 		ret
-

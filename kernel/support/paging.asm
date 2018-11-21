@@ -70,6 +70,7 @@ PAGERestore:
 		inc 	a
 		db 		$ED,$92,$57
 		dec 	a
+		ex 		af,af' 								; update A'
 		pop 	hl
 		pop 	af
 		ret
