@@ -34,8 +34,8 @@ COMCompileExecute:
 __COMCFail:
 	ld 		h,b 									; put "error message" (word) in BC
 	ld 		l,c
-	inc 	bc 										; skip over the tag
-	jp 		Errorhandler 							; and go error.
+	inc 	hl 										; skip over the tag
+	jp 		ErrorHandler 							; and go error.
 
 __COMCExitOkay:
 	pop 	hl

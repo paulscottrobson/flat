@@ -90,31 +90,16 @@ GFXPrintCharacter48k:
 ;
 ;		char# 32-127 to font address => DE
 ;
-		push 	hl
 		ld 		a,b 								; get character
-		and 	$7F 								; bits 0-6 only.
-		sub 	32
-		ld 		l,a 								; put in HL
-		ld 		h,0
-		add 	hl,hl 								; x 8
-		add 	hl,hl
-		add 	hl,hl
-		ld 		de,(DIFontBase) 					; add the font base.
-		add 	hl,de
-		ex 		de,hl 								; put in DE (font address)
-		pop 	hl
+		call 	GFXGetFontGraphicDE
 ;
 ;		copy font data to screen position.
 ;
 		ld 		a,b
 		ld 		b,8 								; copy 8 characters
 		ld 		c,0 								; XOR value 0
-		bit 	7,a 								; is the character reversed
-		jr 		z,__ZXWCCopy
-		dec 	c 									; C is the XOR mask now $FF
 __ZXWCCopy:
 		ld 		a,(de)								; get font data
-		xor 	c 									; xor with reverse
 		ld 		(hl),a 								; write back
 		inc 	h 									; bump pointers
 		inc 	de
@@ -125,3 +110,4 @@ __ZXWCExit:
 		pop 	bc
 		pop 	af
 		ret
+

@@ -89,13 +89,13 @@ __kr_exit:
 ;	$FEFE-$7FFE scan, bit 0-4, active low
 ;
 ;	8:Backspace 13:Return 20-23:Left Down Up Right 
-;	27:Break 32-95: Std ASCII
+;	27:Break 32-127: Std ASCII all L/C
 ;
 __kr_no_shift_table:
-		db 		0,  'Z','X','C','V',			'A','S','D','F','G'
-		db 		'Q','W','E','R','T',			'1','2','3','4','5'
-		db 		'0','9','8','7','6',			'P','O','I','U','Y'
-		db 		13, 'L','K','J','H',			' ', 0, 'M','N','B'
+		db 		0,  'z','x','c','v',			'a','s','d','f','g'
+		db 		'q','w','e','r','t',			'1','2','3','4','5'
+		db 		'0','9','8','7','6',			'p','o','i','u','y'
+		db 		13, 'l','k','j','h',			' ', 0, 'm','n','b'
 
 __kr_symbol_shift_table:
 		db 		 0, ':', 0,  '?','/',			'~','|','\','{','}'

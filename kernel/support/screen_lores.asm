@@ -55,10 +55,6 @@ GFXPrintCharacterLowRes:
 		push 	ix
 
 		ld 		b,e 								; save character in B
-		ld 		a,e
-		and 	$7F
-		cp 		32
-		jr 		c,__LPExit
 
 		add 	hl,hl
 		add 	hl,hl
@@ -70,29 +66,11 @@ GFXPrintCharacterLowRes:
 		and 	7
 		ld 		c,a 								; C is foreground
 
-		push 	hl
 		ld 		a,b 								; get char back
-		ld 		b,0 								; B = no flip colour.
-		bit 	7,a
-		jr 		z,__LowNotReverse 					; but 7 set, flip is $FF
-		dec 	b
-__LowNotReverse:
-		and 	$7F 								; offset from space
-		sub 	$20
-		ld 		l,a 								; put into HL
-		ld 		h,0
-		add 	hl,hl 								; x 8
-		add 	hl,hl
-		add 	hl,hl
-
-		push 	hl 									; transfer to IX
+		call 	GFXGetFontGraphicDE
+		push 	de
 		pop 	ix
 
-		push 	bc 									; add the font base to it.
-		ld 		bc,(DIFontBase)
-		add 	ix,bc
-		pop 	bc
-		pop 	hl
 		ex 		de,hl
 		ld 		a,e 								; put DE => HL
 		and 	192 								; these are part of Y
@@ -122,7 +100,6 @@ __LowOuter:
 		push 	hl 									; save start
 		ld 		d,8 								; do 8 columns
 		ld 		a,(ix+0) 							; get the bit pattern
-		xor 	b
 		inc 	ix
 __LowLoop:
 		ld 		(hl),0 								; background

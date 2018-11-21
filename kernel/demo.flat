@@ -3,15 +3,9 @@
 :test-compile 0< ;
 
 :main
-4618 333 
+1 screenmode
 
-0 40960 !
-11 40960 +!
- 257 40960 +!
-40960 @
-
-
-ab>r 65 hex! r>ab swap 70 hex!
+412 38 
 ;
 
 [main]

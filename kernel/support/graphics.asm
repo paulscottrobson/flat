@@ -120,3 +120,35 @@ __GFXWHDigit:
 		call 	GFXWriteCharacter
 		inc 	hl
 		ret
+
+; *********************************************************************************
+;
+;				For character A, put address of character in DE
+;
+; *********************************************************************************
+
+GFXGetFontGraphicDE:
+		push 	af
+		push 	hl
+		and 	$7F 								; bits 0-6 only.
+		sub 	32
+		ld 		l,a 								; put in HL
+		ld 		h,0
+		add 	hl,hl 								; x 8
+		add 	hl,hl
+		add 	hl,hl
+		ld 		de,(DIFontBase) 					; add the font base.
+		add 	hl,de
+		ex 		de,hl 								; put in DE (font address)
+
+		pop 	hl
+		pop 	af
+		cp 		$7F 								; map $7F to the prompt character
+		ret 	nz
+		ld 		de,__GFXPromptCharacter
+		ret
+
+__GFXPromptCharacter:
+		db 		$FC,$7E,$3F,$1F
+		db 		$1F,$3F,$7E,$FC
+

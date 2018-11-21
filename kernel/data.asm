@@ -50,6 +50,12 @@ COMARegister:										; temp when doing things in the compiler.
 		dw 		0
 COMBRegister:
 		dw 		0	
+
+		db 		$86 								; makes everything 'execute'
+CLIBuffer: 											; CLI Buffer
+		ds 		32
+CLILastKeyboardState:								; last state of keyboard
+		db 		0
 ;
 ;			Display Information
 ;
