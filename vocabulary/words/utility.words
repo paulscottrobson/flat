@@ -31,7 +31,7 @@ HaltZ80:
 ; ***************************************************************************************
 
 ; @word copy
-		call 	$8010 								; load work into BC
+		ld 		bc,(SIWord)
 		ld 		a,b 								; nothing to do.
 		or 		c
 		ret 	z
@@ -68,7 +68,7 @@ __copy2:
 ; ***************************************************************************************
 
 ; @word fill
-		call 	$8010 								; load work into BC
+		ld 		bc,(SIWord)
 		ld 		a,b 								; nothing to do.
 		or 		c
 		ret 	z

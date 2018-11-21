@@ -123,7 +123,7 @@ __LessFalse:
   ret
 
 __LessDifferentSigns:
-  bit  7,b      ; if B is +ve then B must be > A
+  bit  7,d      ; if B is +ve then B must be > A
   jr   z,__LessFalse
 
 __LessTrue:
@@ -613,7 +613,7 @@ en_flat_68_61_6c_74:
 flatwordmarker_63_6f_70_79:
     call COMCompileCallToFollowing
 st_flat_63_6f_70_79:
-  call  $8010         ; load work into BC
+  ld   bc,(SIWord)
   ld   a,b         ; nothing to do.
   or   c
   ret  z
@@ -654,7 +654,7 @@ en_flat_63_6f_70_79:
 flatwordmarker_66_69_6c_6c:
     call COMCompileCallToFollowing
 st_flat_66_69_6c_6c:
-  call  $8010         ; load work into BC
+  ld   bc,(SIWord)
   ld   a,b         ; nothing to do.
   or   c
   ret  z

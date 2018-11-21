@@ -91,7 +91,7 @@ __LessFalse:
 		ret
 
 __LessDifferentSigns:
-		bit 	7,b 					; if B is +ve then B must be > A
+		bit 	7,d 					; if B is +ve then B must be > A
 		jr 		z,__LessFalse
 
 __LessTrue:

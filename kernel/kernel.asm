@@ -31,7 +31,7 @@ Boot:	ld 		sp,(SIStack)						; reset Z80 Stack
 		di											; disable interrupts
 	
 		db 		$ED,$91,7,2							; set turbo port (7) to 2 (14Mhz speed)
-		ld 		l,1 								; set graphics mode 0 (48k Spectrum)
+		ld 		l,0 								; set graphics mode 0 (48k Spectrum)
 		call 	GFXMode
 
 		ld 		a,(SIBootCodePage) 					; get the page to start
@@ -39,12 +39,6 @@ Boot:	ld 		sp,(SIStack)						; reset Z80 Stack
 		ld 		hl,(SIBootCodeAddress) 				; get boot address
 		jp 		(hl) 								; and go there
 
-ErrorHandler: 										; arrive here with message in ASCII with bit 7 set following
-		jr 		ErrorHandler
-
-StartSystem:
-		call 	LOADBootstrap
-		jp 		HaltZ80
 
 		include "support/paging.asm" 				; page switcher (not while executing)
 		include "support/farmemory.asm" 			; far memory routines
@@ -55,6 +49,7 @@ StartSystem:
 		include "support/screen48k.asm"				; screen "drivers"
 		include "support/screen_layer2.asm"
 		include "support/screen_lores.asm"
+		include "support/commandline.asm"			; command line handler
 
 		include "compiler/loader.asm"				; loads in bootstrap code
 		include "compiler/dictionary.asm"			; dictionary add/update routines.

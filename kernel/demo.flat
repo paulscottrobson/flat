@@ -1,5 +1,18 @@
 // comment
-:test 1 + ; 
-:count 42 ;
-:main count test 68 hex! 4- 75 hex! ;
+
+:test-compile 0< ;
+
+:main
+4618 333 
+
+0 40960 !
+11 40960 +!
+ 257 40960 +!
+40960 @
+
+
+ab>r 65 hex! r>ab swap 70 hex!
+;
+
 [main]
+
