@@ -89,7 +89,7 @@ __LowNotReverse:
 		pop 	ix
 
 		push 	bc 									; add the font base to it.
-		ld 		bc,(SIFontBase)
+		ld 		bc,(DIFontBase)
 		add 	ix,bc
 		pop 	bc
 		pop 	hl

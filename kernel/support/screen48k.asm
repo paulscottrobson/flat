@@ -99,7 +99,7 @@ GFXPrintCharacter48k:
 		add 	hl,hl 								; x 8
 		add 	hl,hl
 		add 	hl,hl
-		ld 		de,(SIFontBase) 					; add the font base.
+		ld 		de,(DIFontBase) 					; add the font base.
 		add 	hl,de
 		ex 		de,hl 								; put in DE (font address)
 		pop 	hl

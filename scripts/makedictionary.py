@@ -14,7 +14,7 @@ from labels import *
 
 print("Importing core words into dictionary.")
 image = imagelib.FlatColorForthImage()
-labels = LabelExtractor("kernel.lst").getLabels()
+labels = LabelExtractor("boot.img.vice").getLabels()
 count = 0
 keys = [x for x in labels.keys() if x[:14] == "flatwordmarker"]
 keys.sort(key = lambda x:labels[x])

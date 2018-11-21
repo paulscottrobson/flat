@@ -105,7 +105,7 @@ __L2NotCursor:
 		pop 	hl
 
 		push 	bc 									; add the font base to it.
-		ld 		bc,(SIFontBase)
+		ld 		bc,(DIFontBase)
 		add 	ix,bc
 		pop 	bc
 		;

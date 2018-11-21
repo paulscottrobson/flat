@@ -43,7 +43,6 @@ __DICTFindEndDictionary:
 		ld 		d,0
 		add 	ix,de
 		jr 		__DICTFindEndDictionary
-
 __DICTCreateEntry:
 		ld 		a,b
 		add 	a,5
@@ -52,6 +51,7 @@ __DICTCreateEntry:
 		ld 		a,(SINextFreeCodePage)				; code page
 		ld 		(ix+1),a
 		ld 		de,(SINextFreeCode)					; code address
+		ld 		(SICurrentDefinition),de 			; save it as current definition.
 		ld 		(ix+2),e
 		ld 		(ix+3),d 
 

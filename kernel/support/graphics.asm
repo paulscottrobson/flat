@@ -36,17 +36,17 @@ __GFXLowRes:
 
 __GFXConfigure:
 		ld 		a,l 								; save screen size
-		ld 		(SIScreenWidth),a
+		ld 		(DIScreenWidth),a
 		ld 		a,h
-		ld 		(SIScreenHeight),a
+		ld 		(DIScreenHeight),a
 		ex 		de,hl 								; save driver
-		ld 		(SIScreenDriver),hl
+		ld 		(DIScreenDriver),hl
 
 		ld 		l,d 								; put sizes in HL DE
 		ld 		h,0
 		ld 		d,0
 		call 	MULTMultiply16 						; multiply to get size and store.
-		ld 		(SIScreenSize),hl
+		ld 		(DIScreenSize),hl
 
 		pop 	hl
 		pop 	de
@@ -66,7 +66,7 @@ GFXWriteCharacter:
 		push 	hl
 		ld 		bc,__GFXWCExit
 		push 	bc
-		ld 		bc,(SIScreenDriver)
+		ld 		bc,(DIScreenDriver)
 		push 	bc
 		ret
 __GFXWCExit:

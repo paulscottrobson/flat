@@ -34,10 +34,7 @@ for f in sys.argv[1:]:
 		#	For each word, look at it to see if is defining (x2), or execute
 		#
 		colour = 0x84 									# Green
-		if (word+"  ")[:2] == "::": 					# Cyan
-			colour = 0x85
-			word = word[2:]
-		elif word[0] == ":":							# Red
+		if word[0] == ":":								# Red
 			colour = 0x82
 			word = word[1:]
 		elif word[0] == "[" and word[-1] == "]" and len(word) > 2: # Yellow

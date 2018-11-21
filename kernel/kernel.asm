@@ -17,6 +17,7 @@ DictionaryPage = $20 								; dictionary page
 BootstrapPage = $22 								; bootstrap page
 FirstCodePage = $24 								; first page of actual code.
 
+		opt 	zxnextreg
 		org 	$8000 								; $8000 boot.
 		jr 		Boot
 		org 	$8004 								; $8004 address of sysinfo
@@ -40,9 +41,6 @@ Boot:	ld 		sp,(SIStack)						; reset Z80 Stack
 ErrorHandler: 										; arrive here with message in ASCII with bit 7 set following
 		jr 		ErrorHandler
 		
-COMCopyFollowingCode:
-COMCompileCallToFollowing:
-		ret
 
 		include "support/paging.asm" 				; page switcher (not while executing)
 		include "support/farmemory.asm" 			; far memory routines
@@ -56,7 +54,8 @@ COMCompileCallToFollowing:
 
 		include "compiler/loader.asm"				; loads in bootstrap code
 		include "compiler/dictionary.asm"			; dictionary add/update routines.
-
+		include "compiler/utility.asm"				; utility functions
+		
 		include "temp/__words.asm" 					; and the actual words
 
 AlternateFont:										; nicer font

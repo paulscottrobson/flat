@@ -27,20 +27,14 @@ SIBootCodePage: 									; +12   Run page.
 		db		FirstCodePage,0,0,0
 SIPageUsage:										; +16 	Page Usage Table
 		dw 		PageUsage,0 			
-SIStack:											; +20 	Initial Z80 stack value
-		dw 		StackTop,0							
-SIScreenWidth:										; +24 	Screen Width
-		dw 		0,0
-SIScreenHeight:										; +28 	Screen Height
-		dw 		0,0
-SIScreenSize: 										; +32   Screen Size in Characters
-		dw 		0,0
-SIScreenDriver:										; +36 	Screen Driver
-		dw 		0,0 								
-SIFontBase:											; +40 	768 byte font, begins with space
-		dw 		AlternateFont,0 							
-SIWord:												; +44 	Work word, used in fill/copy/etc
+SIWord:												; +20 	Work word, used in fill/copy/etc
 		dw 		0,0 			
+SIDisplayInformation:								; +24 	Display Information structure address
+		dw 		DIScreenWidth,0
+SICurrentDefinition:								; +28 	Current definition start address.
+		dw 		0,0 								
+SIStack:											; +32 	Initial Z80 stack value
+		dw 		StackTop,0							
 		
 ; ***************************************************************************************
 ;
@@ -56,7 +50,22 @@ ARegister:											; temp when doing things in the compiler.
 		dw 		0
 BRegister:
 		dw 		0	
-		
+;
+;			Display Information
+;
+DIScreenWidth:										; +0 	Screen Width
+		dw 		0,0
+DIScreenHeight:										; +4 	Screen Height
+		dw 		0,0
+DIScreenSize: 										; +8    Screen Size in Characters
+		dw 		0,0
+DIScreenDriver:										; +12 	Screen Driver
+		dw 		0,0 								
+DIFontBase:											; +16 	768 byte font, begins with space
+		dw 		AlternateFont,0 							
+;
+;			Page usage table.
+;
 PageUsage:
 		db 		1									; $20 (dictionary) [1 = system]
 		db 		1 									; $22 (bootstrap)  [2 = code]
