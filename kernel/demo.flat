@@ -1,9 +1,9 @@
 // comment
 
-:test-compile 0< ;
+:test-compile 42 "he_llo ;
 
 :main
-1 screenmode
+1 screen.mode
 
 412 38 
 ;

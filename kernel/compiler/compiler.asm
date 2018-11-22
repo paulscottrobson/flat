@@ -73,9 +73,47 @@ COMCompileWord:
 	jp 		nc,COMExecuteEHLInContext 				; if found, execute it to compile it.
 	ld 		h,b 									; put the word address in HL
 	ld 		l,c
+	inc 	hl 										; string constant ?
+	ld 		a,(hl)
+	dec 	hl
+	cp 		'"'
+	jr 		z,__COMCWStringConstant
 	call 	CONSTConvert 							; does it convert ?
 	jr 		c,__COMCFail 							; if not, fail.
 	call 	COMCompileLoadConstant 					; compile the code to put the value in
+	ret 											; and return.
+
+__COMCWStringConstant:
+	inc 	hl 										; skip over the tag
+	push 	hl 										; save string start
+	ld 		e,-1 									; calculate length, includes the " hence -1
+__COMCWLength:
+	inc 	e
+	inc 	hl
+	bit 	7,(hl)
+	jr 		z,__COMCWLength 
+	ld 		a,$18 									; compile JR length+1
+	call 	FARCompileByte
+	ld 		a,e 									; length + 1 (for ASCIIZ)
+	inc 	a
+	call 	FARCompileByte
+
+	ld 		hl,(SINextFreeCode) 					; HL = Next Free
+	ex 		(sp),hl 								; push on stack, swap with string start.
+__COMCWString:
+	inc 	hl 										; compile string
+	ld 		a,(hl)
+	cp 		'_'										; convert underscore to space
+	jr 		nz,__COMCWNotSpace
+	ld 		a,' '
+__COMCWNotSpace:	
+	call 	FARCompileByte
+	dec 	e
+	jr 		nz,__COMCWString
+	xor 	a 										; ASCIIZ terminator
+	call 	FARCompileByte
+	pop 	hl 										; get address of string
+	call 	COMCompileLoadConstant 					; compile the code to put the address in as a constant
 	ret 											; and return.
 
 ; =======================================================================================

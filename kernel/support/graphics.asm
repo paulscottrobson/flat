@@ -11,6 +11,20 @@
 
 ; *********************************************************************************
 ;
+;									Clear screen
+;
+; *********************************************************************************
+
+GFXClearScreen:
+		push 	hl 									; clear screen by reinitialising
+		ld 		a,(DIScreenMode)
+		ld 		l,a
+		call 	GFXMode
+		pop 	hl
+		ret
+
+; *********************************************************************************
+;
 ;								Set Graphics Mode to L
 ;
 ; *********************************************************************************
@@ -19,6 +33,8 @@ GFXMode:
 		push 	bc
 		push 	de
 		push 	hl
+		ld 		a,l 								; save current mode
+		ld 		(DIScreenMode),a
 		dec 	l 									; L = 1 mode layer2
 		jr 		z,__GFXLayer2
 		dec 	l

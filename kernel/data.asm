@@ -69,6 +69,8 @@ DIScreenDriver:										; +12 	Screen Driver
 		dw 		0,0 								
 DIFontBase:											; +16 	768 byte font, begins with space
 		dw 		AlternateFont,0 							
+DIScreenMode:										; +20 	Current Mode
+		dw 		0,0
 ;
 ;			Page usage table.
 ;

@@ -1,5 +1,4 @@
 TODO:
-	Finish Command Line.
-	Add string constants (compiler only)
 	Fix compiler so won't execute ; and other protected words (?)
+	Import libraries
 	Write editor.

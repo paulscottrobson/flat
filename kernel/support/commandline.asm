@@ -17,6 +17,7 @@
 
 StartSystem:
 		call 	LOADBootstrap						; boot up
+		call 	GFXClearScreen 						; clear the screen
 		ld 		hl,SystemIntroMessage
 ;
 ;					Come here with message to be shown in HL
@@ -46,7 +47,8 @@ __CLIDisplayMessage:
 		ld 		a,(bc)
 		ld 		e,a
 		add 	a,a
-		jr 		c,__CLIDisplayAB
+		jr 		c,__CLIDisplayAB 					; bit 7 set
+		jr 		z,__CLIDisplayAB 					; or zero
 		ld 		d,2
 		call 	GFXWriteCharacter
 		inc 	hl
@@ -79,6 +81,8 @@ __CLILoop:
 		ld 		de,$047F 							; write the cursor out
 		call 	GFXWriteCharacter 					
 		call 	CLIGetKey 							; key get
+		cp 		8
+		jr 		z,__CLIBackspace
 		cp 		13
 		jr		z,__CLIExecuteWord
 		cp 		32 									; execute on space or return
@@ -95,6 +99,16 @@ __CLILoop:
 		jr 		z,__CLIEnterCommandLine
 		inc 	hl 									; go round again with one extra character
 		inc 	ix
+		jr 		__CLILoop
+;
+__CLIBackspace:
+		ld 		a,l 								; at start ?
+		and 	$3F
+		jr 		z,__CLILoop
+		ld 		de,$0120 							; clear current
+		call 	GFXWriteCharacter
+		dec 	hl 									; back one
+		dec 	ix
 		jr 		__CLILoop
 ;
 ;		Execute word in buffer

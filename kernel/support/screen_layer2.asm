@@ -31,9 +31,10 @@ L2PClear:
 		ld 		bc,$123B 							; out to layer 2 port
 		out 	(c),a
 		ld 		hl,$4000 							; erase the bank to $00 
+		ld 		d,l 								; D = 0, slightly quicker.
 L2PClearBank: 										; assume default palette :)
 		dec 	hl
-		ld 		(hl),$00
+		ld 		(hl),d
 		ld 		a,h
 		or 		l
 		jr		nz,L2PClearBank
