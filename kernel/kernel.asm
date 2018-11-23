@@ -38,6 +38,8 @@ Boot:	ld 		sp,(SIStack)						; reset Z80 Stack
 		ld 		hl,(SIBootCodeAddress) 				; get boot address
 		jp 		(hl) 								; and go there
 
+ErrorHandler:
+		jr 		ErrorHandler
 
 		include "support/paging.asm" 				; page switcher (not while executing)
 		include "support/farmemory.asm" 			; far memory routines
@@ -48,7 +50,6 @@ Boot:	ld 		sp,(SIStack)						; reset Z80 Stack
 		include "support/screen48k.asm"				; screen "drivers"
 		include "support/screen_layer2.asm"
 		include "support/screen_lores.asm"
-		include "support/commandline.asm"			; command line handler
 
 		include "compiler/loader.asm"				; loads in bootstrap code
 		include "compiler/dictionary.asm"			; dictionary add/update routines.

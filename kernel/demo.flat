@@ -1,12 +1,10 @@
 // comment
 
-:test-compile 42 "he_llo ;
+:test-compile 100 200 ;
+::test-2 ab>r 184 c, r>ab ; test-compile test-2 ;
 
-:main
-1 screen.mode
+[32766] [2] [hex!] [halt]
 
-412 38 
-;
 
-[main]
+
 

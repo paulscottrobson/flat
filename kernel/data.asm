@@ -22,7 +22,7 @@ SINextFreeCode: 									; +0 	Next Free Code Byte
 SINextFreeCodePage: 								; +4 	Next Free Code Byte Page
 		dw 		FirstCodePage,0
 SIBootCodeAddress:									; +8	Run from here
-		dw 		StartSystem,0
+		dw 		LOADBootstrap,0
 SIBootCodePage: 									; +12   Run page.
 		db		FirstCodePage,0,0,0
 SIPageUsage:										; +16 	Page Usage Table
@@ -31,9 +31,7 @@ SIWord:												; +20 	Work word, used in fill/copy/etc
 		dw 		0,0 			
 SIDisplayInformation:								; +24 	Display Information structure address
 		dw 		DIScreenWidth,0
-SICurrentDefinition:								; +28 	Current definition start address.
-		dw 		0,0 								
-SIStack:											; +32 	Initial Z80 stack value
+SIStack:											; +28 	Initial Z80 stack value
 		dw 		StackTop,0							
 		
 ; ***************************************************************************************

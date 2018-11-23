@@ -11,7 +11,7 @@
 
 ; ***********************************************************************************************
 ;
-;		Add Dictionary Word. Name is string at HL ends in $80-$FF, uses the current page/pointer
+;		Add Dictionary Word. Name is string at BC ends in $80-$FF, uses the current page/pointer
 ;		values. 
 ;
 ; ***********************************************************************************************
@@ -22,6 +22,8 @@ DICTAddWord:
 		push 	de
 		push	hl
 		push 	ix
+		ld 		h,b 								; put name in HL
+		ld 		l,c
 		push 	hl 									
 		ld 		b,-1								; put length of string in B
 __DICTAddGetLength:
@@ -53,11 +55,10 @@ __DICTCreateEntry:
 		ld 		a,(SINextFreeCodePage)				; code page
 		ld 		(ix+1),a
 		ld 		de,(SINextFreeCode)					; code address
-		ld 		(SICurrentDefinition),de 			; save it as current definition.
 		ld 		(ix+2),e
 		ld 		(ix+3),d 
 
-		ld 		(ix+4),b 							; length (0..5)
+		ld 		(ix+4),b 							; length (0..4)
 
 		ex 		de,hl 								; put name in DE
 		inc 	de 									; skip over tag.
@@ -80,7 +81,7 @@ __DICTAddCopy:
 
 ; ***********************************************************************************************
 ;
-;			Find word in dictionary. HL points to name.
+;			Find word in dictionary. BC points to name.
 ;			On exit, HL is the address and E the page number with CC if found, 
 ;			CS set and HL=DE=0 if not found.
 ;
@@ -90,6 +91,9 @@ DICTFindWord:
 		push 	bc 								; save registers - return in EHL Carry
 		push 	ix
 
+		ld 		h,b 							; name in HL
+		ld 		l,c
+		
 		ld 		a,DictionaryPage 				; switch to dictionary page
 		call 	PAGESwitch
 
@@ -103,7 +107,7 @@ __DICTFindMainLoop:
 		push 	hl 
 
 		ld 		a,(ix+4) 						; characters to compare
-		and 	$3F
+		and 	$1F
 		ld 		b,a
 		inc 	hl 								; skip over tag
 __DICTCheckName:

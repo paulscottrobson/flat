@@ -18,11 +18,12 @@
 
 COMCompileExecute:
 	push 	bc
-	push 	de
-	push 	hl
+	push 	ix
 
 	ld 		a,(bc) 									; look at the tag
-	cp 		$82 									; $82 = red word (definition)
+	cp 		$82 									; $82 = red word (definition + header)
+	jr 		z,__COMCDefine
+	cp 		$83 									; $83 = magenta word (definition only)
 	jr 		z,__COMCDefine
 	cp 		$84 									; $84 = green word (compilation)
 	jr 		z,__COMCCompile
@@ -38,21 +39,33 @@ __COMCFail:
 	jp 		ErrorHandler 							; and go error.
 
 __COMCExitOkay:
-	pop 	hl
-	pop 	de
+	pop 	ix
 	pop 	bc
 	ret
 
 ; =======================================================================================
 ;
-;					Red define. Add the word to the dictionary at HERE.
-;				
+;			Red define. Add the word to the dictionary at HERE and do the prefix
+;					Magenta define. Add the word to HERE only.
+;
 ; =======================================================================================
 
 __COMCDefine:
-	ld 		h,b
+	push 	de 										; save A + B current values.
+	push 	hl
+	ld 		h,b 									; add the word to the dictionary.
 	ld 		l,c
 	call 	DICTAddWord
+	ld 		a,(bc) 									; re-check the tag
+	cp 		$83
+	jr 		z,__COMCDefineNoHeader 					; if it is $83 Magenta then no header.
+	ld 		a,$CD 									; CALL opcode
+	call 	FARCompileByte
+	ld 		hl,COMCompileCallToFollowing 			; address of self-compiling routine.
+	call 	FARCompileWord
+__COMCDefineNoHeader:
+	pop 	hl 										; restore A + B current values
+	pop 	de
 	jp 		__COMCExitOkay
 
 ; =======================================================================================
@@ -67,54 +80,40 @@ __COMCCompile:
 	jp 		__COMCExitOkay
 
 COMCompileWord:
-	ld 		h,b 									; put the word address in HL
-	ld 		l,c
+	push 	de 										; A and B are not changed.
+	push 	hl 
 	call 	DICTFindWord 							; find the word ?
-	jp 		nc,COMExecuteEHLInContext 				; if found, execute it to compile it.
-	ld 		h,b 									; put the word address in HL
-	ld 		l,c
-	inc 	hl 										; string constant ?
-	ld 		a,(hl)
-	dec 	hl
-	cp 		'"'
-	jr 		z,__COMCWStringConstant
-	call 	CONSTConvert 							; does it convert ?
+	jr 		nc,__COMCWExecute 						; create the code to execute this word.
+	call 	CONSTConvert 							; does it convert to a number ?
 	jr 		c,__COMCFail 							; if not, fail.
-	call 	COMCompileLoadConstant 					; compile the code to put the value in
-	ret 											; and return.
+;
+;		This code compiles the code to load in as a constant
+;
+__COMCWConstant:
+	ld 		a,$EB 									; compile EX DE,HL
+	call 	FARCompileByte
+	ld 		a,$21 									; compile LD HL,xxxxx
+	call 	FARCompileByte
+	call 	FARCompileWord 							; compile address
+	pop 	hl 											
+	pop 	de
+	ret
+;
+;		This code compiles the code to call the word by .... calling the word.
+;
+__COMCWExecute:
+	ld 		a,e 									; switch to the page
+	call 	PAGESwitch
+	push 	hl 										; put execution address in IX.
+	pop 	ix
+	pop 	hl 										; restore registers
+	pop 	de
+	call 	__COMCWCallIX 							; call (ix)
+	call 	PAGERestore 							; restore the page
+	ret
 
-__COMCWStringConstant:
-	inc 	hl 										; skip over the tag
-	push 	hl 										; save string start
-	ld 		e,-1 									; calculate length, includes the " hence -1
-__COMCWLength:
-	inc 	e
-	inc 	hl
-	bit 	7,(hl)
-	jr 		z,__COMCWLength 
-	ld 		a,$18 									; compile JR length+1
-	call 	FARCompileByte
-	ld 		a,e 									; length + 1 (for ASCIIZ)
-	inc 	a
-	call 	FARCompileByte
-
-	ld 		hl,(SINextFreeCode) 					; HL = Next Free
-	ex 		(sp),hl 								; push on stack, swap with string start.
-__COMCWString:
-	inc 	hl 										; compile string
-	ld 		a,(hl)
-	cp 		'_'										; convert underscore to space
-	jr 		nz,__COMCWNotSpace
-	ld 		a,' '
-__COMCWNotSpace:	
-	call 	FARCompileByte
-	dec 	e
-	jr 		nz,__COMCWString
-	xor 	a 										; ASCIIZ terminator
-	call 	FARCompileByte
-	pop 	hl 										; get address of string
-	call 	COMCompileLoadConstant 					; compile the code to put the address in as a constant
-	ret 											; and return.
+__COMCWCallIX:
+	jp 		(ix)
 
 ; =======================================================================================
 ;
@@ -124,6 +123,10 @@ __COMCWNotSpace:
 ; =======================================================================================
 
 __COMCExecute:
+	db 		$DD,$01
+	push 	de 										; save A and B
+	push 	hl 
+
 	ld 		hl,(SINextFreeCode) 					; save the next free code
 	push 	hl
 	ld 		hl,ExecuteCodeBuffer 					; point here the execute code buffer
@@ -136,11 +139,8 @@ __COMCExecute:
 	pop 	hl 										; restore the next free code
 	ld 		(SINextFreeCode),hl
 
-	ld 		de,(COMBRegister) 						; load registers we saved when entering Compiler
-	ld 		hl,(COMARegister) 	
+	pop 	hl 										; restore A + B
+	pop 	de  
 	call 	ExecuteCodeBuffer 						; execute the code buffer.
-	ld 		(COMARegister),hl 						; put registers back
-	ld 		(COMBRegister),de
-
 	jp 		__COMCExitOkay
 
