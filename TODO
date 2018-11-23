@@ -1,4 +1,5 @@
 TODO:
+	Re-entrant compilation block. Not allowed !
 	Variables
 	Structures 
 	Import libraries

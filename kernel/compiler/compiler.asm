@@ -79,6 +79,12 @@ __COMCCompile:
 	call 	COMCompileWord 							; call the word which does the compiling
 	jp 		__COMCExitOkay
 
+; =======================================================================================
+;
+;				Compile the code at [HERE] to do the job of the word.
+;		
+; =======================================================================================
+
 COMCompileWord:
 	push 	de 										; A and B are not changed.
 	push 	hl 
@@ -123,7 +129,6 @@ __COMCWCallIX:
 ; =======================================================================================
 
 __COMCExecute:
-	db 		$DD,$01
 	push 	de 										; save A and B
 	push 	hl 
 
