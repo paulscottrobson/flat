@@ -9,22 +9,19 @@
 ; ***************************************************************************************
 ; ***************************************************************************************
 
-StackTop   = 	$7EF0 								; Top of stack
-EditBuffer = $7B08 									; 512 byte edit buffer (2 bytes either side)
-ErrorMessageBuffer = $7D10
-ExecuteCodeBuffer = $7D40 			
 
 DictionaryPage = $20 								; dictionary page
-BootstrapPage = $22 								; bootstrap page
-FirstCodePage = $24 								; first page of actual code.
+SourceFirstPage = $22 								; bootstrap page
+SourcePages = 64
+FirstCodePage = SourceFirstPage + SourcePages/16	; first page of actual code.
+
+EditBuffer = $7B08 									; $7B00-$7D20 512 byte edit buffer
+StackTop = $7EFC 									;      -$7EFC Top of stack
 
 		org 	$8000 								; $8000 boot.
 		jr 		Boot
 		org 	$8004 								; $8004 address of sysinfo
 		dw 		SystemInformationTable
-		org 	$8010								; $8010 loads word into BC
-		ld 		bc,(SIWord)
-		ret
 
 Boot:	ld 		sp,(SIStack)						; reset Z80 Stack
 		di											; disable interrupts
@@ -51,8 +48,8 @@ ErrorHandler:
 		include "support/screen_layer2.asm"
 		include "support/screen_lores.asm"
 
-		include "compiler/loader.asm"				; loads in bootstrap code
 		include "compiler/dictionary.asm"			; dictionary add/update routines.
+		include "compiler/buffer.asm"				; buffer routines.
 		include "compiler/utility.asm"				; utility functions
 		include "compiler/constant.asm" 			; ASCII -> Int conversion
 		include "compiler/compiler.asm"				; actual compiler code.

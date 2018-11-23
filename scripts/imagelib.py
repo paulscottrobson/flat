@@ -16,9 +16,6 @@ class FlatColorForthImage(object):
 		self.image = [x for x in h.read(-1)]
 		h.close()
 		self.sysInfo = self.read(0,0x8004)+self.read(0,0x8005)*256
-		self.pageTable = self.read(0,self.sysInfo+16)+self.read(0,self.sysInfo+17)*256
-		self.wordDictionary = {}
-		self.macroDictionary = {}
 		self.currentPage = 	self.read(0,self.sysInfo+4)
 		self.currentAddress = self.read(0,self.sysInfo+0)+self.read(0,self.sysInfo+1)*256
 		self.echo = True
@@ -35,8 +32,8 @@ class FlatColorForthImage(object):
 	#
 	#		Return bootstrapping page
 	#
-	def bootstrapPage(self):
-		return 0x22
+	def sourcePageInfo(self):
+		return [0x22,64]
 	#
 	#		Return current page and address for next free code.
 	#
@@ -66,10 +63,6 @@ class FlatColorForthImage(object):
 		self.expandImage(page,address)
 		assert data >= 0 and data < 256
 		self.image[self.address(page,address)] = data
-		if page >= 0x20:
-			pageTableEntry = self.pageTable + ((page - 0x20) >> 1)
-			if self.read(0,pageTableEntry) == 0:
-				self.write(0,pageTableEntry,dataType)
 	#
 	#		Compile byte
 	#

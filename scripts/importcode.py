@@ -15,11 +15,12 @@ from imagelib import *
 #		Initialise
 #
 image = FlatColorForthImage()
-page = image.bootstrapPage()
+page = image.sourcePageInfo()[0]
 print("Importing into bootstrap page ${0:02x}".format(page))
 paging = 512
-for i in range(0,0x4000):
-	image.write(page,0xC000+i,0xFF)
+for p in range(0,image.sourcePageInfo()[1] >> 5):
+	for i in range(0,0x4000):
+		image.write(page+p,0xC000+i,0xFF)
 address = 0xC000
 #
 #		Work through all the source

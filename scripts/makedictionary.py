@@ -14,6 +14,7 @@ from labels import *
 
 print("Importing core words into dictionary.")
 image = imagelib.FlatColorForthImage()
+print(image.getCodePage())
 labels = LabelExtractor("kernel.lst").getLabels()
 count = 0
 keys = [x for x in labels.keys() if x[:14] == "flatwordmarker"]
