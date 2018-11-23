@@ -1,4 +1,7 @@
 TODO:
-	Fix compiler so won't execute ; and other protected words (?)
+	Variables
+	Structures 
 	Import libraries
+	Command Line.
 	Write editor.
+	Paging.

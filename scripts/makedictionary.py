@@ -26,4 +26,3 @@ for label in keys:
 	count += 1
 image.save()
 print("\tImported {0} words.".format(count))
-

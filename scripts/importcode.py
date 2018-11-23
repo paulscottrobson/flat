@@ -33,11 +33,15 @@ for f in sys.argv[1:]:
 		#
 		#	For each word, look at it to see if is defining (x2), or execute
 		#
-		colour = 0x84 									# Green
-		if word[0] == ":":								# Red
+		colour = 0x84 									# Green (compile)
+
+		if (word+"  ")[:2] == "::":						# Magenta (define only)
+			colour = 0x83
+			word = word[2:]
+		elif word[0] == ":":							# Red (define and compile header)
 			colour = 0x82
 			word = word[1:]
-		elif word[0] == "[" and word[-1] == "]" and len(word) > 2: # Yellow
+		elif word[0] == "[" and word[-1] == "]": 		# Yellow (execute)
 			colour = 0x86
 			word = word[1:-1]
 		#
@@ -45,6 +49,7 @@ for f in sys.argv[1:]:
 		#
 		if word[0] != '"' or word[-1] != "":			
 			word = word.lower()
+
 		#print("{0:02x} {1}".format(colour,word))
 		#
 		#	Make the final word and check it fits.
