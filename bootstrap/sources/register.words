@@ -1,0 +1,80 @@
+// ***************************************************************************************
+// ***************************************************************************************
+//
+//		Name : 		register.words
+//		Author :	Paul Robson (paul@robsons.org.uk)
+//		Date : 		3rd December 2018
+//		Purpose :	Source code for bootstrap : Register manipulation
+//
+// ***************************************************************************************
+// ***************************************************************************************
+
+@macro 	b>a
+		ld 		h,d
+		ld 		l,e
+
+@macro 	c>a
+		ld 		h,b
+		ld 		l,c
+
+@macro 	a>b
+		ld 		d,h
+		ld 		e,l
+
+@macro 	c>b
+		ld 		d,b
+		ld 		e,c
+
+@macro 	a>c
+		ld 		b,h
+		ld 		c,l
+
+@macro 	b>c
+		ld 		b,d
+		ld 		c,e
+
+// =======================================================================================
+
+@macro 	a>r
+		push 	hl
+
+@macro 	b>r
+		push 	de
+		
+@macro 	c>r
+		push 	bc
+		
+@macro 	ab>r
+		push 	de
+		push 	hl
+		
+@macro 	abc>r
+		push 	bc
+		push 	de
+		push 	hl
+		
+// =======================================================================================
+
+@macro 	r>a
+		pop 	hl
+
+@macro 	r>b
+		pop 	de
+
+@macro 	r>c
+		pop 	bc
+
+@macro 	r>ab
+		pop 	hl
+		pop 	de
+
+@macro 	r>abc
+		pop 	hl
+		pop 	de
+		pop 	bc
+
+// =======================================================================================
+
+@macro 	swap
+		ex 		de,hl
+

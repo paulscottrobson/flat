@@ -3,7 +3,7 @@
 ;
 ;		File:		graphics.asm
 ;		Purpose:	General screen I/O routines
-;		Date : 		15th November 2018
+;		Date : 		3rd December 2018
 ;		Author:		paul@robsons.org.uk
 ;
 ; *********************************************************************************
@@ -17,24 +17,25 @@
 
 GFXClearScreen:
 		push 	hl 									; clear screen by reinitialising
-		ld 		a,(DIScreenMode)
-		ld 		l,a
+		ld 		a,(__DIScreenMode)
 		call 	GFXMode
 		pop 	hl
 		ret
 
 ; *********************************************************************************
 ;
-;								Set Graphics Mode to L
+;								Set Graphics Mode to A
 ;
 ; *********************************************************************************
 
+GFXModeE:
+		ld 		a,e
 GFXMode:
 		push 	bc
 		push 	de
 		push 	hl
-		ld 		a,l 								; save current mode
-		ld 		(DIScreenMode),a
+		ld 		l,a 								; save current mode
+		ld 		(__DIScreenMode),a
 		dec 	l 									; L = 1 mode layer2
 		jr 		z,__GFXLayer2
 		dec 	l
@@ -51,19 +52,14 @@ __GFXLowRes:
 		call 	GFXInitialiseLowRes
 
 __GFXConfigure:
-		ld 		a,l 								; save screen size
-		ld 		(DIScreenWidth),a
+		ld 		a,l 								; save screen extent
+		ld 		(__DIScreenWidth),a
 		ld 		a,h
-		ld 		(DIScreenHeight),a
+		ld 		(__DIScreenHeight),a
 		ex 		de,hl 								; save driver
-		ld 		(DIScreenDriver),hl
-
-		ld 		l,d 								; put sizes in HL DE
-		ld 		h,0
-		ld 		d,0
-		call 	MULTMultiply16 						; multiply to get size and store.
-		ld 		(DIScreenSize),hl
-
+		ld 		(__DIScreenDriver),hl
+		ld 		hl,0 								; set writing address
+		ld 		(__DIScreenAddress),hl
 		pop 	hl
 		pop 	de
 		pop 	bc
@@ -82,7 +78,7 @@ GFXWriteCharacter:
 		push 	hl
 		ld 		bc,__GFXWCExit
 		push 	bc
-		ld 		bc,(DIScreenDriver)
+		ld 		bc,(__DIScreenDriver)
 		push 	bc
 		ret
 __GFXWCExit:
@@ -145,6 +141,7 @@ __GFXWHDigit:
 
 GFXGetFontGraphicDE:
 		push 	af
+		push 	bc
 		push 	hl
 		and 	$7F 								; bits 0-6 only.
 		sub 	32
@@ -153,13 +150,13 @@ GFXGetFontGraphicDE:
 		add 	hl,hl 								; x 8
 		add 	hl,hl
 		add 	hl,hl
-		ld 		de,(DIFontBase) 					; add the font base.
+		ld 		de,(__DIFontBase) 					; add the font base.
 		add 	hl,de
 		ex 		de,hl 								; put in DE (font address)
-
 		pop 	hl
+		pop 	bc
 		pop 	af
-		cp 		$7F 								; map $7F to the prompt character
+		cp 		$7F
 		ret 	nz
 		ld 		de,__GFXPromptCharacter
 		ret
@@ -167,4 +164,5 @@ GFXGetFontGraphicDE:
 __GFXPromptCharacter:
 		db 		$FC,$7E,$3F,$1F
 		db 		$1F,$3F,$7E,$FC
+
 

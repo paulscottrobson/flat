@@ -3,7 +3,7 @@
 ;
 ;		File:		keyboard.asm
 ;		Purpose:	Spectrum Keyboard Interface
-;		Date : 		15th November 2018
+;		Date : 		3rd December 2018
 ;		Author:		paul@robsons.org.uk
 ;
 ; *********************************************************************************
@@ -88,7 +88,7 @@ __kr_exit:
 ;
 ;	$FEFE-$7FFE scan, bit 0-4, active low
 ;
-;	8:Backspace 13:Return 20-23:Left Down Up Right 
+;	3:Abort (Shift+Q) 8:Backspace 13:Return 
 ;	27:Break 32-127: Std ASCII all L/C
 ;
 __kr_no_shift_table:
@@ -97,14 +97,14 @@ __kr_no_shift_table:
 		db 		'0','9','8','7','6',			'p','o','i','u','y'
 		db 		13, 'l','k','j','h',			' ', 0, 'm','n','b'
 
+__kr_shift_table:
 __kr_symbol_shift_table:
 		db 		 0, ':', 0,  '?','/',			'~','|','\','{','}'
-		db 		 0,  0,  0  ,'<','>',			'!','@','#','$','%'
+		db 		 3,  0,  0  ,'<','>',			'!','@','#','$','%'
 		db 		'_',')','(',"'",'&',			'"',';', 0, ']','['
-		db 		13, '=','+','-','^',			' ', 0, '.',',','*'
+		db 		27, '=','+','-','^',			' ', 0, '.',',','*'
 
-__kr_shift_table:
 		db 		0,  ':',0  ,'?','/',			'~','|','\','{','}'
-		db 		0,  0,  0  ,'<','>',			'!','@','#','$',20
+		db 		3,  0,  0  ,'<','>',			16,17,18,19,20
 		db 		8, ')',23,  22, 21,				'"',';', 0, ']','['
 		db 		27, '=','+','-','^',			' ', 0, '.',',','*'

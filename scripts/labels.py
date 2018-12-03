@@ -3,7 +3,7 @@
 #
 #		File:		labels.py
 #		Purpose:	Extract labels from assembler result
-#		Date : 		19th November 2018
+#		Date : 		25th November 2018
 #		Author:		paul@robsons.org.uk
 #
 # *********************************************************************************
@@ -41,5 +41,5 @@ class SnasmLabelExtractor(object):
 	def getLabels(self):
 		return self.labels
 
-class LabelExtractor(ZasmLabelExtractor):
+class LabelExtractor(SnasmLabelExtractor):
 	pass

@@ -3,7 +3,7 @@
 ;
 ;		File:		screen_layer2.asm
 ;		Purpose:	Layer 2 console interface, sprites enabled, no shadow.
-;		Date : 		8th November 2018
+;		Date : 		3rd December 2018
 ;		Author:		paul@robsons.org.uk
 ;
 ; *********************************************************************************
@@ -120,6 +120,8 @@ __L2Outer:
 		ld 		d,8 								; do 8 columns
 		ld 		a,(ix+0) 							; get the bit pattern
 		inc 	ix
+		or 		a
+		jr 		z,__L2Blank
 __L2Loop:
 		ld 		(hl),0 								; background
 		add 	a,a 								; shift pattern left
@@ -129,6 +131,25 @@ __L2NotSet:
 		inc 	hl
 		dec 	d 									; do a row
 		jr 		nz,	__L2Loop
+		jr 		__L2Exit1
+__L2Blank:
+		xor 	a
+		ld 		(hl),a
+		inc 	hl
+		ld 		(hl),a
+		inc 	hl
+		ld 		(hl),a
+		inc 	hl
+		ld 		(hl),a
+		inc 	hl
+		ld 		(hl),a
+		inc 	hl
+		ld 		(hl),a
+		inc 	hl
+		ld 		(hl),a
+		inc 	hl
+		ld 		(hl),a
+__L2Exit1:
 		pop 	hl 									; restore, go 256 bytes down.
 		inc 	h
 		dec 	e 									; do 8 rows

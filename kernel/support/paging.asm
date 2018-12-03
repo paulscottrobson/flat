@@ -3,7 +3,7 @@
 ;
 ;		Name : 		paging.asm
 ;		Author :	paul@robsons.org.uk
-;		Date : 		15th November 2018
+;		Date : 		3rd December 2018
 ;		Purpose :	Paging Manager
 ;
 ; ***************************************************************************************
@@ -16,13 +16,15 @@
 ; ********************************************************************************************************
 
 PAGEInitialise:
+		push 	hl
 		db 		$ED,$92,$56							; switch to page A
 		inc 	a
 		db 		$ED,$92,$57
 		dec 	a
 		ex 		af,af' 								; put page in A'
-		ld 		hl,PAGEStackBase 					; reset the page stack
-		ld 		(PAGEStackPointer),hl
+		ld 		hl,__PAGEStackBase 					; reset the page stack
+		ld 		(__PAGEStackPointer),hl
+		pop 	hl
 		ret
 
 ; ********************************************************************************************************
@@ -36,11 +38,11 @@ PAGESwitch:
 		push 	hl
 
 		push 	af 									; save A on stack
-		ld 		hl,(PAGEStackPointer) 				; put A' on the stack, the current page
+		ld 		hl,(__PAGEStackPointer) 			; put A' on the stack, the current page
 		ex 		af,af'
 		ld 		(hl),a
 		inc 	hl
-		ld 		(PAGEStackPointer),hl
+		ld 		(__PAGEStackPointer),hl
 
 		pop 	af 									; restore new A
 		db 		$ED,$92,$56							; switch to page A
@@ -62,10 +64,10 @@ PAGESwitch:
 PAGERestore:
 		push 	af
 		push 	hl
-		ld 		hl,(PAGEStackPointer) 				; pop the old page off
+		ld 		hl,(__PAGEStackPointer) 			; pop the old page off
 		dec 	hl
 		ld 		a,(hl)
-		ld 		(PAGEStackPointer),hl
+		ld 		(__PAGEStackPointer),hl
 		db 		$ED,$92,$56							; switch to page A
 		inc 	a
 		db 		$ED,$92,$57
@@ -74,5 +76,4 @@ PAGERestore:
 		pop 	hl
 		pop 	af
 		ret
-		
-		
+				
