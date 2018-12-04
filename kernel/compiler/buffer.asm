@@ -17,6 +17,8 @@
 
 BUFFScan:
 		ld 		a,FirstSourcePage
+		ld 		de,$BB12
+		ld 		hl,$AA13
 __BUFFScanLoop:
 		call 	BUFFCompile 						; compile buffer
 		inc 	a 									; bump page
@@ -80,6 +82,7 @@ __BUFFNext:
 BUFFCompileEditBuffer:
 		push 	af									; save registers
 		push 	bc
+		push 	ix
 		ld 		bc,EditBuffer 						; BC points to edit buffer, this is passed in C
 __BUFFCEBLoop:
 		ld 		a,(bc)								; read tag
@@ -94,6 +97,7 @@ __BUFFCEBNext:
 		jr 		__BUFFCEBLoop
 
 __BUFFCEBExit:
+		pop 	ix
 		pop 	bc 									; pop and exit
 		pop 	af
 		ret

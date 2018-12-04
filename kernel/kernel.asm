@@ -48,6 +48,8 @@ Boot:	ld 		sp,StackTop							; reset Z80 Stack
 		call 	BUFFScan
 
 w1:		jp 		w1
+ErrorHandler:
+		jp 		ErrorHandler
 
 		include "support/debug.asm"					; debug display
 		include "support/multiply.asm" 				; 16 bit multiply
@@ -62,9 +64,11 @@ w1:		jp 		w1
 		include "support/system.asm"				; system handler
 
 		include "compiler/buffer.asm" 				; buffer code.
+		include "compiler/dictionary.asm" 			; dictionary access code
+		include "compiler/constant.asm"				; ASCII -> Integer
 		include "compiler/compile.asm"				; actual compiler.
 		include "compiler/utility.asm"				; compiler utility functions.
-		
+
 AlternateFont:										; nicer font
 		include "font.inc" 							; can be $3D00 here to save memory
 		include "data.asm"		
