@@ -1,0 +1,6 @@
+//
+//		List of words to be imported into the dictionary.			
+//
+FARCompileByteL	 			c,		
+FARCompileWordHL 			, 		
+DEBUGShowWord				debug 	

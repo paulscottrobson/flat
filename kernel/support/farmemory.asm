@@ -16,6 +16,7 @@
 ; ***********************************************************************************************
 
 FARCompileByteL:
+		call 	COMUCompileCallToSelf
 		ld 		a,l
 FARCompileByteA:
 		push 	af 									; save byte and HL
@@ -39,6 +40,8 @@ FARCompileByteA:
 ;
 ; ***********************************************************************************************
 
+FARCompileWordHL:
+		call 	COMUCompileCallToSelf
 FARCompileWord:
 		push 	af 									; save byte and HL
 		push 	de

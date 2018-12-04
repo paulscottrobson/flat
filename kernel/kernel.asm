@@ -15,14 +15,15 @@
 ;		in data.asm
 ;													
 DictionaryPage = $20 								; dictionary page
-FirstCodePage = $22 								; first code page.
-								
+FirstSourcePage = $22 								; first page of 512 byte source pages
+SourcePageCount = 4 								; number of source pages (32 pages/page)
+EditPageSize = 512 									; bytes per edit page.
+FirstCodePage = $22+SourcePageCount*2 				; first code page.
 ;
 ;		Memory allocated from the Unused space in $4000-$7FFF
 ;
 EditBuffer = $7B08 									; $7B00-$7D1F 512 byte edit buffer
 StackTop = $7EFC 									;      -$7EFC Top of stack
-EditPageSize = 512 									; bytes per edit page.
 
 		opt 	zxnextreg
 		org 	$8000 								; $8000 boot.
@@ -40,15 +41,17 @@ Boot:	ld 		sp,StackTop							; reset Z80 Stack
 		ld 		a,FirstCodePage 					; get the page to start
 		call 	PAGEInitialise
 
-		db 		$DD,$01
 		ld 		hl,0								; A = 0
 		ld 		de,0 								; B = Mode
 		call 	SystemHandler 						; Switch to that mode.
-		ld 		hl,2
-		call 	SystemHandler
-		
+
+		call 	BUFFScan
+
 w1:		jp 		w1
 
+		include "support/debug.asm"					; debug display
+		include "support/multiply.asm" 				; 16 bit multiply
+		include "support/divide.asm" 				; 16 bit divide
 		include "support/farmemory.asm" 			; far memory routines
 		include "support/graphics.asm" 				; common graphics
 		include "support/keyboard.asm"				; keyboard handler
@@ -58,6 +61,10 @@ w1:		jp 		w1
 		include "support/screen_lores.asm"
 		include "support/system.asm"				; system handler
 
+		include "compiler/buffer.asm" 				; buffer code.
+		include "compiler/compile.asm"				; actual compiler.
+		include "compiler/utility.asm"				; compiler utility functions.
+		
 AlternateFont:										; nicer font
 		include "font.inc" 							; can be $3D00 here to save memory
 		include "data.asm"		

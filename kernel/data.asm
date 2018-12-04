@@ -44,7 +44,9 @@ __DIScreenDriver:									; Screen Driver
 		dw 		0	
 __DIScreenAddress:									; position on screen
 		dw 		0
-		
+__DIScreenSize:										; char size of screen
+		dw 		0		
+
 ; ***************************************************************************************
 ;
 ;								 Other data and buffers
@@ -55,8 +57,6 @@ __PAGEStackPointer: 								; stack used for switching pages
 		dw 		0
 __PAGEStackBase:
 		ds 		16
-
-
 
 		org 	$A000
 FreeMemory:		
