@@ -28,7 +28,7 @@ __MultiplyNoAdd:
 		or 		c
 		jr 		nz,__MultiplyLoop
 		pop 	de 									// restore B and C
-		pop 	hl
+		pop 	bc
 		ret
 
 // =======================================================================================

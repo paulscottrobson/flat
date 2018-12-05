@@ -28,7 +28,7 @@ __MultiplyNoAdd:
   or   c
   jr   nz,__MultiplyLoop
   pop  de
-  pop  hl
+  pop  bc
   ret
 end_2a_3a_77:
 

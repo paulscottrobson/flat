@@ -52,8 +52,8 @@ ErrorHandler:
 		jp 		ErrorHandler
 
 		include "support/debug.asm"					; debug display
-		include "support/multiply.asm" 				; 16 bit multiply
-		include "support/divide.asm" 				; 16 bit divide
+		include "support/multiply.asm" 				; 16 bit multiply (not used in kernel)
+		include "support/divide.asm" 				; 16 bit divide (not used in kernel)
 		include "support/farmemory.asm" 			; far memory routines
 		include "support/graphics.asm" 				; common graphics
 		include "support/keyboard.asm"				; keyboard handler

@@ -1,5 +1,8 @@
 TODO
-	Command Line.
+	Command Line/Error Handler/Stack Reset/Warm Start
+	Add division (and modulus ?)
+	Add system call
+	Word Testing
 	Libraries etc.
 		
 CLI Resets:

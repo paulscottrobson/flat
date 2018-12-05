@@ -32,7 +32,10 @@ for word in words:
 	if wType == "w":
 		genCode = " ".join(["[{0}] [c,]".format(x) for x in code])
 	else:
-		genCode = "compiles "+" ".join(["{0} c,".format(x) for x in code])
+		genCode = "compiles [229] [c,] [213] [c,] "
+		genCode = genCode +" ".join(["{0} c,".format(x) for x in code])
+		genCode = genCode + " [209] [c,] [225] [c,] "
+
 	genCode = ":"+name+" "+genCode+" [201] [c,] "
 	#print(name,wType,codeBegin,codeEnd,code)
 	#print(genCode)
