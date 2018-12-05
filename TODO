@@ -1,6 +1,6 @@
 TODO
 	Command Line/Error Handler/Stack Reset/Warm Start
-	Add division (and modulus ?)
+	Add division (and modulus ?) via /mod ?
 	Add system call
 	Word Testing
 	Libraries etc.
