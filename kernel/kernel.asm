@@ -9,7 +9,6 @@
 ; ***************************************************************************************
 ; ***************************************************************************************
 
-
 ;
 ;		Page allocation. These need to match up with those given in the page table
 ;		in data.asm
@@ -23,6 +22,7 @@ FirstCodePage = $22+SourcePageCount*2 				; first code page.
 ;		Memory allocated from the Unused space in $4000-$7FFF
 ;
 EditBuffer = $7B08 									; $7B00-$7D1F 512 byte edit buffer
+ExecuteBuffer = $7D20 								; $7D20-$7D5F Execute buffer
 StackTop = $7EFC 									;      -$7EFC Top of stack
 
 		opt 	zxnextreg
@@ -61,7 +61,7 @@ ErrorHandler:
 		include "support/screen48k.asm"				; screen "drivers"
 		include "support/screen_layer2.asm"
 		include "support/screen_lores.asm"
-		include "support/system.asm"				; system handler
+		include "support/system.asm"				; system calls handler
 
 		include "compiler/buffer.asm" 				; buffer code.
 		include "compiler/dictionary.asm" 			; dictionary access code

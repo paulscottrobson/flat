@@ -1,9 +1,9 @@
 TODO
-	Green code
-	Yellow code
-	Red code
-
-	Try compiling bootstrapper.
-
+	Command Line.
 	Libraries etc.
 		
+CLI Resets:
+	Stack
+	Paging Stack
+	Code Buffer Stack
+

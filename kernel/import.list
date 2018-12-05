@@ -4,3 +4,4 @@
 FARCompileByteL	 			c,		
 FARCompileWordHL 			, 		
 DEBUGShowWord				debug 	
+COMUWordCompiles 			compiles

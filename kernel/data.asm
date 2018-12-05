@@ -58,6 +58,9 @@ __PAGEStackPointer: 								; stack used for switching pages
 __PAGEStackBase:
 		ds 		16
 
+__COMExecBufferPointer:								; pointer into execute buffer area
+		dw 		ExecuteBuffer 						; advances if code recurses
+
 		org 	$A000
 FreeMemory:		
 		org 	$C000

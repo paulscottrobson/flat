@@ -9,6 +9,16 @@
 ; ***************************************************************************************
 ; ***************************************************************************************
 
+COMUWordCompiles:
+		push 	hl
+		ld 		hl,(Here)
+		dec 	hl
+		dec 	hl
+		dec 	hl
+		ld 		(Here),hl
+		pop 	hl
+		ret
+
 COMUCompileCallToSelf:
 		pop 	bc									; address to compile call to
 		push 	hl 									; save HL

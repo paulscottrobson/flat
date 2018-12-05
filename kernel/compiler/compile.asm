@@ -36,7 +36,14 @@ COMError:											; error, BC points to tag
 ;		Red word. Add to dictionary and compile default header.
 ;		
 __COMCRedTag00:
-		db 		$DD,$01
+		call 	DICTAddWord 						; add BC to dictionary
+		push 	hl
+		ld 		a,$CD 								; compile standard header
+		call 	FARCompileByteA
+		ld 		hl,COMUCompileCallToSelf 			; compiles call to self
+		call 	FARCompileWord
+		pop 	hl
+		ret
 ;
 ;		Green word - word is executed under self compilation rule, if it's a constant
 ; 		or string appropriate code is generated.
@@ -50,7 +57,15 @@ __COMCGreenTag01:
 ;		anyway.
 ;
 __COMCYellowTag10:
-		db 		$DD,$01
+		push 	ix
+		call 	COMCompileWordInBuffer 				; compile code in the buffer
+		call 	__CallIX 							; call it
+		call 	COMBufferReleaseSpace
+		pop 	ix
+		ret
+
+__CallIX:
+		jp 		(ix)
 
 ; ***************************************************************************************
 ;
@@ -133,4 +148,53 @@ __COMCCContinue:
 		pop 	ix 									; restore BC and IX
 		pop 	bc
 		ret 										; and exit.
+
+; ***************************************************************************************
+;
+;					Compile word at BC in buffer. Return buffer pointer in IX
+;
+; ***************************************************************************************
+
+COMCompileWordInBuffer:
+		ld 		ix,(Here) 							; push HERE on the stack
+		push 	ix
+
+		ld 		ix,(__COMExecBufferPointer) 		; point IX to the execute buffer area
+		push 	ix 									; save on the stack
+		push 	bc 									; add 32 to it.
+		ld 		bc,32
+		add 	ix,bc
+		ld 		(__COMExecBufferPointer),ix 		; and write back for reentrancy.
+		pop 	bc 			
+		pop 	ix 									; IX is now the current value to use
+		ld 		(Here),ix 							; so point here to it.
+
+		call 	COMCompileCodeAtHereForBC 			; do the actual compilation 
+		ld 		a,$C9								; compile a RET
+		call 	FARCompileByteA
+
+		ex 		(sp),ix 							; restore and save HERE
+		ld 		(Here),ix
+		pop 	ix 									; restore address of code
+		ret 										; and exit
+
+; ***************************************************************************************
+;
+;			Release space allocated for execution of the word in buffer
+;
+; ***************************************************************************************
+
+COMBufferReleaseSpace:
+		push 	hl
+		push 	de
+		ld 		hl,(__COMExecBufferPointer)
+		ld 		de,-32
+		add 	hl,de
+		ld 		(__COMExecBufferPointer),hl
+		pop 	de
+		pop 	hl
+		ret
+		pop 	bc
+
+
 

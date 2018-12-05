@@ -65,9 +65,11 @@ for f in sys.argv[1:]:
 			if currentPageAddress == 0:
 				currentPageNumber += 1
 				currentPageAddress = 0xC000
+			currentBasePageAddress = currentPageAddress
+			count += 1
 			bytesRemaining = pageSize
 		#
-		#print("\t\t{0:02x} {1:16} {2:2} ${3:02x}:${4:04x} {5}".format(tag,word,currentPageIndex,currentPageNumber,currentPageAddress,bytesRemaining))
+		#print("\t\t{0:02x} {1:16} ${2:02x}:${3:04x} {4}".format(tag,word,currentPageNumber,currentPageAddress,bytesRemaining))
 		#
 		#	Store the word
 		#
