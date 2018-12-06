@@ -72,7 +72,7 @@ start_2d:
   ld   h,d
   ld   l,e
   xor  a
-  sbc  hl,de
+  sbc  hl,bc
 end_2d:
 
 ; =========== -- macro ===========

@@ -25,27 +25,29 @@ NextFreePage: 										; +4 	Next available code page.
 		db 		FirstCodePage+1,0,0,0
 Parameter:											; +8 	General parameter for third value.
 		dw 		0,0 
-		
+DisplayInfo: 										; +10 	Display information
+		dw 		DisplayInformation,0		
+
 ; ***************************************************************************************
 ;
 ;							 Display system information
 ;
 ; ***************************************************************************************
 
-__DIScreenMode:										; current mode
-		db 		0
-__DIScreenWidth: 									; screen extent
-		db 		0
-__DIScreenHeight:
-		db 		0
+DisplayInformation:
+
+__DIScreenWidth: 									; +0 	screen width
+		db 		0,0,0,0
+__DIScreenHeight:									; +4 	screen height
+		db 		0,0,0,0
+__DIScreenSize:										; +8 	char size of screen
+		dw 		0,0		
+__DIScreenMode:										; +12 	current mode
+		db 		0,0,0,0
 __DIFontBase:										; font in use
 		dw 		AlternateFont
 __DIScreenDriver:									; Screen Driver
 		dw 		0	
-__DIScreenAddress:									; position on screen
-		dw 		0
-__DIScreenSize:										; char size of screen
-		dw 		0		
 
 ; ***************************************************************************************
 ;
@@ -58,8 +60,19 @@ __PAGEStackPointer: 								; stack used for switching pages
 __PAGEStackBase:
 		ds 		16
 
-__COMExecBufferPointer:								; pointer into execute buffer area
-		dw 		ExecuteBuffer 						; advances if code recurses
+__COMExecBufferPointer: 							; where compiled code to be executed goes.
+		dw 		ExecuteBuffer
+
+		db 		0
+__CLIBuffer:
+		ds 		18
+__CLICurrentKey:
+		db 		0
+
+ARegister:											; A+B registers when not executing
+		dw 		0
+BRegister:
+		dw 		0		
 
 		org 	$A000
 FreeMemory:		

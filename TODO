@@ -1,10 +1,5 @@
 TODO
-	Command Line/Error Handler/Stack Reset/Warm Start
 	Word Testing
 	Libraries etc.
 		
-CLI Resets:
-	Stack
-	Paging Stack
-	Code Buffer Stack
 

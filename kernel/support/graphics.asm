@@ -63,10 +63,6 @@ __GFXConfigure:
 		ld 		d,0
 		call 	MULTMultiply16
 		ld 		(__DIScreenSize),hl
-
-		ld 		hl,0 								; set writing address
-		ld 		(__DIScreenAddress),hl
-
 		pop 	hl
 		pop 	de
 		pop 	bc

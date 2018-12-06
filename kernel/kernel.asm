@@ -41,11 +41,9 @@ Boot:	ld 		sp,StackTop							; reset Z80 Stack
 		xor 	a 									; set Mode 0 (standard 48k Spectrum + Sprites)
 		call 	GFXMode
 		call 	BUFFScan 							; scan the buffers
+		jp 		CommandLineStart
 
-w1:		jp 		w1
-ErrorHandler:
-		jp 		ErrorHandler
-
+		include "support/command.asm"				; CLI Stuff
 		include "support/debug.asm"					; debug display
 		include "support/multiply.asm" 				; 16 bit multiply (not used in kernel)
 		include "support/divide.asm" 				; 16 bit divide (not used in kernel)
