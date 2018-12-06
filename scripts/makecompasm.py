@@ -43,12 +43,17 @@ for w in source:
 #
 keys = [x for x in words.keys()]
 keys.sort()
-hOut = open("_source.asm","w")
+hOut = open("__words.asm","w")
 for w in keys:
 	hOut.write("; =========== {0} {1} ===========\n\n".format(w,words[w]["type"]))
-	scrambled = "_".join(["{0:02x}".format(ord(x)) for x in w+":"+words[w]["type"][0]])
+	scrambled = "_".join(["{0:02x}".format(ord(x)) for x in w])
 	isMacro = words[w]["type"] == "macro"
 	hOut.write("start_"+scrambled+":\n")
+	if isMacro:
+		hOut.write(" ld a,end_{0}-start_{0}-5\n".format(scrambled))
+		hOut.write(" call COMUCopyCode\n")
+	else:
+		hOut.write(" call COMUCompileCallToSelf\n")
 	hOut.write("\n".join(words[w]["code"])+"\n")
 	hOut.write("end_"+scrambled+":\n")
 	hOut.write("\n")

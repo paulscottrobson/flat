@@ -3,32 +3,32 @@
 //
 //		Name : 		binary.words
 //		Author :	Paul Robson (paul@robsons.org.uk)
-//		Date : 		3rd December 2018
+//		Date : 		6th December 2018
 //		Purpose :	Source code for bootstrap : Binary words
 //
 // ***************************************************************************************
 // ***************************************************************************************
 
 @word 	* 											// 16 bit multiply A = A * B
-		push 	bc 									// save B and C
+		jp 		MULTMultiply16
+
+// =======================================================================================
+
+@word 	/ 											// 16 bit divide A = B / A
 		push 	de
-		ld 		b,h 								// HL -> BC
-		ld 		c,l
-		ld 		hl,$0000							// result
-__MultiplyLoop:
-		srl 	b 									// shift BC right
-		rr 		c
-		jr 		nc,__MultiplyNoAdd
-		add 	hl,de 								// if bit 0 set add DE into result
-__MultiplyNoAdd:
-		ex 		de,hl 								// shift DE left
-		add 	hl,de
 		ex 		de,hl
-		ld 		a,b 								// until BC is zero
-		or 		c
-		jr 		nz,__MultiplyLoop
-		pop 	de 									// restore B and C
-		pop 	bc
+		call 	DIVDivideMod16
+		ex 		de,hl
+		pop 	de
+		ret
+
+// =======================================================================================
+
+@word 	mod 										// 16 bit divide A = B mod A
+		push 	de
+		ex 		de,hl
+		call 	DIVDivideMod16
+		pop 	de
 		ret
 
 // =======================================================================================
@@ -38,10 +38,21 @@ __MultiplyNoAdd:
 
 // =======================================================================================
 
+@macro 	- 											// 16 bit subtract A = B - A
+		ld 		b,h
+		ld 		c,l
+		ld 		h,d
+		ld 		l,e
+		xor 	a
+		sbc 	hl,de
+
+// =======================================================================================
+
 @word 	< 											// A = -1 if B < A else 0
 		ld 		a,d 								// look at bit 15's
 		xor 	h
-		jp 		m,__SignsDifferent 					// code if signs are different.
+		add 	a,a 								// Shift top bit into C
+		jr 		c,__SignsDifferent 					// code if signs are different.
 		push 	de
 		ex 		de,hl
 		xor 	a 									// do B-A calculation
@@ -106,3 +117,4 @@ __SignsDifferent:
 		ld 		l,a
 		ret
 				
+		

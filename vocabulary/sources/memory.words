@@ -3,7 +3,7 @@
 //
 //		Name : 		memory.words
 //		Author :	Paul Robson (paul@robsons.org.uk)
-//		Date : 		3rd December 2018
+//		Date : 		6th December 2018
 //		Purpose :	Source code for bootstrap : Memory words
 //
 // ***************************************************************************************
@@ -48,13 +48,17 @@
 
 // =======================================================================================
 
-@macro	p@											// read A from port C
+@word	p@											// read A from port A
+		ld 		b,h
+		ld 		c,l
 		in 		l,(c)
 		ld 		h,0
 
 // =======================================================================================
 
-@macro 	p! 											// write A to port C
-		out 	(c),l
+@macro 	p! 											// write B to port A
+		ld 		b,h
+		ld 		c,l
+		out 	(c),e
 
 		

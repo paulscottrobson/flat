@@ -3,7 +3,7 @@
 //
 //		Name : 		misc.words
 //		Author :	Paul Robson (paul@robsons.org.uk)
-//		Date : 		3rd December 2018
+//		Date : 		6th December 2018
 //		Purpose :	Source code for bootstrap : All the other words
 //
 // ***************************************************************************************
@@ -20,6 +20,7 @@
 // =======================================================================================
 
 @word copy
+		ld 		bc,(Parameter)
 		ld 		a,b 								// nothing to do.
 		or 		c
 		ret 	z
@@ -55,6 +56,7 @@ __copy2:
 // =======================================================================================
 
 @word fill
+		ld 		bc,(Parameter)
 		ld 		a,b 								// nothing to do.
 		or 		c
 		ret 	z
@@ -75,9 +77,24 @@ __fill1:ld 		(hl),e
 // =======================================================================================
 
 @word 		halt 
+
 __HaltLoop:
 		di
 		halt
 		jr 		__HaltLoop
 
-		
+// =======================================================================================
+
+@macro 		param!
+
+		ld 		(Parameter),hl
+
+// =======================================================================================
+
+@word	compiles
+		ld 		bc,(Here)
+		dec 	bc
+		dec 	bc
+		dec 	bc
+		ld 		(Here),bc
+		ret		
