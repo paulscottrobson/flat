@@ -20,18 +20,13 @@ image = imagelib.FlatImage()
 labels = LabelExtractor("boot.img.vice").getLabels()
 count = 0
 #
-#		Read label/word pairs in
-#
-words = [x.replace("\t"," ").strip().lower() for x in open("import.list").readlines() if x.strip() != ""]
-words = [x for x in words if x[:2] != "//"]
-#
 #		Add each pair to the dictionary
 #
+words = [x for x in labels.keys() if x[:6] == "start_"]
+words.sort()
 for w in words:
-	m = re.match("^([A-Za-z0-9\_]+)\s+([0-9a-zA-Z\,]+)\s*$",w)
-	assert m is not None,w+" syntax ?"
-	assert m.group(1) in labels,w+ "label ?"
-	image.addDictionary(m.group(2),image.getCodePage(),labels[m.group(1)])
+	name = "".join([chr(int(x,16)) for x in w[6:].split("_")])
+	image.addDictionary(name,image.getCodePage(),labels[w])
 	count += 1
 image.save()
 print("\tImported {0} words.".format(count))

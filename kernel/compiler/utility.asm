@@ -9,15 +9,11 @@
 ; ***************************************************************************************
 ; ***************************************************************************************
 
-COMUWordCompiles:
-		push 	hl
-		ld 		hl,(Here)
-		dec 	hl
-		dec 	hl
-		dec 	hl
-		ld 		(Here),hl
-		pop 	hl
-		ret
+; ***************************************************************************************
+;
+;				Compile code to call code following this call's return address
+;
+; ***************************************************************************************
 
 COMUCompileCallToSelf:
 		pop 	bc									; address to compile call to
@@ -30,6 +26,12 @@ COMUCompileCallToSelf:
 		pop 	hl 									; restore HL and exit
 		ret
 
+; ***************************************************************************************
+;
+;							Compile code to load constant
+;
+; ***************************************************************************************
+
 COMUCompileConstant:
 		ld 		a,$EB 								; EX DE,HL
 		call 	FARCompileByteA
@@ -38,4 +40,21 @@ COMUCompileConstant:
 		call 	FARCompileWord						; compile constant
 		ret
 
-		
+; ***************************************************************************************
+;
+;			Compile code to copy A bytes from code following caller (for MACRO)
+;
+; ***************************************************************************************
+
+COMUCopyCode:
+		pop 	bc 									; BC = code to copy
+		push 	de 									; save E
+		ld 		e,a 								; E = count
+__COMUCopyLoop:
+		ld 		a,(bc) 								; read a byte
+		call 	FARCompileByteA 					; compile it
+		inc 	bc 									; next byte
+		dec 	e 									; do E bytes
+		jr 		nz,__COMUCopyLoop
+		pop 	de 									; restore E and exit
+		ret

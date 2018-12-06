@@ -23,9 +23,9 @@ HerePage: 											; +2	Here.Page
 		db 		FirstCodePage,0
 NextFreePage: 										; +4 	Next available code page.
 		db 		FirstCodePage+1,0,0,0
-DictionaryTop:
-		dw 		$C000,0 							; +6 	Top of dictionary 
-
+Parameter:											; +8 	General parameter for third value.
+		dw 		0,0 
+		
 ; ***************************************************************************************
 ;
 ;							 Display system information

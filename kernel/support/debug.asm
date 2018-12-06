@@ -9,50 +9,34 @@
 ; *********************************************************************************
 ; *********************************************************************************
 
-DEBUGShowWord:
-		call 	COMUCompileCallToSelf
 DEBUGShow:
 		push 	af 									; save registers
 		push 	bc
 		push 	de
 		push 	hl
 
-		push 	bc 									; push CBA
-		push 	de
+		push 	de 									; push BA
 		push 	hl
 
 		ld 		hl,(__DIScreenSize) 				; calculate 32 off bottom of screen
 		ld 		de,-32
 		add 	hl,de
-		ex 		de,hl
-		push 	de 									; save it
-		ld 		hl,3 								; set screen position
-		call 	SystemHandler
-		ld 		b,32 								; count
-__DEBUGSSClear:
-		ld 		hl,4
-		ld 		de,$0400
-		call 	SystemHandler
-		djnz 	__DEBUGSSClear
+		push 	hl 									; save this position.
 
-		pop 	de 									; restore the bottom of screen
-		ld 		hl,3 								; set screen position
-		call 	SystemHandler
+		ld 		b,32 								; count of spaces to write.
+__DEBUGSSClear:
+		ld 		de,$0420
+		call 	GFXWriteCharacter
+		inc 	hl
+		djnz 	__DEBUGSSClear
+		pop 	hl 									; restore the bottom of screen
 
 		pop 	de 									; pop off stack and print
 		call 	__DEBUGPrintNumber
-		ld 		de,$0600
-		call 	__DEBUGPrintCharacter
+		inc 	hl
 
 		pop 	de
 		call 	__DEBUGPrintNumber
-		ld 		de,$0600
-		call 	__DEBUGPrintCharacter
-
-		pop 	de
-		call 	__DEBUGPrintNumber
-		ld 		de,$0600
-		call 	__DEBUGPrintCharacter
 
 		pop 	hl
 		pop 	de
@@ -60,21 +44,12 @@ __DEBUGSSClear:
 		pop 	af
 		ret
 
-__DEBUGPrintCharacter:
-		push 	hl 									; seperating space.
-		push 	de
-		ld 		hl,4
-		call 	SystemHandler
-		pop 	de
-		pop 	hl
-		ret
 ;
-;		Print integer DE
+;		Print integer DE at position HL
 ;
 __DEBUGPrintNumber:
 		push 	bc
 		push 	de
-		push 	hl
 
 		push 	de
 		bit 	7,d
@@ -89,20 +64,21 @@ __DEBUGPrintNumber:
 __DSSDDNotNegative:
 		call 	__DSSDisplayRecursive
 		pop 	bc
-		ld 		de,$0600+'-'
 		bit 	7,b
 		jr 		z,__DSDDNoMinus
-		call 	__DEBUGPrintCharacter
+		ld 		de,$0600+'-'
+		call 	GFXWriteCharacter
+		inc 	hl
 __DSDDNoMinus:
-		pop 	hl
 		pop 	de
 		pop 	bc
 		ret
 
 __DSSDisplayRecursive:
+		push 	hl
 		ld 		hl,10
 		call 	DIVDivideMod16
-		push 	hl
+		ex 		(sp),hl
 		ld 		a,d
 		or 		e
 		call 	nz,__DSSDisplayRecursive
@@ -111,5 +87,6 @@ __DSSDisplayRecursive:
 		add 	a,48
 		ld 		e,a
 		ld 		d,6
-		call 	__DEBUGPrintCharacter
+		call 	GFXWriteCharacter
+		inc 	hl
 		ret

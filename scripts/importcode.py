@@ -84,7 +84,6 @@ for f in sys.argv[1:]:
 	print("\tImported file '{0}'.".format(f))
 #		
 #		and write out
-
 #
 image.save()
 print("Filled {0} buffers.".format(count))

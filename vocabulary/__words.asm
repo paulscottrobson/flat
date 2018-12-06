@@ -55,6 +55,13 @@ start_2b_2b_2b:
   inc  hl
 end_2b_2b_2b:
 
+; =========== , word ===========
+
+start_2c:
+ call COMUCompileCallToSelf
+  jp   FARCompileWord
+end_2c:
+
 ; =========== - macro ===========
 
 start_2d:
@@ -313,6 +320,13 @@ start_63_21:
   ld   (hl),e
 end_63_21:
 
+; =========== c, word ===========
+
+start_63_2c:
+ call COMUCompileCallToSelf
+  jp   FARCompileByteL
+end_63_2c:
+
 ; =========== c@ macro ===========
 
 start_63_40:
@@ -368,6 +382,13 @@ __copy2:
   jr   __copyExit
 end_63_6f_70_79:
 
+; =========== debug word ===========
+
+start_64_65_62_75_67:
+ call COMUCompileCallToSelf
+  jp   DEBUGShow
+end_64_65_62_75_67:
+
 ; =========== fill word ===========
 
 start_66_69_6c_6c:
@@ -398,6 +419,17 @@ __HaltLoop:
   halt
   jr   __HaltLoop
 end_68_61_6c_74:
+
+; =========== inkey word ===========
+
+start_69_6e_6b_65_79:
+ call COMUCompileCallToSelf
+  ex   de,hl
+  call  IOScanKeyboard
+  ld   l,a
+  ld   h,0
+  ret
+end_69_6e_6b_65_79:
 
 ; =========== mod word ===========
 

@@ -30,10 +30,7 @@ StackTop = $7EFC 									;      -$7EFC Top of stack
 		jr 		Boot
 		org 	$8004 								; $8004 address of sysinfo
 		dw 		SystemInformation 
-		org		$8008								; $8008 system commands.
-		jp	 	SystemHandler
 
-		org 	$8020
 Boot:	ld 		sp,StackTop							; reset Z80 Stack
 		di											; disable interrupts
 	
@@ -41,11 +38,9 @@ Boot:	ld 		sp,StackTop							; reset Z80 Stack
 		ld 		a,FirstCodePage 					; get the page to start
 		call 	PAGEInitialise
 
-		ld 		hl,0								; A = 0
-		ld 		de,0 								; B = Mode
-		call 	SystemHandler 						; Switch to that mode.
-
-		call 	BUFFScan
+		xor 	a 									; set Mode 0 (standard 48k Spectrum + Sprites)
+		call 	GFXMode
+		call 	BUFFScan 							; scan the buffers
 
 w1:		jp 		w1
 ErrorHandler:
@@ -61,7 +56,6 @@ ErrorHandler:
 		include "support/screen48k.asm"				; screen "drivers"
 		include "support/screen_layer2.asm"
 		include "support/screen_lores.asm"
-		include "support/system.asm"				; system calls handler
 
 		include "compiler/buffer.asm" 				; buffer code.
 		include "compiler/dictionary.asm" 			; dictionary access code
@@ -69,6 +63,8 @@ ErrorHandler:
 		include "compiler/compile.asm"				; actual compiler.
 		include "compiler/utility.asm"				; compiler utility functions.
 
+		include "temp/__words.asm"					; vocabulary file.
+		
 AlternateFont:										; nicer font
 		include "font.inc" 							; can be $3D00 here to save memory
 		include "data.asm"		

@@ -12,9 +12,9 @@ pushd ..\bootloader
 call build.bat
 popd
 rem
-rem		Build the bootstrap file.
+rem		Build the vocabulary file.
 rem
-pushd ..\bootstrap
+pushd ..\vocabulary
 call build.bat
 popd
 rem
