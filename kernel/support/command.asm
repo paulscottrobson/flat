@@ -11,17 +11,23 @@
 
 CommandLineStart:
 		ld 		hl,__CLIWelcome
-		jr 		ErrorHandler
+		ld 		d,5
+		jr 		Continue
 WarmStart:
 		ld 		hl,__CLIWarmStart
+		ld 		d,4
+		jr 		Continue
 ErrorHandler:
+		ld 		d,2
+Continue:
 		ld 		sp,StackTop							; reset Z80 Stack
+		push 	hl
+		push 	de
 		ld 		a,FirstCodePage 					; get the page to start and reset the paging.
 		call 	PAGEInitialise
 		ld 		bc,ExecuteBuffer 					; reset exec pointer
 		ld 		(__COMExecBufferPointer),bc
 
-		push 	hl
 
 		ld		hl,(ARegister)						; display memory copies
 		ld 		de,(BRegister)
@@ -38,6 +44,8 @@ __CLIClear:
 		djnz 	__CLIClear
 		ld 		de,-16 								; half way across that row
 		add 	hl,de
+
+		pop 	de 									; get colour
 		pop 	bc 									; retrieve message
 __CLIMessage:
 		ld 		a,(bc) 								; display message till -ve or 0
@@ -45,7 +53,6 @@ __CLIMessage:
 		jr 		z,__CLIMessageEnd
 		jp 		m,__CLIMessageEnd
 		ld 		e,a 								; display char in red
-		ld 		d,2
 		call 	GFXWriteCharacter
 		inc 	hl 									; advance pos and message
 		inc		bc
