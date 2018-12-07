@@ -389,6 +389,20 @@ start_64_65_62_75_67:
   jp   DEBUGShow
 end_64_65_62_75_67:
 
+; =========== far! word ===========
+
+start_66_61_72_21:
+ call COMUCompileCallToSelf
+  jp   FARWriteword
+end_66_61_72_21:
+
+; =========== far@ word ===========
+
+start_66_61_72_40:
+ call COMUCompileCallToSelf
+  jp   FARReadWord
+end_66_61_72_40:
+
 ; =========== fill word ===========
 
 start_66_69_6c_6c:

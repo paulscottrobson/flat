@@ -39,8 +39,6 @@ FARCompileByteA:
 ;
 ; ***********************************************************************************************
 
-FARCompileWordHL:
-		call 	COMUCompileCallToSelf
 FARCompileWord:
 		push 	af 									; save byte and HL
 		push 	de
@@ -60,4 +58,34 @@ FARCompileWord:
 		pop 	af
 		ret
 
-											
+; ***********************************************************************************************
+;
+;										Far Read of A -> A
+;
+; ***********************************************************************************************											
+
+FARReadWord:
+		ld 		a,(Parameter)
+		call 	PAGESwitch
+		ld 		a,(hl)
+		inc 	hl
+		ld 		h,(hl)
+		ld 		l,a
+		call 	PAGERestore
+		ret
+
+; ***********************************************************************************************
+;
+;										Far Write of B -> A
+;
+; ***********************************************************************************************											
+
+FARWriteWord:
+		ld 		a,(Parameter)
+		call 	PAGESwitch
+		ld 		(hl),e
+		inc 	hl
+		ld 		(hl),d
+		dec 	hl
+		call 	PAGERestore
+		ret
