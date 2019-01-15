@@ -1,4 +1,4 @@
-#CSpect V2.1.1 ZXSpectrum emulator by Mike Dailly
+ï»¿#CSpect V2.2.0 ZXSpectrum emulator by Mike Dailly
 (c)1998-2018 All rights reserved
 
 Be aware...emulator is far from well tested, might crash for any reason!
@@ -38,10 +38,37 @@ Command Line Options
 
 Whats new
 ======================================================================================
+V2.2.0
+------
+Fixed reg 0x43 bit 7- disable palette auto increment.
+Fixed NextReg access for sprites. Was using the wrong index.
+
+
+V2.1.4
+------
+Added logging debug command (see below)
+Added Layer 2 pixel priority mode - top bit of second colour palette byte (the single bit of blue) specifies over the top of everything.
+Added Next OS streaming API ( see below  )
+Added DMA reverse mode (R0 BASE, bit 2)
+Added BSLA DE,B  (ED 28)  shift DE left by B places - uses bits 4..0 of B only
+Added BSRA DE,B  (ED 28)  arithmetic shift right DE by B places - uses bits 4..0 of B only - bit 15 is replicated to keep sign
+Added BSRL DE,B  (ED 2A)  logical shift right DE by B places - uses bits 4..0 of B only
+Added BSRF DE,B  (ED 2B)  shift right DE by B places, filling from left with 1s - uses bits 4..0 of B only
+Added BRLC DE,B  (ED 2C)  rotate DE left by B places - uses bits 3..0 of B only (to rotate right, use B=16-places)
+Added JP (C)     (ED 98)  JP  ( IN(C)*64 + PC&$c000 )
+Added new sprite control byte
+Added sprite expand on X (16,32,64 or 128)
+Added sprite expand on Y (16,32,64 or 128)
+Added 16 colour shape mode
+Removed 12 sprite limit, limitations still apply when expanding on X (100 16x16s per line max)
+Sprite pixel wrapping on X and Y (out one side, back in the other)
+Added "lighten" mode.  L2+ULA colours clamped. (selected using SLU layer order of 110)
+Added "darken" mode.  L2+ULA-555 colours clamped. (selected using SLU layer order of 111)
+
+
 V2.1.1
 ------
 Fixed a crash in sprite palettes.
-
 
 V2.1.0
 ------
@@ -98,14 +125,14 @@ BC = DATE
 DE = TIME
 
 Bits	Description
-0-4     Day of the month (1–31)
+0-4     Day of the month (1â€“31)
 5-8     Month (1 = January, 2 = February, and so on)
 9-15    Year offset from 1980 (add 1980 to get actual year)
 
 Bits    Description
 0-4     Second divided by 2
-5-10    Minute (0–59)
-11-15   Hour (0–23 on a 24-hour clock)
+5-10    Minute (0â€“59)
+11-15   Hour (0â€“23 on a 24-hour clock)
 
 
 
@@ -423,9 +450,12 @@ Registers:
    |
    | same for all others
    |
-   SP <value>      Set the stack register
-   PC <value>      Set alternate program counter register
-
+   SP <value>       Set the stack register
+   PC <value>       Set alternate program counter register
+LOG OUT [port]      LOG all port writes to [port]. If port is not specified, ALL port writes are logged.
+                    (Logging only occurs when values to the port change)
+LOG IN  [port]      LOG all port reads from [port]. If port is not specified, ALL port reads are logged.
+                    (Logging only occurs when values port changes)
 
 
 LowRes mode
@@ -656,3 +686,66 @@ Banks[...]						// Bank 5 is first (loaded to $4000), then bank 2 (to $8000) the
 (R/W) 0x4A (74) => Transparency colour fallback
   bits 7-0 = Set the 8 bit colour.
   (0 = black on reset on reset)
+
+
+
+  Next OS streaming API
+  ---------------------
+; *************************************************************************** 
+; * DISK_FILEMAP ($85)                                                      * 
+; *************************************************************************** 
+; Obtain a map of card addresses describing the space occupied by the file. 
+; Can be called multiple times if buffer is filled, continuing from previous. 
+; Entry: 
+;       A=file handle (just opened, or following previous DISK_FILEMAP calls) 
+;       IX=buffer 
+;       DE=max entries (each 6 bytes: 4 byte address, 2 byte sector count) 
+; Exit (success): 
+;       Fc=0 
+;       DE=max entries-number of entries returned 
+;       HL=address in buffer after last entry 
+;       A=card flags: bit 0=card id (0 or 1) 
+;                     bit 1=0 for byte addressing, 1 for block addressing 
+; Exit (failure): 
+;       Fc=1 
+;       A=error 
+; 
+; NOTES: 
+; Each entry may describe an area of the file between 2K and just under 32MB 
+; in size, depending upon the fragmentation and disk format. 
+; Please see example application code, stream.asm, for full usage information 
+; (available separately or at the end of this document).
+
+; *************************************************************************** 
+; * DISK_STRMSTART ($86)                                                    * 
+; *************************************************************************** 
+; Start reading from the card in streaming mode. 
+; Entry: IXDE=card address 
+;        BC=number of 512-byte blocks to stream 
+;        A=card flags. $80 = don't wait for card being ready.
+; Exit (success): Fc=0 
+;                 B=0 for SD/MMC protocol, 1 for IDE protocol 
+;                 C=8-bit data port 
+; Exit (failure): Fc=1, A=esx_edevicebusy 
+; ; NOTES: 
+; On the Next, this call always returns with B=0 (SD/MMC protocol) and C=$EB 
+; When streaming using the SD/MMC protocol, after every 512 bytes you must read 
+; a 2-byte CRC value (which can be discarded) and then wait for a $FE value 
+; indicating that the next block is ready to be read. 
+; Please see example application code, stream.asm, for full usage information 
+; (available separately or at the end of this document).
+
+; *************************************************************************** 
+; * DISK_STRMEND ($87)                                                      * 
+; *************************************************************************** 
+; Stop current streaming operation. 
+; Entry: A=card flags 
+; Exit (success): Fc=0 
+; Exit (failure): Fc=1, A=esx_edevicebusy 
+; 
+; NOTES: 
+; This call must be made to terminate a streaming operation. 
+; Please see example application code, stream.asm, for full usage information 
+; (available separately or at the end of this document).
+
+
