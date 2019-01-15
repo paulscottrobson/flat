@@ -1,6 +1,6 @@
               	; --------------------------------------
               	; zasm: assemble "bootloader.asm"
-              	; date: 2019-01-15 13:48:46
+              	; date: 2019-01-15 22:26:47
               	; --------------------------------------
 
 
@@ -188,5 +188,5 @@ _end             = $0000 = 65536          bootloader.asm:15 (unused)
 _size            = $C01B = 49179          bootloader.asm:15 (unused)
 
 
-total time: 0.0010 sec.
+total time: 0.0030 sec.
 no errors
