@@ -41,26 +41,30 @@ for w in range(0,len(parts),2):												# work through in pairs.
 	defn = re.split("\s+",parts[w].replace("~","").strip())					# get name/type
 	name = defn[1]															
 	wType = defn[0]
-	assert wType == "@word" or wType == "@macro"
+	assert wType == "@word" or wType == "@macro" or wType == "@xmacro"
 	code = [x.rstrip() for x in parts[w+1].split("~") if x.rstrip() != ""]	# strip code
 	scramble = "_".join(["{0:02x}".format(ord(x)) for x in name])			# scrambled word name
 	words[name] = "define_"+scramble 										# comment to help readability
 	hOut.write(";\n; {0} {1} {0}\n;\n".format("===========",name))
 	hOut.write("define_{0}:\n".format(scramble))
-	if wType == "@word":
-		hOut.write("\tcall COMCompileCallToSelf\n")
-	if wType == "@macro":
+	if wType == "@word":													# normal code word
+		hOut.write("\tcall COMCompileCallToSelf\n")	
+	if wType == "@macro" or wType == "@xmacro":								# copy macros
+		if wType == "@xmacro":												# this stops execution being detected
+			hOut.write("\tnop\n")											# so things like a>r can't be run.
 		hOut.write("\tcall COMCopyCode\n")
-		hOut.write("\tdb   end_{0}-start_{0}\n".format(scramble))
+		hOut.write("\tdb   end_{0}-start_{0}\n".format(scramble))			# output size
 
-	hOut.write("start_{0}:\n".format(scramble))
+	hOut.write("start_{0}:\n".format(scramble))								# output code
 	hOut.write("\n".join(["\t"+x.strip() if x.startswith(" ") else x.strip() for x in code]))
 	hOut.write("\n")
 	hOut.write("end_{0}:\n".format(scramble))
-	hOut.write("\tret\n\n")
+	if wType == "@macro":													# add RET so can be called as word.
+		hOut.write("\tret\n")
+	hOut.write("\n")
 hOut.close()
 
-keys = [x for x in words.keys()]
+keys = [x for x in words.keys()]											# generate dictionary source.
 keys.sort()
 hOut = open(".."+os.sep+"kernel"+os.sep+"temp"+os.sep+"__dictionary.asm","w")
 for k in keys:

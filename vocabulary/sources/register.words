@@ -20,26 +20,26 @@
 
 // =======================================================================================
 
-@macro 	a>r
+@xmacro	a>r
 		push 	hl
 
-@macro 	b>r
+@xmacro b>r
 		push 	de
 		
 		
-@macro 	ab>r
+@xmacro ab>r
 		push 	de
 		push 	hl
 		
 // =======================================================================================
 
-@macro 	r>a
+@xmacro r>a
 		pop 	hl
 
-@macro 	r>b
+@xmacro r>b
 		pop 	de
 
-@macro 	r>ab
+@xmacro r>ab
 		pop 	hl
 		pop 	de
 

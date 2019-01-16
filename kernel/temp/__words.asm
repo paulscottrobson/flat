@@ -6,7 +6,6 @@ define_2a:
 start_2a:
 	jp   MULTMultiply16
 end_2a:
-	ret
 
 ;
 ; =========== / ===========
@@ -21,7 +20,6 @@ start_2f:
 	pop  de
 	ret
 end_2f:
-	ret
 
 ;
 ; =========== mod ===========
@@ -35,7 +33,6 @@ start_6d_6f_64:
 	pop  de
 	ret
 end_6d_6f_64:
-	ret
 
 ;
 ; =========== + ===========
@@ -109,7 +106,6 @@ start_61_6e_64:
 	ld   l,a
 	ret
 end_61_6e_64:
-	ret
 
 ;
 ; =========== or ===========
@@ -125,7 +121,6 @@ start_6f_72:
 	ld   l,a
 	ret
 end_6f_72:
-	ret
 
 ;
 ; =========== xor ===========
@@ -141,7 +136,6 @@ start_78_6f_72:
 	ld   l,a
 	ret
 end_78_6f_72:
-	ret
 
 ;
 ; =========== ! ===========
@@ -186,7 +180,6 @@ start_2b_21:
 	ld   (hl),a
 	ret
 end_2b_21:
-	ret
 
 ;
 ; =========== c! ===========
@@ -222,7 +215,6 @@ start_70_40:
 	in   l,(c)
 	ld   h,0
 end_70_40:
-	ret
 
 ;
 ; =========== p! ===========
@@ -234,7 +226,7 @@ start_70_21:
 	ld   b,h
 	ld   c,l
 	out  (c),e
-@macro  ;
+@xmacro ;
 	ret
 end_70_21:
 	ret
@@ -243,12 +235,12 @@ end_70_21:
 ; =========== break ===========
 ;
 define_62_72_65_61_6b:
+	nop
 	call COMCopyCode
 	db   end_62_72_65_61_6b-start_62_72_65_61_6b
 start_62_72_65_61_6b:
 	db   $DD,$01
 end_62_72_65_61_6b:
-	ret
 
 ;
 ; =========== debug ===========
@@ -258,7 +250,6 @@ define_64_65_62_75_67:
 start_64_65_62_75_67:
 	jp   DEBUGShow
 end_64_65_62_75_67:
-	ret
 
 ;
 ; =========== c, ===========
@@ -268,7 +259,6 @@ define_63_2c:
 start_63_2c:
 	jp   FARCompileByteL
 end_63_2c:
-	ret
 
 ;
 ; =========== , ===========
@@ -278,7 +268,6 @@ define_2c:
 start_2c:
 	jp   FARCompileWord
 end_2c:
-	ret
 
 ;
 ; =========== copy ===========
@@ -315,7 +304,6 @@ __copy2:
 	lddr
 	jr   __copyExit
 end_63_6f_70_79:
-	ret
 
 ;
 ; =========== fill ===========
@@ -339,7 +327,6 @@ __fill1:ld   (hl),e
 	pop  bc
 	ret
 end_66_69_6c_6c:
-	ret
 
 ;
 ; =========== halt ===========
@@ -352,7 +339,6 @@ __HaltLoop:
 	halt
 	jr   __HaltLoop
 end_68_61_6c_74:
-	ret
 
 ;
 ; =========== param! ===========
@@ -378,7 +364,6 @@ start_63_6f_6d_70_69_6c_65_73:
 	ld   (Here),bc
 	ret
 end_63_6f_6d_70_69_6c_65_73:
-	ret
 
 ;
 ; =========== inkey ===========
@@ -392,7 +377,6 @@ start_69_6e_6b_65_79:
 	ld   h,0
 	ret
 end_69_6e_6b_65_79:
-	ret
 
 ;
 ; =========== b>a ===========
@@ -422,69 +406,69 @@ end_61_3e_62:
 ; =========== a>r ===========
 ;
 define_61_3e_72:
+	nop
 	call COMCopyCode
 	db   end_61_3e_72-start_61_3e_72
 start_61_3e_72:
 	push  hl
 end_61_3e_72:
-	ret
 
 ;
 ; =========== b>r ===========
 ;
 define_62_3e_72:
+	nop
 	call COMCopyCode
 	db   end_62_3e_72-start_62_3e_72
 start_62_3e_72:
 	push  de
 end_62_3e_72:
-	ret
 
 ;
 ; =========== ab>r ===========
 ;
 define_61_62_3e_72:
+	nop
 	call COMCopyCode
 	db   end_61_62_3e_72-start_61_62_3e_72
 start_61_62_3e_72:
 	push  de
 	push  hl
 end_61_62_3e_72:
-	ret
 
 ;
 ; =========== r>a ===========
 ;
 define_72_3e_61:
+	nop
 	call COMCopyCode
 	db   end_72_3e_61-start_72_3e_61
 start_72_3e_61:
 	pop  hl
 end_72_3e_61:
-	ret
 
 ;
 ; =========== r>b ===========
 ;
 define_72_3e_62:
+	nop
 	call COMCopyCode
 	db   end_72_3e_62-start_72_3e_62
 start_72_3e_62:
 	pop  de
 end_72_3e_62:
-	ret
 
 ;
 ; =========== r>ab ===========
 ;
 define_72_3e_61_62:
+	nop
 	call COMCopyCode
 	db   end_72_3e_61_62-start_72_3e_61_62
 start_72_3e_61_62:
 	pop  hl
 	pop  de
 end_72_3e_61_62:
-	ret
 
 ;
 ; =========== swap ===========
@@ -535,7 +519,6 @@ start_30_2d:
 	inc  hl
 	ret
 end_30_2d:
-	ret
 
 ;
 ; =========== ++ ===========
@@ -573,7 +556,6 @@ start_30:
 	dec  hl
 	ret
 end_30:
-	ret
 
 ;
 ; =========== 0 ===========
@@ -589,7 +571,6 @@ start_30:
 	dec  hl
 	ret
 end_30:
-	ret
 
 ;
 ; =========== 2* ===========
@@ -667,5 +648,4 @@ start_6e_6f_74:
 	ld   l,a
 	ret
 end_6e_6f_74:
-	ret
 
