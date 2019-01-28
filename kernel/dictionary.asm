@@ -34,11 +34,11 @@
 	db 3
 	db "+++"
 
-	db 6+5
+	db 1+5
 	db $20
-	dw define_2c_20_6c_6f_63_6b
-	db 6
-	db ", lock"
+	dw define_2c
+	db 1
+	db ","
 
 	db 1+5
 	db $20
@@ -118,11 +118,11 @@
 	db 2
 	db "8*"
 
-	db 6+5
+	db 1+5
 	db $20
-	dw define_3b_20_6c_6f_63_6b
-	db 6
-	db "; lock"
+	dw define_3b
+	db 1
+	db ";"
 
 	db 1+5
 	db $20
@@ -148,17 +148,17 @@
 	db 3
 	db "a>b"
 
-	db 8+5
+	db 3+5
 	db $20
-	dw define_61_3e_72_20_6c_6f_63_6b
-	db 8
-	db "a>r lock"
+	dw define_61_3e_72
+	db 3
+	db "a>r"
 
-	db 9+5
+	db 4+5
 	db $20
-	dw define_61_62_3e_72_20_6c_6f_63_6b
-	db 9
-	db "ab>r lock"
+	dw define_61_62_3e_72
+	db 4
+	db "ab>r"
 
 	db 3+5
 	db $20
@@ -178,17 +178,17 @@
 	db 3
 	db "b>a"
 
-	db 8+5
+	db 3+5
 	db $20
-	dw define_62_3e_72_20_6c_6f_63_6b
-	db 8
-	db "b>r lock"
+	dw define_62_3e_72
+	db 3
+	db "b>r"
 
-	db 10+5
+	db 5+5
 	db $20
-	dw define_62_72_65_61_6b_20_6c_6f_63_6b
-	db 10
-	db "break lock"
+	dw define_62_72_65_61_6b
+	db 5
+	db "break"
 
 	db 5+5
 	db $20
@@ -202,11 +202,11 @@
 	db 2
 	db "c!"
 
-	db 7+5
+	db 2+5
 	db $20
-	dw define_63_2c_20_6c_6f_63_6b
-	db 7
-	db "c, lock"
+	dw define_63_2c
+	db 2
+	db "c,"
 
 	db 2+5
 	db $20
@@ -250,11 +250,11 @@
 	db 4
 	db "fill"
 
-	db 9+5
+	db 4+5
 	db $20
-	dw define_68_61_6c_74_20_6c_6f_63_6b
-	db 9
-	db "halt lock"
+	dw define_68_61_6c_74
+	db 4
+	db "halt"
 
 	db 3+5
 	db $20
@@ -292,35 +292,35 @@
 	db 6
 	db "param!"
 
-	db 8+5
+	db 3+5
 	db $20
-	dw define_70_6f_70_20_6c_6f_63_6b
-	db 8
-	db "pop lock"
+	dw define_70_6f_70
+	db 3
+	db "pop"
 
-	db 9+5
+	db 4+5
 	db $20
-	dw define_70_75_73_68_20_6c_6f_63_6b
-	db 9
-	db "push lock"
+	dw define_70_75_73_68
+	db 4
+	db "push"
 
-	db 8+5
+	db 3+5
 	db $20
-	dw define_72_3e_61_20_6c_6f_63_6b
-	db 8
-	db "r>a lock"
+	dw define_72_3e_61
+	db 3
+	db "r>a"
 
-	db 9+5
+	db 4+5
 	db $20
-	dw define_72_3e_61_62_20_6c_6f_63_6b
-	db 9
-	db "r>ab lock"
+	dw define_72_3e_61_62
+	db 4
+	db "r>ab"
 
-	db 8+5
+	db 3+5
 	db $20
-	dw define_72_3e_62_20_6c_6f_63_6b
-	db 8
-	db "r>b lock"
+	dw define_72_3e_62
+	db 3
+	db "r>b"
 
 	db 4+5
 	db $20

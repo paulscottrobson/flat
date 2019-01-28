@@ -11,113 +11,113 @@
 
 
 
-; ********* push lock macro *********
+; ********* push macro *********
 
-define_70_75_73_68_20_6c_6f_63_6b:
+define_70_75_73_68:
 	nop
 	call COMPMacroExpand
-	ld b,end_70_75_73_68_20_6c_6f_63_6b-start_70_75_73_68_20_6c_6f_63_6b
-start_70_75_73_68_20_6c_6f_63_6b:
+	ld b,end_70_75_73_68-start_70_75_73_68
+start_70_75_73_68:
 	push  hl
-end_70_75_73_68_20_6c_6f_63_6b:
+end_70_75_73_68:
 	ret
 
 
 
-; ********* pop lock macro *********
+; ********* pop macro *********
 
-define_70_6f_70_20_6c_6f_63_6b:
+define_70_6f_70:
 	nop
 	call COMPMacroExpand
-	ld b,end_70_6f_70_20_6c_6f_63_6b-start_70_6f_70_20_6c_6f_63_6b
-start_70_6f_70_20_6c_6f_63_6b:
+	ld b,end_70_6f_70-start_70_6f_70
+start_70_6f_70:
 	ex   de,hl
 	pop  hl
-end_70_6f_70_20_6c_6f_63_6b:
+end_70_6f_70:
 	ret
 
 ; ***************************************************************************************
 
 
 
-; ********* a>r lock macro *********
+; ********* a>r macro *********
 
-define_61_3e_72_20_6c_6f_63_6b:
+define_61_3e_72:
 	nop
 	call COMPMacroExpand
-	ld b,end_61_3e_72_20_6c_6f_63_6b-start_61_3e_72_20_6c_6f_63_6b
-start_61_3e_72_20_6c_6f_63_6b:
+	ld b,end_61_3e_72-start_61_3e_72
+start_61_3e_72:
 	push  hl
-end_61_3e_72_20_6c_6f_63_6b:
+end_61_3e_72:
 	ret
 
 
 
-; ********* r>a lock macro *********
+; ********* r>a macro *********
 
-define_72_3e_61_20_6c_6f_63_6b:
+define_72_3e_61:
 	nop
 	call COMPMacroExpand
-	ld b,end_72_3e_61_20_6c_6f_63_6b-start_72_3e_61_20_6c_6f_63_6b
-start_72_3e_61_20_6c_6f_63_6b:
+	ld b,end_72_3e_61-start_72_3e_61
+start_72_3e_61:
 	pop  hl
-end_72_3e_61_20_6c_6f_63_6b:
+end_72_3e_61:
 	ret
 
 ; ***************************************************************************************
 
 
 
-; ********* b>r lock macro *********
+; ********* b>r macro *********
 
-define_62_3e_72_20_6c_6f_63_6b:
+define_62_3e_72:
 	nop
 	call COMPMacroExpand
-	ld b,end_62_3e_72_20_6c_6f_63_6b-start_62_3e_72_20_6c_6f_63_6b
-start_62_3e_72_20_6c_6f_63_6b:
+	ld b,end_62_3e_72-start_62_3e_72
+start_62_3e_72:
 	push  de
-end_62_3e_72_20_6c_6f_63_6b:
+end_62_3e_72:
 	ret
 
 
 
-; ********* r>b lock macro *********
+; ********* r>b macro *********
 
-define_72_3e_62_20_6c_6f_63_6b:
+define_72_3e_62:
 	nop
 	call COMPMacroExpand
-	ld b,end_72_3e_62_20_6c_6f_63_6b-start_72_3e_62_20_6c_6f_63_6b
-start_72_3e_62_20_6c_6f_63_6b:
+	ld b,end_72_3e_62-start_72_3e_62
+start_72_3e_62:
 	pop  de
-end_72_3e_62_20_6c_6f_63_6b:
+end_72_3e_62:
 	ret
 
 ; ***************************************************************************************
 
 
 
-; ********* ab>r lock macro *********
+; ********* ab>r macro *********
 
-define_61_62_3e_72_20_6c_6f_63_6b:
+define_61_62_3e_72:
 	nop
 	call COMPMacroExpand
-	ld b,end_61_62_3e_72_20_6c_6f_63_6b-start_61_62_3e_72_20_6c_6f_63_6b
-start_61_62_3e_72_20_6c_6f_63_6b:
+	ld b,end_61_62_3e_72-start_61_62_3e_72
+start_61_62_3e_72:
 	push  de
 	push  hl
-end_61_62_3e_72_20_6c_6f_63_6b:
+end_61_62_3e_72:
 	ret
 
 
 
-; ********* r>ab lock macro *********
+; ********* r>ab macro *********
 
-define_72_3e_61_62_20_6c_6f_63_6b:
+define_72_3e_61_62:
 	nop
 	call COMPMacroExpand
-	ld b,end_72_3e_61_62_20_6c_6f_63_6b-start_72_3e_61_62_20_6c_6f_63_6b
-start_72_3e_61_62_20_6c_6f_63_6b:
+	ld b,end_72_3e_61_62-start_72_3e_61_62
+start_72_3e_61_62:
 	pop  hl
 	pop  de
-end_72_3e_61_62_20_6c_6f_63_6b:
+end_72_3e_61_62:
 	ret

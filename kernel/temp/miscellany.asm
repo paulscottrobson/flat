@@ -11,9 +11,9 @@
 
 
 
-; ********* , lock word *********
+; ********* , word *********
 
-define_2c_20_6c_6f_63_6b:
+define_2c:
 	nop
 	call COMPCompileSelf
 	jp   FARCompileWord
@@ -22,24 +22,24 @@ define_2c_20_6c_6f_63_6b:
 
 
 
-; ********* ; lock macro *********
+; ********* ; macro *********
 
-define_3b_20_6c_6f_63_6b:
+define_3b:
 	nop
 	call COMPMacroExpand
-	ld b,end_3b_20_6c_6f_63_6b-start_3b_20_6c_6f_63_6b
-start_3b_20_6c_6f_63_6b:
+	ld b,end_3b-start_3b
+start_3b:
 	ret
-end_3b_20_6c_6f_63_6b:
+end_3b:
 	ret
 
 ; ***************************************************************************************
 
 
 
-; ********* c, lock word *********
+; ********* c, word *********
 
-define_63_2c_20_6c_6f_63_6b:
+define_63_2c:
 	nop
 	call COMPCompileSelf
 	ld   a,l
@@ -126,9 +126,9 @@ __fill_loop:
 
 
 
-; ********* halt lock word *********
+; ********* halt word *********
 
-define_68_61_6c_74_20_6c_6f_63_6b:
+define_68_61_6c_74:
 	nop
 	call COMPCompileSelf
 __halt_loop:
@@ -140,14 +140,14 @@ __halt_loop:
 
 
 
-; ********* break lock macro *********
+; ********* break macro *********
 
-define_62_72_65_61_6b_20_6c_6f_63_6b:
+define_62_72_65_61_6b:
 	nop
 	call COMPMacroExpand
-	ld b,end_62_72_65_61_6b_20_6c_6f_63_6b-start_62_72_65_61_6b_20_6c_6f_63_6b
-start_62_72_65_61_6b_20_6c_6f_63_6b:
+	ld b,end_62_72_65_61_6b-start_62_72_65_61_6b
+start_62_72_65_61_6b:
 	db   $DD,$01
-end_62_72_65_61_6b_20_6c_6f_63_6b:
+end_62_72_65_61_6b:
 	ret
 

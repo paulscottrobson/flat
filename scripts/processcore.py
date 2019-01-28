@@ -35,9 +35,9 @@ def convert(sourceFile,targetFile):
 				name = name[:-4].strip()
 				locked = True
 			assert current == "word" or current == "macro"
-			scrambled = "_".join(["{0:02x}".format(ord(c)) for c in m.group(2)])
+			scrambled = "_".join(["{0:02x}".format(ord(c)) for c in name])
 			#print(current,scrambled,m.group(2))
-			hOut.write("\n\n; {0} {1} {2} {0}\n\n".format("*********",m.group(2),current))
+			hOut.write("\n\n; {0} {1} {2} {0}\n\n".format("*********",name,current))
 			hOut.write("define_"+scrambled+":\n")
 			if locked:
 				hOut.write("\tnop\n")
@@ -45,7 +45,8 @@ def convert(sourceFile,targetFile):
 			if current != "word":
 				hOut.write("\tld b,end_{0}-start_{0}\n".format(scrambled))
 				hOut.write("start_"+scrambled+":\n")
-			dictionary[m.group(2)] = "define_"+scrambled
+			assert name not in dictionary
+			dictionary[name] = "define_"+scrambled
 
 		else:
 			l = "\t"+l.strip() if l.startswith(" ") else l.strip()

@@ -66,5 +66,3 @@ __PAGEStackBase:
 
 FreeMemory:		
 
-		org 	$C000
-		include "dictionary.asm"

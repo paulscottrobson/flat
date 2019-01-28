@@ -15,4 +15,5 @@
 	include "temp/register.asm"
 	include "temp/stack.asm"
 	include "temp/unary.asm"
+	include "temp/wordaction.asm"
 

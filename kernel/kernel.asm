@@ -32,6 +32,8 @@ StackTop = $7EFC 									;      -$7EFC Top of stack
 Boot:	ld 		sp,StackTop							; reset Z80 Stack
 		di											; disable interrupts
 	
+		db 		$DD,$01
+
 		db 		$ED,$91,7,2							; set turbo port (7) to 2 (14Mhz speed)
 		ld 		a,FirstCodePage 					; get the page to start
 		call 	PAGEInitialise
@@ -42,17 +44,19 @@ Boot:	ld 		sp,StackTop							; reset Z80 Stack
 		ld 		a,(BootPage)						; switch to boot page.
 		call 	PAGEInitialise
 		ld 		ix,(BootAddress)					; start address
-		ld 		hl,0								; zero ABC
+		ld 		hl,0								; zero AB registers
 		ld 		de,0
-		ld 		bc,0
-		jp 		(ix)
+		ld 		(Parameter),hl 						; clear parameter
+		jp 		(ix) 								; and execute.
 
 StopDefault:	
 		jp 		StopDefault
 
-COMPCompileSelf:
-COMPMacroExpand:
 		ret
 		
-		include "includes.asm"		
-		include "data.asm"		
+		include "includes.asm"						; the included sources picked up by processcore.py
+		include "data.asm"							; data area.
+
+		org 	$C000
+		include "dictionary.asm" 					; dictionary.
+
