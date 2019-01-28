@@ -244,6 +244,12 @@
 	db 4
 	db "copy"
 
+	db 11+5
+	db $20
+	dw define_64_69_63_74_2e_63_72_75_6e_63_68
+	db 11
+	db "dict.crunch"
+
 	db 4+5
 	db $20
 	dw define_66_69_6c_6c

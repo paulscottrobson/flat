@@ -64,5 +64,4 @@ __PAGEStackPointer: 								; stack used for switching pages
 __PAGEStackBase:
 		ds 		16
 
-FreeMemory:		
 

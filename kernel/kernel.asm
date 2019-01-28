@@ -54,9 +54,11 @@ StopDefault:
 
 		ret
 		
-		include "includes.asm"						; the included sources picked up by processcore.py
+		include "__includes.asm"					; the included sources picked up by processcore.py
 		include "data.asm"							; data area.
 
+FreeMemory:											; free memory in $8000-$BFFF page.
+
 		org 	$C000
-		include "dictionary.asm" 					; dictionary.
+		include "temp/__dictionary.asm" 			; dictionary.
 

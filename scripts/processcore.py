@@ -67,14 +67,14 @@ for root,dirs,files in os.walk("components"):
 
 importList.sort()
 importList = ["\tinclude \"{0}\"".format(x) for x in importList]
-h = open("includes.asm","w")
+h = open("__includes.asm","w")
 h.write("\n".join(importList))
 h.write("\n\n")
 h.close()			
 
 words = [x for x in dictionary.keys()]
 words.sort()
-h = open("dictionary.asm","w")
+h = open("temp"+os.sep+"__dictionary.asm","w")
 for w in words:
 	h.write("\tdb {0}+5\n".format(len(w)))
 	h.write("\tdb $20\n")

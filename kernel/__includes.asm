@@ -10,6 +10,7 @@
 	include "components/core/paging.asm"
 	include "temp/binary.asm"
 	include "temp/console.asm"
+	include "temp/dictionary.asm"
 	include "temp/memory.asm"
 	include "temp/miscellany.asm"
 	include "temp/register.asm"
