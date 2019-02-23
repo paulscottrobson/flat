@@ -1,4 +1,4 @@
-﻿#CSpect V2.2.0 ZXSpectrum emulator by Mike Dailly
+﻿#CSpect V2.2.4 ZXSpectrum emulator by Mike Dailly
 (c)1998-2018 All rights reserved
 
 Be aware...emulator is far from well tested, might crash for any reason!
@@ -24,7 +24,7 @@ Command Line Options
 -brk               =  to enable "BREAK" opcode of "DD 01"
 -esc               =  to disable ESCAPE exit key (use exit opcode, close button or ALT+F4 to exit)
 -cur               =  to map cursor keys to 6789 (l/r/d/u)
--8_3			   =  set filenames back to 8.3 detection
+-8_3               =  set filenames back to 8.3 detection
 -mmc=<dir>\        =  enable RST $08 usage, must provide path to "root" dir of emulated SD card (eg  "-mmc=.\" or "-mmc=c:\test\")
 -map=<path\file>   =  SNASM format map file for use in the debugger. format is: "<16bit address> <physical address> <type> <primary_label>[@<local>]"
 -sound             =  disable sound
@@ -32,16 +32,39 @@ Command Line Options
 -w<size>           =  set window size (1 to 4)
 -r                 =  Remember window settings (in "cspect.dat" file, just delete the file to reset)
 -16bit             =  Use the logical (16bit) addresses in the debugger only
+-60                =  60Hz mode
 
 
 
 
 Whats new
 ======================================================================================
-V2.2.0
+V2.2.4
+------
+Minor fix to tilemap indexing on u16 tile size
+
+V2.2.3
+------
+Added ULA scrolling using LowRes scroll registers. Note: X currently byte scrolling only.
+Added Tilemap screen mode
+Added X and Y scrolling to tilemaps
+Fixed a couple of bugs in the streaming API.
+Fixed USL rendering order - was just buggered. (Layer2 demo was broken)
+Added a "vsync" mode when using "-60 -sound"
+
+
+V2.2.2
+------
+Fixed regs $75-$79 auto inc then top bit of $35 NOT set
+Upped sprites to 128 as per new hardware (yum!)
+
+V2.2.1
 ------
 Fixed reg 0x43 bit 7- disable palette auto increment.
 Fixed NextReg access for sprites. Was using the wrong index.
+Added Auto-increment/port binding for NextReg $35 (sprite number)
+Added Auto-increment sprite Next registers $75-$79 (mirrors)
+Fixed MMC path setting from the command line
 
 
 V2.1.4
