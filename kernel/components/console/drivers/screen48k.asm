@@ -4,7 +4,7 @@
 ;		File:		screen48k.asm
 ;		Purpose:	Hardware interface to Spectrum display, standard but with
 ;					sprites enabled. 	
-;		Date : 		28th January 2019
+;		Date : 		12th March 2019
 ;		Author:		paul@robsons.org.uk
 ;
 ; *********************************************************************************

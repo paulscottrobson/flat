@@ -3,7 +3,7 @@
 ;
 ;  Name :   dictionary.src
 ;  Author : Paul Robson (paul@robsons.org.uk)
-;  Date :   28th January 2019.
+;  Date :   12th March 2019.
 ;  Purpose : Dictionary handler.
 ;
 ; ***************************************************************************************

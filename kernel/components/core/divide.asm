@@ -3,7 +3,7 @@
 ;
 ;		File:		divide.asm
 ;		Purpose:	16 bit unsigned divide
-;		Date : 		28th January 2018
+;		Date : 		12th March 2019
 ;		Author:		paul@robsons.org.uk
 ;
 ; *********************************************************************************

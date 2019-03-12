@@ -3,8 +3,8 @@
 ;
 ;		Name : 		kernel.asm
 ;		Author :	Paul Robson (paul@robsons.org.uk)
-;		Date : 		5th January 2019
-;		Purpose :	M7 Kernel
+;		Date : 		12th March 2019
+;		Purpose :	Flat Kernel
 ;
 ; ***************************************************************************************
 ; ***************************************************************************************
