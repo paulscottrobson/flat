@@ -1,9 +1,8 @@
 TODO
-	Buffer Scanner
-	Compiler/Executor
 	Runtime Library
 	Core library ; variables !! @@ && structures min max
 	Libraries etc. adding functionality as needed.
-
+	Warm Start
+	Proper Error message for compiler/interpreter.
 		
 

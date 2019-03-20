@@ -1,6 +1,6 @@
               	; --------------------------------------
               	; zasm: assemble "kernel.asm"
-              	; date: 2019-03-20 14:49:03
+              	; date: 2019-03-20 15:09:35
               	; --------------------------------------
 
 
@@ -33,7 +33,7 @@
 8000:         			org 	$8000 								; $8000 boot.
 8000: 1804    			jr 		Boot
 8002: FFFF    			org 	$8004 								; $8004 address of sysinfo
-8004: 678B    			dw 		SystemInformation 
+8004: 918B    			dw 		SystemInformation 
               	
 8006: 31FC7E  	Boot:	ld 		sp,StackTop							; reset Z80 Stack
 8009: F3      			di											; disable interrupts
@@ -45,12 +45,12 @@
 8013: 3E00    			ld 		a,0 								; set Mode 0 (standard 48k Spectrum + Sprites)
 8015: CD0B85  			call 	GFXMode
               	
-8018: 3A758B  			ld 		a,(BootPage)						; switch to boot page.
+8018: 3A9F8B  			ld 		a,(BootPage)						; switch to boot page.
 801B: CDCA86  			call 	PAGEInitialise
-801E: DD2A738B			ld 		ix,(BootAddress)					; start address
+801E: DD2A9D8B			ld 		ix,(BootAddress)					; start address
 8022: 210000  			ld 		hl,0								; zero AB registers
 8025: 110000  			ld 		de,0
-8028: 22778B  			ld 		(Parameter),hl 						; clear parameter
+8028: 22A18B  			ld 		(Parameter),hl 						; clear parameter
 802B: DDE9    			jp 		(ix) 								; and execute.
               	
 802D:         	BootDefault:
@@ -165,7 +165,7 @@
 808F: 29      			add 	hl,hl 								; x 8
 8090: 29      			add 	hl,hl
 8091: 29      			add 	hl,hl
-8092: ED5B8B8B			ld 		de,(SIFontBase) 					; add the font base.
+8092: ED5BB58B			ld 		de,(SIFontBase) 					; add the font base.
 8096: 19      			add 	hl,de
 8097: EB      			ex 		de,hl 								; put in DE (font address)
 8098: E1      			pop 	hl
@@ -299,7 +299,7 @@
 811F: E1      			pop 	hl
               	
 8120: C5      			push 	bc 									; add the font base to it.
-8121: ED4B8B8B			ld 		bc,(SIFontBase)
+8121: ED4BB58B			ld 		bc,(SIFontBase)
 8125: DD09    			add 	ix,bc
 8127: C1      			pop 	bc
               			;
@@ -446,7 +446,7 @@
 81BD: DDE1    			pop 	ix
               	
 81BF: C5      			push 	bc 									; add the font base to it.
-81C0: ED4B8B8B			ld 		bc,(SIFontBase)
+81C0: ED4BB58B			ld 		bc,(SIFontBase)
 81C4: DD09    			add 	ix,bc
 81C6: C1      			pop 	bc
 81C7: E1      			pop 	hl
@@ -722,7 +722,7 @@
 850C: D5      			push 	de
 850D: E5      			push 	hl
 850E: 7D      			ld 		a,l 								; save new mode.
-850F: 32878B  			ld 		(SIScreenMode),a
+850F: 32B18B  			ld 		(SIScreenMode),a
 8512: 2D      			dec 	l 									; L = 1 mode layer2
 8513: 2808    			jr 		z,__GFXLayer2
 8515: 2D      			dec 	l
@@ -740,17 +740,17 @@
               	
 8525:         	__GFXConfigure:
 8525: 7D      			ld 		a,l 								; save screen size
-8526: 327B8B  			ld 		(SIScreenWidth),a
+8526: 32A58B  			ld 		(SIScreenWidth),a
 8529: 7C      			ld 		a,h
-852A: 327F8B  			ld 		(SIScreenHeight),a
+852A: 32A98B  			ld 		(SIScreenHeight),a
 852D: EB      			ex 		de,hl 								; save driver
-852E: 228D8B  			ld 		(SIScreenDriver),hl
+852E: 22B78B  			ld 		(SIScreenDriver),hl
               	
 8531: 6A      			ld 		l,d 								; put sizes in HL DE
 8532: 2600    			ld 		h,0
 8534: 1600    			ld 		d,0
 8536: CDB086  			call 	MULTMultiply16 						; multiply to get size and store.
-8539: 22838B  			ld 		(SIScreenSize),hl
+8539: 22AD8B  			ld 		(SIScreenSize),hl
               	
 853C: E1      			pop 	hl
 853D: D1      			pop 	de
@@ -770,7 +770,7 @@
 8543: E5      			push 	hl
 8544: 014E85  			ld 		bc,__GFXWCExit
 8547: C5      			push 	bc
-8548: ED4B8D8B			ld 		bc,(SIScreenDriver)
+8548: ED4BB78B			ld 		bc,(SIScreenDriver)
 854C: C5      			push 	bc
 854D: C9      			ret
 854E:         	__GFXWCExit:
@@ -1039,13 +1039,13 @@
 867D: F5      			push 	af 									; save byte and HL
 867E: E5      			push 	hl
 867F: F5      			push 	af 									; save byte
-8680: 3A698B  			ld		a,(HerePage) 						; switch to page
+8680: 3A938B  			ld		a,(HerePage) 						; switch to page
 8683: CDDC86  			call 	PAGESwitch
-8686: 2A678B  			ld 		hl,(Here) 							; write to memory location
+8686: 2A918B  			ld 		hl,(Here) 							; write to memory location
 8689: F1      			pop 	af
 868A: 77      			ld 		(hl),a
 868B: 23      			inc 	hl 									; bump memory location
-868C: 22678B  			ld 		(Here),hl 							; write back
+868C: 22918B  			ld 		(Here),hl 							; write back
 868F: CDF586  			call 	PAGERestore
 8692: E1      			pop 	hl 									; restore and exit
 8693: F1      			pop 	af
@@ -1062,14 +1062,14 @@
 8696: D5      			push 	de
 8697: E5      			push 	hl
 8698: EB      			ex 		de,hl 								; word into DE
-8699: 3A698B  			ld		a,(HerePage) 						; switch to page
+8699: 3A938B  			ld		a,(HerePage) 						; switch to page
 869C: CDDC86  			call 	PAGESwitch
-869F: 2A678B  			ld 		hl,(Here) 							; write to memory location
+869F: 2A918B  			ld 		hl,(Here) 							; write to memory location
 86A2: 73      			ld 		(hl),e
 86A3: 23      			inc 	hl 	
 86A4: 72      			ld 		(hl),d
 86A5: 23      			inc 	hl
-86A6: 22678B  			ld 		(Here),hl 							; write back
+86A6: 22918B  			ld 		(Here),hl 							; write back
 86A9: CDF586  			call 	PAGERestore
 86AC: E1      			pop 	hl
 86AD: D1      			pop 	de 									; restore and exit
@@ -1141,8 +1141,8 @@
 86CF: ED9257  			db 		$ED,$92,$57
 86D2: 3D      			dec 	a
 86D3: 08      			ex 		af,af' 								; put page in A'
-86D4: 21918B  			ld 		hl,__PAGEStackBase 					; reset the page stack
-86D7: 228F8B  			ld 		(__PAGEStackPointer),hl
+86D4: 21BB8B  			ld 		hl,__PAGEStackBase 					; reset the page stack
+86D7: 22B98B  			ld 		(__PAGEStackPointer),hl
 86DA: E1      			pop 	hl
 86DB: C9      			ret
               	
@@ -1157,11 +1157,11 @@
 86DD: E5      			push 	hl
               	
 86DE: F5      			push 	af 									; save A on stack
-86DF: 2A8F8B  			ld 		hl,(__PAGEStackPointer) 			; put A' on the stack, the current page
+86DF: 2AB98B  			ld 		hl,(__PAGEStackPointer) 			; put A' on the stack, the current page
 86E2: 08      			ex 		af,af'
 86E3: 77      			ld 		(hl),a
 86E4: 23      			inc 	hl
-86E5: 228F8B  			ld 		(__PAGEStackPointer),hl
+86E5: 22B98B  			ld 		(__PAGEStackPointer),hl
               	
 86E8: F1      			pop 	af 									; restore new A
 86E9: ED9256  			db 		$ED,$92,$56							; switch to page A
@@ -1183,10 +1183,10 @@
 86F5:         	PAGERestore:
 86F5: F5      			push 	af
 86F6: E5      			push 	hl
-86F7: 2A8F8B  			ld 		hl,(__PAGEStackPointer) 			; pop the old page off
+86F7: 2AB98B  			ld 		hl,(__PAGEStackPointer) 			; pop the old page off
 86FA: 2B      			dec 	hl
 86FB: 7E      			ld 		a,(hl)
-86FC: 228F8B  			ld 		(__PAGEStackPointer),hl
+86FC: 22B98B  			ld 		(__PAGEStackPointer),hl
 86FF: ED9256  			db 		$ED,$92,$56							; switch to page A
 8702: 3C      			inc 	a
 8703: ED9257  			db 		$ED,$92,$57
@@ -1215,7 +1215,7 @@
               	; ********* < word *********
               	
 870B:         	define_3c:
-870B: CD508B  		call COMPCompileSelf
+870B: CD7A8B  		call COMPCompileSelf
 870E: 7C      		ld   a,h           ; check if signs different.
 870F: AA      		xor  d
 8710: 87      		add  a,a          ; CS if different
@@ -1242,7 +1242,7 @@
               	; ********* = word *********
               	
 8723:         	define_3d:
-8723: CD508B  		call COMPCompileSelf
+8723: CD7A8B  		call COMPCompileSelf
 8726: 7C      		ld   a,h          ; H = H ^ D
 8727: AA      		xor  d
 8728: 67      		ld   h,a
@@ -1261,7 +1261,7 @@
               	; ********* - word *********
               	
 8732:         	define_2d:
-8732: CD508B  		call COMPCompileSelf
+8732: CD7A8B  		call COMPCompileSelf
 8735: D5      		push  de           ; save DE
 8736: EB      		ex   de,hl          ; HL = B, DE = A
 8737: AF      		xor  a            ; clear carry
@@ -1276,7 +1276,7 @@
               	; ********* * word *********
               	
 873C:         	define_2a:
-873C: CD508B  		call COMPCompileSelf
+873C: CD7A8B  		call COMPCompileSelf
 873F: C3B086  		jp   MULTMultiply16
               	
               	; ***************************************************************************************
@@ -1286,7 +1286,7 @@
               	; ********* / word *********
               	
 8742:         	define_2f:
-8742: CD508B  		call COMPCompileSelf
+8742: CD7A8B  		call COMPCompileSelf
 8745: D5      		push  de
 8746: CD5286  		call  DIVDivideMod16
 8749: EB      		ex   de,hl
@@ -1300,7 +1300,7 @@
               	; ********* + macro *********
               	
 874C:         	define_2b:
-874C: CD5B8B  		call COMPMacroExpand
+874C: CD858B  		call COMPMacroExpand
 874F: 0601    		ld b,end_2b-start_2b
 8751:         	start_2b:
 8751: 19      		add  hl,de
@@ -1314,7 +1314,7 @@
               	; ********* and word *********
               	
 8753:         	define_61_6e_64:
-8753: CD508B  		call COMPCompileSelf
+8753: CD7A8B  		call COMPCompileSelf
 8756: 7C      		ld   a,h
 8757: A2      		and  d
 8758: 67      		ld   h,a
@@ -1330,7 +1330,7 @@
               	; ********* mod word *********
               	
 875D:         	define_6d_6f_64:
-875D: CD508B  		call COMPCompileSelf
+875D: CD7A8B  		call COMPCompileSelf
 8760: D5      		push  de
 8761: CD5286  		call  DIVDivideMod16
 8764: D1      		pop  de
@@ -1343,7 +1343,7 @@
               	; ********* or word *********
               	
 8766:         	define_6f_72:
-8766: CD508B  		call COMPCompileSelf
+8766: CD7A8B  		call COMPCompileSelf
 8769: 7C      		ld   a,h
 876A: B2      		or   d
 876B: 67      		ld   h,a
@@ -1359,7 +1359,7 @@
               	; ********* xor word *********
               	
 8770:         	define_78_6f_72:
-8770: CD508B  		call COMPCompileSelf
+8770: CD7A8B  		call COMPCompileSelf
 8773: 7C      		ld   a,h
 8774: AA      		xor  d
 8775: 67      		ld   h,a
@@ -1385,7 +1385,7 @@
               	; ********* con.raw.setmode word *********
               	
 877A:         	define_63_6f_6e_2e_72_61_77_2e_73_65_74_6d_6f_64_65:
-877A: CD508B  		call COMPCompileSelf
+877A: CD7A8B  		call COMPCompileSelf
 877D: C30B85  		jp   GFXMode
               	
               	
@@ -1393,7 +1393,7 @@
               	; ********* con.raw.char! word *********
               	
 8780:         	define_63_6f_6e_2e_72_61_77_2e_63_68_61_72_21:
-8780: CD508B  		call COMPCompileSelf
+8780: CD7A8B  		call COMPCompileSelf
 8783: C34085  		jp   GFXWriteCharacter
               	
               	
@@ -1401,7 +1401,7 @@
               	; ********* con.raw.hex! word *********
               	
 8786:         	define_63_6f_6e_2e_72_61_77_2e_68_65_78_21:
-8786: CD508B  		call COMPCompileSelf
+8786: CD7A8B  		call COMPCompileSelf
 8789: C35385  		jp   GFXWriteHexWord
               	
               	
@@ -1409,7 +1409,7 @@
               	; ********* con.raw.inkey word *********
               	
 878C:         	define_63_6f_6e_2e_72_61_77_2e_69_6e_6b_65_79:
-878C: CD508B  		call COMPCompileSelf
+878C: CD7A8B  		call COMPCompileSelf
 878F: EB      		ex   de,hl
 8790: CD8585  		call  IOScanKeyboard       ; read keyboard
 8793: 6F      		ld   l,a
@@ -1544,10 +1544,10 @@
 87FB: C605    		add  a,5
 87FD: DD7700  		ld   (ix+0),a        ; offset is length + 5
               	
-8800: 3A698B  		ld   a,(HerePage)      ; code page
+8800: 3A938B  		ld   a,(HerePage)      ; code page
 8803: DD7701  		ld   (ix+1),a
               	
-8806: ED5B678B		ld   de,(Here)        ; code address
+8806: ED5B918B		ld   de,(Here)        ; code address
 880A: DD7302  		ld   (ix+2),e
 880D: DD7203  		ld   (ix+3),d
               	
@@ -1659,7 +1659,7 @@
               	; ********* dict.crunch word *********
               	
 8889:         	define_64_69_63_74_2e_63_72_75_6e_63_68:
-8889: CD508B  		call COMPCompileSelf
+8889: CD7A8B  		call COMPCompileSelf
               	
 888C:         	DICTCrunchDictionary:
 888C: C5      		push  bc
@@ -1729,7 +1729,7 @@
               	; ********* loadfrom word *********
               	
 88C9:         	define_6c_6f_61_64_66_72_6f_6d:
-88C9: CD508B  		call COMPCompileSelf
+88C9: CD7A8B  		call COMPCompileSelf
               	
 88CC:         	LOADLoadPages:
               	
@@ -1855,7 +1855,7 @@
               	; ********* ! macro *********
               	
 895C:         	define_21:
-895C: CD5B8B  		call COMPMacroExpand
+895C: CD858B  		call COMPMacroExpand
 895F: 0604    		ld b,end_21-start_21
 8961:         	start_21:
 8961: 73      		ld   (hl),e
@@ -1872,7 +1872,7 @@
               	; ********* @ macro *********
               	
 8966:         	define_40:
-8966: CD5B8B  		call COMPMacroExpand
+8966: CD858B  		call COMPMacroExpand
 8969: 0604    		ld b,end_40-start_40
 896B:         	start_40:
 896B: 7E      		ld   a,(hl)
@@ -1889,7 +1889,7 @@
               	; ********* +! word *********
               	
 8970:         	define_2b_21:
-8970: CD508B  		call COMPCompileSelf
+8970: CD7A8B  		call COMPCompileSelf
 8973: 7E      		ld   a,(hl)
 8974: 83      		add  a,e
 8975: 77      		ld   (hl),a
@@ -1907,7 +1907,7 @@
               	; ********* c! macro *********
               	
 897C:         	define_63_21:
-897C: CD5B8B  		call COMPMacroExpand
+897C: CD858B  		call COMPMacroExpand
 897F: 0601    		ld b,end_63_21-start_63_21
 8981:         	start_63_21:
 8981: 73      		ld   (hl),e
@@ -1921,7 +1921,7 @@
               	; ********* c@ macro *********
               	
 8983:         	define_63_40:
-8983: CD5B8B  		call COMPMacroExpand
+8983: CD858B  		call COMPMacroExpand
 8986: 0603    		ld b,end_63_40-start_63_40
 8988:         	start_63_40:
 8988: 6E      		ld   l,(hl)
@@ -1936,7 +1936,7 @@
               	; ********* p@ word *********
               	
 898C:         	define_70_40:
-898C: CD508B  		call COMPCompileSelf
+898C: CD7A8B  		call COMPCompileSelf
 898F: 42      		ld   b,d
 8990: 4B      		ld   c,e
 8991: ED68    		in   l,(c)
@@ -1950,7 +1950,7 @@
               	; ********* p! macro *********
               	
 8996:         	define_70_21:
-8996: CD5B8B  		call COMPMacroExpand
+8996: CD858B  		call COMPMacroExpand
 8999: 0604    		ld b,end_70_21-start_70_21
 899B:         	start_70_21:
 899B: 42      		ld   b,d
@@ -1976,7 +1976,7 @@
               	
 89A0:         	define_2c:
 89A0: 00      		nop
-89A1: CD508B  		call COMPCompileSelf
+89A1: CD7A8B  		call COMPCompileSelf
 89A4: C39586  		jp   FARCompileWord
               	
               	; ***************************************************************************************
@@ -1987,7 +1987,7 @@
               	
 89A7:         	define_3b:
 89A7: 00      		nop
-89A8: CD5B8B  		call COMPMacroExpand
+89A8: CD858B  		call COMPMacroExpand
 89AB: 0601    		ld b,end_3b-start_3b
 89AD:         	start_3b:
 89AD: C9      		ret
@@ -2002,7 +2002,7 @@
               	
 89AF:         	define_63_2c:
 89AF: 00      		nop
-89B0: CD508B  		call COMPCompileSelf
+89B0: CD7A8B  		call COMPCompileSelf
 89B3: 7D      		ld   a,l
 89B4: C39586  		jp   FARCompileWord
               	
@@ -2013,8 +2013,8 @@
               	; ********* param! word *********
               	
 89B7:         	define_70_61_72_61_6d_21:
-89B7: CD508B  		call COMPCompileSelf
-89BA: 22778B  		ld   (Parameter),hl
+89B7: CD7A8B  		call COMPCompileSelf
+89BA: 22A18B  		ld   (Parameter),hl
               	
               	; ***************************************************************************************
               	
@@ -2023,8 +2023,8 @@
               	; ********* copy word *********
               	
 89BD:         	define_63_6f_70_79:
-89BD: CD508B  		call COMPCompileSelf
-89C0: ED4B778B		ld   bc,(Parameter)
+89BD: CD7A8B  		call COMPCompileSelf
+89C0: ED4BA18B		ld   bc,(Parameter)
 89C4: 78      		ld   a,b
 89C5: B1      		or   c
 89C6: C8      		ret  z
@@ -2063,8 +2063,8 @@
               	; ********* fill word *********
               	
 89E1:         	define_66_69_6c_6c:
-89E1: CD508B  		call COMPCompileSelf
-89E4: ED4B778B		ld   bc,(Parameter)
+89E1: CD7A8B  		call COMPCompileSelf
+89E4: ED4BA18B		ld   bc,(Parameter)
 89E8: 78      		ld   a,b         ; exit if C = 0
 89E9: B1      		or   c
 89EA: C8      		ret  z
@@ -2091,7 +2091,7 @@
               	
 89F8:         	define_68_61_6c_74:
 89F8: 00      		nop
-89F9: CD508B  		call COMPCompileSelf
+89F9: CD7A8B  		call COMPCompileSelf
 89FC:         	__halt_loop:
 89FC: F3      		di
 89FD: 76      		halt
@@ -2105,7 +2105,7 @@
               	
 8A00:         	define_62_72_65_61_6b:
 8A00: 00      		nop
-8A01: CD5B8B  		call COMPMacroExpand
+8A01: CD858B  		call COMPMacroExpand
 8A04: 0602    		ld b,end_62_72_65_61_6b-start_62_72_65_61_6b
 8A06:         	start_62_72_65_61_6b:
 8A06: DD01    		db   $DD,$01
@@ -2133,73 +2133,105 @@
 8A09:         	PROProcessTaggedWord:
 8A09: DD7E00  		ld   a,(ix+0)       ; Check type
 8A0C: E6C0    		and  $C0         ; strip off length leaving tag
-8A0E: 2805    		jr   z,__PRODefinition      ; $00 is a RED definition
-8A10: FE40    		cp   $40         ; $40 is a GREEN compilation
-8A12: 2815    		jr   z,__PROCompilation
-8A14: C9      		ret
+8A0E: 2809    		jr   z,__PRODefinition      ; $00 is RED definition
+8A10: FE40    		cp   $40         ; $40 is GREEN compilation
+8A12: 2819    		jr   z,__PROCompilation
+8A14: FE80    		cp   $80         ; $80 is YELLOW execution
+8A16: 2839    		jr   z,__PROExecution
+8A18: C9      		ret
               	;
               	;  Handle a RED word (definition), by adding a dictionary reference and a self-compile
               	;  call.
               	;
-8A15:         	__PRODefinition:
-8A15: DDE5    		push  ix          ; copy word address into BC
-8A17: C1      		pop  bc
-8A18: CDD787  		call  DICTAddWord       ; add the definition in
-8A1B: 3ECD    		ld   a,$CD          ; Z80 call instruction.
-8A1D: CD7D86  		call  FARCompileByte
-8A20: E5      		push  hl
-8A21: 21508B  		ld   hl,COMPCompileSelf      ; compile self address.
-8A24: CD9586  		call  FARCompileWord
-8A27: E1      		pop  hl
-8A28: C9      		ret
+8A19:         	__PRODefinition:
+8A19: DDE5    		push  ix          ; copy word address into BC
+8A1B: C1      		pop  bc
+8A1C: CDD787  		call  DICTAddWord       ; add the definition in
+8A1F: 3ECD    		ld   a,$CD          ; Z80 call instruction.
+8A21: CD7D86  		call  FARCompileByte
+8A24: E5      		push  hl
+8A25: 217A8B  		ld   hl,COMPCompileSelf      ; compile self address.
+8A28: CD9586  		call  FARCompileWord
+8A2B: E1      		pop  hl
+8A2C: C9      		ret
               	;
-              	;  Handle a Green word, by calling it if it exists to self compile, otherwise try as a
+              	;  Handle a GREEN word, by calling it if it exists to self compile, otherwise try as a
               	;  constant, compiling load constant code.
               	;
-8A29:         	__PROCompilation:
-8A29: D9      		exx           ; temporarily put AB in alternate registers.
-8A2A: DDE5    		push  ix          ; put the word address in BC
-8A2C: C1      		pop  bc
-8A2D: CD2B88  		call  DICTFindWord       ; look it up.
-8A30: 3805    		jr   c,__PROComTryConstant     ; not found, try as a constant.
+8A2D:         	__PROCompilation:
+8A2D: D9      		exx           ; temporarily put AB in alternate registers.
+8A2E: DDE5    		push  ix          ; put the word address in BC
+8A30: C1      		pop  bc
+8A31: CD2B88  		call  DICTFindWord       ; look it up.
+8A34: 3805    		jr   c,__PROComTryConstant     ; not found, try as a constant.
               	;
-8A32: CD518A  		call  __PROExecute       ; Execute E:HL with the a values in the alternate register
-8A35: D9      		exx           ; restore the AB values
-8A36: C9      		ret
+8A36: CD7B8A  		call  __PROExecuteEHL      ; Execute E:HL with the a values in the alternate register
+8A39: D9      		exx           ; restore the AB values
+8A3A: C9      		ret
               	;
-8A37:         	__PROComTryConstant:
-8A37: DD01    		db   $DD,$01
-8A39: CD9787  		call  CONSTEvaluate       ; evaluate as a constant.
-8A3C: 3811    		jr   c,__PROCError      ; not evaluatable as a constant.
-8A3E: 3EEB    		ld   a,$EB         ; compile EX DE,HL
-8A40: CD7D86  		call  FARCompileByte
-8A43: 3E21    		ld   a,$21         ; compile LD HL,xxxx
-8A45: CD7D86  		call  FARCompileByte
-8A48: 60      		ld   h,b         ; compile constant in BC
-8A49: 69      		ld   l,c
-8A4A: CD9586  		call  FARCompileWord
-8A4D: D9      		exx           ; get AB back
-8A4E: C9      		ret
+8A3B:         	__PROComTryConstant:
+8A3B: CD9787  		call  CONSTEvaluate       ; evaluate as a constant.
+8A3E: 3839    		jr   c,__PROCError      ; not evaluatable as a constant.
+8A40: 3EEB    		ld   a,$EB         ; compile EX DE,HL
+8A42: CD7D86  		call  FARCompileByte
+8A45: 3E21    		ld   a,$21         ; compile LD HL,xxxx
+8A47: CD7D86  		call  FARCompileByte
+8A4A: 60      		ld   h,b         ; compile constant in BC
+8A4B: 69      		ld   l,c
+8A4C: CD9586  		call  FARCompileWord
+8A4F: D9      		exx           ; get AB back
+8A50: C9      		ret
+              	;
+              	;  Handle a YELLOW word, executing it directly.
+              	;
+8A51:         	__PROExecution:
+8A51: DD01    		db   $DD,$01
+8A53: D9      		exx           ; temporarily put AB in alternate registers.
+8A54: DDE5    		push  ix          ; put the word address in BC
+8A56: C1      		pop  bc
+8A57: CD2B88  		call  DICTFindWord       ; look it up.
+8A5A: 3813    		jr   c,__PROExeTryConstant     ; not found, try as a constant.
+8A5C: 7B      		ld   a,e         ; switch to page
+8A5D: CDDC86  		call  PAGESwitch
+8A60: 7E      		ld   a,(hl)         ; read first byte and switch back.
+8A61: CDF586  		call  PAGERestore
+8A64: B7      		or   a          ; if it is zero, (NOP) you cannot execute this.
+8A65: 2812    		jr   z,__PROCError       ; because it is verboten :)
+8A67: 23      		inc  hl          ; skip over the compile-caller to the actual code.
+8A68: 23      		inc  hl
+8A69: 23      		inc  hl
+8A6A: CD7B8A  		call  __PROExecuteEHL      ; and execute that.
+8A6D: D9      		exx            ; restore A/B and exit.
+8A6E: C9      		ret
+              	;
+8A6F:         	__PROExeTryConstant:
+8A6F: CD9787  		call  CONSTEvaluate       ; evaluate as a constant.
+8A72: 3805    		jr   c,__PROCError      ; not evaluatable as a constant.
+8A74: C5      		push  bc          ; save result
+8A75: D9      		exx           ; get A B back
+8A76: EB      		ex   de,hl         ; put A into B
+8A77: E1      		pop  hl          ; copy new value into A
+8A78: C9      		ret
               	;
               	;  Error
               	;
-8A4F:         	__PROCError:           ; can't process word.
-8A4F: 18FE    		jr   __PROCError
+8A79:         	__PROCError:           ; can't process word.
+8A79: 18FE    		jr   __PROCError
               	;
               	;  Execute E:HL using A/B values in HL' and DE'
               	;
-8A51:         	__PROExecute:
-8A51: 7B      		ld   a,e          ; switch to the correct page
-8A52: CDDC86  		call  PAGESwitch
-8A55: 015C8A  		ld   bc,__PROExecuteContinue    ; return to here.
-8A58: C5      		push  bc
-8A59: E5      		push  hl          ; call here.
-8A5A: D9      		exx           ; restore A/B from HL' DE'
-8A5B: C9      		ret           ; call the routine.
-8A5C:         	__PROExecuteContinue:
-8A5C: D9      		exx           ; save A/B back in HL' DE'
-8A5D: CDF586  		call  PAGERestore       ; back to the original page.
-8A60: C9      		ret
+8A7B:         	__PROExecuteEHL:
+8A7B: 7B      		ld   a,e          ; switch to the correct page
+8A7C: CDDC86  		call  PAGESwitch
+8A7F: 01868A  		ld   bc,__PROExecuteContinue    ; return to here.
+8A82: C5      		push  bc
+8A83: E5      		push  hl          ; call here.
+8A84: D9      		exx           ; restore A/B from HL' DE'
+8A85: C9      		ret           ; call the routine.
+8A86:         	__PROExecuteContinue:
+8A86: D9      		exx           ; save A/B back in HL' DE'
+8A87: CDF586  		call  PAGERestore       ; back to the original page.
+8A8A: C9      		ret
               		include "temp/register.asm"
               	; ***************************************************************************************
               	; ***************************************************************************************
@@ -2216,13 +2248,13 @@
               	
               	; ********* swap macro *********
               	
-8A61:         	define_73_77_61_70:
-8A61: CD5B8B  		call COMPMacroExpand
-8A64: 0601    		ld b,end_73_77_61_70-start_73_77_61_70
-8A66:         	start_73_77_61_70:
-8A66: EB      		ex   de,hl
-8A67:         	end_73_77_61_70:
-8A67: C9      		ret
+8A8B:         	define_73_77_61_70:
+8A8B: CD858B  		call COMPMacroExpand
+8A8E: 0601    		ld b,end_73_77_61_70-start_73_77_61_70
+8A90:         	start_73_77_61_70:
+8A90: EB      		ex   de,hl
+8A91:         	end_73_77_61_70:
+8A91: C9      		ret
               	
               	; ***************************************************************************************
               	
@@ -2230,28 +2262,28 @@
               	
               	; ********* a>b macro *********
               	
-8A68:         	define_61_3e_62:
-8A68: CD5B8B  		call COMPMacroExpand
-8A6B: 0602    		ld b,end_61_3e_62-start_61_3e_62
-8A6D:         	start_61_3e_62:
-8A6D: 54      		ld   d,h
-8A6E: 5D      		ld   e,l
-8A6F:         	end_61_3e_62:
-8A6F: C9      		ret
+8A92:         	define_61_3e_62:
+8A92: CD858B  		call COMPMacroExpand
+8A95: 0602    		ld b,end_61_3e_62-start_61_3e_62
+8A97:         	start_61_3e_62:
+8A97: 54      		ld   d,h
+8A98: 5D      		ld   e,l
+8A99:         	end_61_3e_62:
+8A99: C9      		ret
               	
               	
               	
               	
               	; ********* b>a macro *********
               	
-8A70:         	define_62_3e_61:
-8A70: CD5B8B  		call COMPMacroExpand
-8A73: 0602    		ld b,end_62_3e_61-start_62_3e_61
-8A75:         	start_62_3e_61:
-8A75: 62      		ld   h,d
-8A76: 6B      		ld   l,e
-8A77:         	end_62_3e_61:
-8A77: C9      		ret
+8A9A:         	define_62_3e_61:
+8A9A: CD858B  		call COMPMacroExpand
+8A9D: 0602    		ld b,end_62_3e_61-start_62_3e_61
+8A9F:         	start_62_3e_61:
+8A9F: 62      		ld   h,d
+8AA0: 6B      		ld   l,e
+8AA1:         	end_62_3e_61:
+8AA1: C9      		ret
               	
               		include "temp/stack.asm"
               	; ***************************************************************************************
@@ -2269,28 +2301,28 @@
               	
               	; ********* push macro *********
               	
-8A78:         	define_70_75_73_68:
-8A78: 00      		nop
-8A79: CD5B8B  		call COMPMacroExpand
-8A7C: 0601    		ld b,end_70_75_73_68-start_70_75_73_68
-8A7E:         	start_70_75_73_68:
-8A7E: E5      		push  hl
-8A7F:         	end_70_75_73_68:
-8A7F: C9      		ret
+8AA2:         	define_70_75_73_68:
+8AA2: 00      		nop
+8AA3: CD858B  		call COMPMacroExpand
+8AA6: 0601    		ld b,end_70_75_73_68-start_70_75_73_68
+8AA8:         	start_70_75_73_68:
+8AA8: E5      		push  hl
+8AA9:         	end_70_75_73_68:
+8AA9: C9      		ret
               	
               	
               	
               	; ********* pop macro *********
               	
-8A80:         	define_70_6f_70:
-8A80: 00      		nop
-8A81: CD5B8B  		call COMPMacroExpand
-8A84: 0602    		ld b,end_70_6f_70-start_70_6f_70
-8A86:         	start_70_6f_70:
-8A86: EB      		ex   de,hl
-8A87: E1      		pop  hl
-8A88:         	end_70_6f_70:
-8A88: C9      		ret
+8AAA:         	define_70_6f_70:
+8AAA: 00      		nop
+8AAB: CD858B  		call COMPMacroExpand
+8AAE: 0602    		ld b,end_70_6f_70-start_70_6f_70
+8AB0:         	start_70_6f_70:
+8AB0: EB      		ex   de,hl
+8AB1: E1      		pop  hl
+8AB2:         	end_70_6f_70:
+8AB2: C9      		ret
               	
               	; ***************************************************************************************
               	
@@ -2298,27 +2330,27 @@
               	
               	; ********* a>r macro *********
               	
-8A89:         	define_61_3e_72:
-8A89: 00      		nop
-8A8A: CD5B8B  		call COMPMacroExpand
-8A8D: 0601    		ld b,end_61_3e_72-start_61_3e_72
-8A8F:         	start_61_3e_72:
-8A8F: E5      		push  hl
-8A90:         	end_61_3e_72:
-8A90: C9      		ret
+8AB3:         	define_61_3e_72:
+8AB3: 00      		nop
+8AB4: CD858B  		call COMPMacroExpand
+8AB7: 0601    		ld b,end_61_3e_72-start_61_3e_72
+8AB9:         	start_61_3e_72:
+8AB9: E5      		push  hl
+8ABA:         	end_61_3e_72:
+8ABA: C9      		ret
               	
               	
               	
               	; ********* r>a macro *********
               	
-8A91:         	define_72_3e_61:
-8A91: 00      		nop
-8A92: CD5B8B  		call COMPMacroExpand
-8A95: 0601    		ld b,end_72_3e_61-start_72_3e_61
-8A97:         	start_72_3e_61:
-8A97: E1      		pop  hl
-8A98:         	end_72_3e_61:
-8A98: C9      		ret
+8ABB:         	define_72_3e_61:
+8ABB: 00      		nop
+8ABC: CD858B  		call COMPMacroExpand
+8ABF: 0601    		ld b,end_72_3e_61-start_72_3e_61
+8AC1:         	start_72_3e_61:
+8AC1: E1      		pop  hl
+8AC2:         	end_72_3e_61:
+8AC2: C9      		ret
               	
               	; ***************************************************************************************
               	
@@ -2326,27 +2358,27 @@
               	
               	; ********* b>r macro *********
               	
-8A99:         	define_62_3e_72:
-8A99: 00      		nop
-8A9A: CD5B8B  		call COMPMacroExpand
-8A9D: 0601    		ld b,end_62_3e_72-start_62_3e_72
-8A9F:         	start_62_3e_72:
-8A9F: D5      		push  de
-8AA0:         	end_62_3e_72:
-8AA0: C9      		ret
+8AC3:         	define_62_3e_72:
+8AC3: 00      		nop
+8AC4: CD858B  		call COMPMacroExpand
+8AC7: 0601    		ld b,end_62_3e_72-start_62_3e_72
+8AC9:         	start_62_3e_72:
+8AC9: D5      		push  de
+8ACA:         	end_62_3e_72:
+8ACA: C9      		ret
               	
               	
               	
               	; ********* r>b macro *********
               	
-8AA1:         	define_72_3e_62:
-8AA1: 00      		nop
-8AA2: CD5B8B  		call COMPMacroExpand
-8AA5: 0601    		ld b,end_72_3e_62-start_72_3e_62
-8AA7:         	start_72_3e_62:
-8AA7: D1      		pop  de
-8AA8:         	end_72_3e_62:
-8AA8: C9      		ret
+8ACB:         	define_72_3e_62:
+8ACB: 00      		nop
+8ACC: CD858B  		call COMPMacroExpand
+8ACF: 0601    		ld b,end_72_3e_62-start_72_3e_62
+8AD1:         	start_72_3e_62:
+8AD1: D1      		pop  de
+8AD2:         	end_72_3e_62:
+8AD2: C9      		ret
               	
               	; ***************************************************************************************
               	
@@ -2354,29 +2386,29 @@
               	
               	; ********* ab>r macro *********
               	
-8AA9:         	define_61_62_3e_72:
-8AA9: 00      		nop
-8AAA: CD5B8B  		call COMPMacroExpand
-8AAD: 0602    		ld b,end_61_62_3e_72-start_61_62_3e_72
-8AAF:         	start_61_62_3e_72:
-8AAF: D5      		push  de
-8AB0: E5      		push  hl
-8AB1:         	end_61_62_3e_72:
-8AB1: C9      		ret
+8AD3:         	define_61_62_3e_72:
+8AD3: 00      		nop
+8AD4: CD858B  		call COMPMacroExpand
+8AD7: 0602    		ld b,end_61_62_3e_72-start_61_62_3e_72
+8AD9:         	start_61_62_3e_72:
+8AD9: D5      		push  de
+8ADA: E5      		push  hl
+8ADB:         	end_61_62_3e_72:
+8ADB: C9      		ret
               	
               	
               	
               	; ********* r>ab macro *********
               	
-8AB2:         	define_72_3e_61_62:
-8AB2: 00      		nop
-8AB3: CD5B8B  		call COMPMacroExpand
-8AB6: 0602    		ld b,end_72_3e_61_62-start_72_3e_61_62
-8AB8:         	start_72_3e_61_62:
-8AB8: E1      		pop  hl
-8AB9: D1      		pop  de
-8ABA:         	end_72_3e_61_62:
-8ABA: C9      		ret
+8ADC:         	define_72_3e_61_62:
+8ADC: 00      		nop
+8ADD: CD858B  		call COMPMacroExpand
+8AE0: 0602    		ld b,end_72_3e_61_62-start_72_3e_61_62
+8AE2:         	start_72_3e_61_62:
+8AE2: E1      		pop  hl
+8AE3: D1      		pop  de
+8AE4:         	end_72_3e_61_62:
+8AE4: C9      		ret
               		include "temp/unary.asm"
               	; ***************************************************************************************
               	; ***************************************************************************************
@@ -2393,13 +2425,13 @@
               	
               	; ********* -- macro *********
               	
-8ABB:         	define_2d_2d:
-8ABB: CD5B8B  		call COMPMacroExpand
-8ABE: 0601    		ld b,end_2d_2d-start_2d_2d
-8AC0:         	start_2d_2d:
-8AC0: 2B      		dec  hl
-8AC1:         	end_2d_2d:
-8AC1: C9      		ret
+8AE5:         	define_2d_2d:
+8AE5: CD858B  		call COMPMacroExpand
+8AE8: 0601    		ld b,end_2d_2d-start_2d_2d
+8AEA:         	start_2d_2d:
+8AEA: 2B      		dec  hl
+8AEB:         	end_2d_2d:
+8AEB: C9      		ret
               	
               	; ***************************************************************************************
               	
@@ -2407,14 +2439,14 @@
               	
               	; ********* --- macro *********
               	
-8AC2:         	define_2d_2d_2d:
-8AC2: CD5B8B  		call COMPMacroExpand
-8AC5: 0602    		ld b,end_2d_2d_2d-start_2d_2d_2d
-8AC7:         	start_2d_2d_2d:
-8AC7: 2B      		dec  hl
-8AC8: 2B      		dec  hl
-8AC9:         	end_2d_2d_2d:
-8AC9: C9      		ret
+8AEC:         	define_2d_2d_2d:
+8AEC: CD858B  		call COMPMacroExpand
+8AEF: 0602    		ld b,end_2d_2d_2d-start_2d_2d_2d
+8AF1:         	start_2d_2d_2d:
+8AF1: 2B      		dec  hl
+8AF2: 2B      		dec  hl
+8AF3:         	end_2d_2d_2d:
+8AF3: C9      		ret
               	
               	; ***************************************************************************************
               	
@@ -2422,13 +2454,13 @@
               	
               	; ********* ++ macro *********
               	
-8ACA:         	define_2b_2b:
-8ACA: CD5B8B  		call COMPMacroExpand
-8ACD: 0601    		ld b,end_2b_2b-start_2b_2b
-8ACF:         	start_2b_2b:
-8ACF: 23      		inc  hl
-8AD0:         	end_2b_2b:
-8AD0: C9      		ret
+8AF4:         	define_2b_2b:
+8AF4: CD858B  		call COMPMacroExpand
+8AF7: 0601    		ld b,end_2b_2b-start_2b_2b
+8AF9:         	start_2b_2b:
+8AF9: 23      		inc  hl
+8AFA:         	end_2b_2b:
+8AFA: C9      		ret
               	
               	; ***************************************************************************************
               	
@@ -2436,14 +2468,14 @@
               	
               	; ********* +++ macro *********
               	
-8AD1:         	define_2b_2b_2b:
-8AD1: CD5B8B  		call COMPMacroExpand
-8AD4: 0602    		ld b,end_2b_2b_2b-start_2b_2b_2b
-8AD6:         	start_2b_2b_2b:
-8AD6: 23      		inc  hl
-8AD7: 23      		inc  hl
-8AD8:         	end_2b_2b_2b:
-8AD8: C9      		ret
+8AFB:         	define_2b_2b_2b:
+8AFB: CD858B  		call COMPMacroExpand
+8AFE: 0602    		ld b,end_2b_2b_2b-start_2b_2b_2b
+8B00:         	start_2b_2b_2b:
+8B00: 23      		inc  hl
+8B01: 23      		inc  hl
+8B02:         	end_2b_2b_2b:
+8B02: C9      		ret
               	
               	; ***************************************************************************************
               	
@@ -2451,17 +2483,17 @@
               	
               	; ********* 0- word *********
               	
-8AD9:         	define_30_2d:
-8AD9: CD508B  		call COMPCompileSelf
-8ADC:         	__negate:
-8ADC: 7C      		ld   a,h
-8ADD: 2F      		cpl
-8ADE: 67      		ld   h,a
-8ADF: 7D      		ld   a,l
-8AE0: 2F      		cpl
-8AE1: 6F      		ld   l,a
-8AE2: 23      		inc  hl
-8AE3: C9      		ret
+8B03:         	define_30_2d:
+8B03: CD7A8B  		call COMPCompileSelf
+8B06:         	__negate:
+8B06: 7C      		ld   a,h
+8B07: 2F      		cpl
+8B08: 67      		ld   h,a
+8B09: 7D      		ld   a,l
+8B0A: 2F      		cpl
+8B0B: 6F      		ld   l,a
+8B0C: 23      		inc  hl
+8B0D: C9      		ret
               	
               	; ***************************************************************************************
               	
@@ -2469,13 +2501,13 @@
               	
               	; ********* 0< word *********
               	
-8AE4:         	define_30_3c:
-8AE4: CD508B  		call COMPCompileSelf
-8AE7: CB7C    		bit  7,h
-8AE9: 210000  		ld   hl,$0000
-8AEC: C8      		ret  z
-8AED: 2B      		dec  hl
-8AEE: C9      		ret
+8B0E:         	define_30_3c:
+8B0E: CD7A8B  		call COMPCompileSelf
+8B11: CB7C    		bit  7,h
+8B13: 210000  		ld   hl,$0000
+8B16: C8      		ret  z
+8B17: 2B      		dec  hl
+8B18: C9      		ret
               	
               	; ***************************************************************************************
               	
@@ -2483,14 +2515,14 @@
               	
               	; ********* 0= word *********
               	
-8AEF:         	define_30_3d:
-8AEF: CD508B  		call COMPCompileSelf
-8AF2: 7C      		ld   a,h
-8AF3: B5      		or   l
-8AF4: 210000  		ld   hl,$0000
-8AF7: C0      		ret  nz
-8AF8: 2B      		dec  hl
-8AF9: C9      		ret
+8B19:         	define_30_3d:
+8B19: CD7A8B  		call COMPCompileSelf
+8B1C: 7C      		ld   a,h
+8B1D: B5      		or   l
+8B1E: 210000  		ld   hl,$0000
+8B21: C0      		ret  nz
+8B22: 2B      		dec  hl
+8B23: C9      		ret
               	
               	; ***************************************************************************************
               	
@@ -2498,55 +2530,55 @@
               	
               	; ********* 2* macro *********
               	
-8AFA:         	define_32_2a:
-8AFA: CD5B8B  		call COMPMacroExpand
-8AFD: 0601    		ld b,end_32_2a-start_32_2a
-8AFF:         	start_32_2a:
-8AFF: 29      		add  hl,hl
-8B00:         	end_32_2a:
-8B00: C9      		ret
+8B24:         	define_32_2a:
+8B24: CD858B  		call COMPMacroExpand
+8B27: 0601    		ld b,end_32_2a-start_32_2a
+8B29:         	start_32_2a:
+8B29: 29      		add  hl,hl
+8B2A:         	end_32_2a:
+8B2A: C9      		ret
               	
               	
               	
               	; ********* 4* macro *********
               	
-8B01:         	define_34_2a:
-8B01: CD5B8B  		call COMPMacroExpand
-8B04: 0602    		ld b,end_34_2a-start_34_2a
-8B06:         	start_34_2a:
-8B06: 29      		add  hl,hl
-8B07: 29      		add  hl,hl
-8B08:         	end_34_2a:
-8B08: C9      		ret
+8B2B:         	define_34_2a:
+8B2B: CD858B  		call COMPMacroExpand
+8B2E: 0602    		ld b,end_34_2a-start_34_2a
+8B30:         	start_34_2a:
+8B30: 29      		add  hl,hl
+8B31: 29      		add  hl,hl
+8B32:         	end_34_2a:
+8B32: C9      		ret
               	
               	
               	
               	; ********* 8* macro *********
               	
-8B09:         	define_38_2a:
-8B09: CD5B8B  		call COMPMacroExpand
-8B0C: 0603    		ld b,end_38_2a-start_38_2a
-8B0E:         	start_38_2a:
-8B0E: 29      		add  hl,hl
-8B0F: 29      		add  hl,hl
-8B10: 29      		add  hl,hl
-8B11:         	end_38_2a:
-8B11: C9      		ret
+8B33:         	define_38_2a:
+8B33: CD858B  		call COMPMacroExpand
+8B36: 0603    		ld b,end_38_2a-start_38_2a
+8B38:         	start_38_2a:
+8B38: 29      		add  hl,hl
+8B39: 29      		add  hl,hl
+8B3A: 29      		add  hl,hl
+8B3B:         	end_38_2a:
+8B3B: C9      		ret
               	
               	
               	
               	; ********* 16* macro *********
               	
-8B12:         	define_31_36_2a:
-8B12: CD5B8B  		call COMPMacroExpand
-8B15: 0604    		ld b,end_31_36_2a-start_31_36_2a
-8B17:         	start_31_36_2a:
-8B17: 29      		add  hl,hl
-8B18: 29      		add  hl,hl
-8B19: 29      		add  hl,hl
-8B1A: 29      		add  hl,hl
-8B1B:         	end_31_36_2a:
-8B1B: C9      		ret
+8B3C:         	define_31_36_2a:
+8B3C: CD858B  		call COMPMacroExpand
+8B3F: 0604    		ld b,end_31_36_2a-start_31_36_2a
+8B41:         	start_31_36_2a:
+8B41: 29      		add  hl,hl
+8B42: 29      		add  hl,hl
+8B43: 29      		add  hl,hl
+8B44: 29      		add  hl,hl
+8B45:         	end_31_36_2a:
+8B45: C9      		ret
               	
               	; ***************************************************************************************
               	
@@ -2554,29 +2586,29 @@
               	
               	; ********* 2/ macro *********
               	
-8B1C:         	define_32_2f:
-8B1C: CD5B8B  		call COMPMacroExpand
-8B1F: 0604    		ld b,end_32_2f-start_32_2f
-8B21:         	start_32_2f:
-8B21: CB2C    		sra  h
-8B23: CB1D    		rr   l
-8B25:         	end_32_2f:
-8B25: C9      		ret
+8B46:         	define_32_2f:
+8B46: CD858B  		call COMPMacroExpand
+8B49: 0604    		ld b,end_32_2f-start_32_2f
+8B4B:         	start_32_2f:
+8B4B: CB2C    		sra  h
+8B4D: CB1D    		rr   l
+8B4F:         	end_32_2f:
+8B4F: C9      		ret
               	
               	
               	
               	; ********* 4/ macro *********
               	
-8B26:         	define_34_2f:
-8B26: CD5B8B  		call COMPMacroExpand
-8B29: 0608    		ld b,end_34_2f-start_34_2f
-8B2B:         	start_34_2f:
-8B2B: CB2C    		sra  h
-8B2D: CB1D    		rr   l
-8B2F: CB2C    		sra  h
-8B31: CB1D    		rr   l
-8B33:         	end_34_2f:
-8B33: C9      		ret
+8B50:         	define_34_2f:
+8B50: CD858B  		call COMPMacroExpand
+8B53: 0608    		ld b,end_34_2f-start_34_2f
+8B55:         	start_34_2f:
+8B55: CB2C    		sra  h
+8B57: CB1D    		rr   l
+8B59: CB2C    		sra  h
+8B5B: CB1D    		rr   l
+8B5D:         	end_34_2f:
+8B5D: C9      		ret
               	
               	; ***************************************************************************************
               	
@@ -2584,11 +2616,11 @@
               	
               	; ********* abs word *********
               	
-8B34:         	define_61_62_73:
-8B34: CD508B  		call COMPCompileSelf
-8B37: CB7C    		bit  7,h
-8B39: C8      		ret  z
-8B3A: C3DC8A  		jp   __negate
+8B5E:         	define_61_62_73:
+8B5E: CD7A8B  		call COMPCompileSelf
+8B61: CB7C    		bit  7,h
+8B63: C8      		ret  z
+8B64: C3068B  		jp   __negate
               	
               	; ***************************************************************************************
               	
@@ -2596,15 +2628,15 @@
               	
               	; ********* bswap macro *********
               	
-8B3D:         	define_62_73_77_61_70:
-8B3D: CD5B8B  		call COMPMacroExpand
-8B40: 0603    		ld b,end_62_73_77_61_70-start_62_73_77_61_70
-8B42:         	start_62_73_77_61_70:
-8B42: 7D      		ld   a,l
-8B43: 6C      		ld   l,h
-8B44: 67      		ld   h,a
-8B45:         	end_62_73_77_61_70:
-8B45: C9      		ret
+8B67:         	define_62_73_77_61_70:
+8B67: CD858B  		call COMPMacroExpand
+8B6A: 0603    		ld b,end_62_73_77_61_70-start_62_73_77_61_70
+8B6C:         	start_62_73_77_61_70:
+8B6C: 7D      		ld   a,l
+8B6D: 6C      		ld   l,h
+8B6E: 67      		ld   h,a
+8B6F:         	end_62_73_77_61_70:
+8B6F: C9      		ret
               	
               	; ***************************************************************************************
               	
@@ -2612,15 +2644,15 @@
               	
               	; ********* not word *********
               	
-8B46:         	define_6e_6f_74:
-8B46: CD508B  		call COMPCompileSelf
-8B49: 7C      		ld   a,h
-8B4A: 2F      		cpl
-8B4B: 67      		ld   h,a
-8B4C: 7D      		ld   a,l
-8B4D: 2F      		cpl
-8B4E: 6F      		ld   l,a
-8B4F: C9      		ret
+8B70:         	define_6e_6f_74:
+8B70: CD7A8B  		call COMPCompileSelf
+8B73: 7C      		ld   a,h
+8B74: 2F      		cpl
+8B75: 67      		ld   h,a
+8B76: 7D      		ld   a,l
+8B77: 2F      		cpl
+8B78: 6F      		ld   l,a
+8B79: C9      		ret
               		include "temp/wordaction.asm"
               	; ***************************************************************************************
               	; ***************************************************************************************
@@ -2639,13 +2671,13 @@
               	;
               	; ***************************************************************************************
               	
-8B50:         	COMPCompileSelf:
-8B50: E3      		ex   (sp),hl        ; HL is the address, old HL on top of stack
-8B51: 3ECD    		ld  a,$CD         ; call opcode
-8B53: CD7D86  		call  FARCompileByte       ; compile that
-8B56: CD9586  		call  FARCompileWord       ; compile the address
-8B59: E1      		pop  hl          ; restore old HL
-8B5A: C9      		ret
+8B7A:         	COMPCompileSelf:
+8B7A: E3      		ex   (sp),hl        ; HL is the address, old HL on top of stack
+8B7B: 3ECD    		ld  a,$CD         ; call opcode
+8B7D: CD7D86  		call  FARCompileByte       ; compile that
+8B80: CD9586  		call  FARCompileWord       ; compile the address
+8B83: E1      		pop  hl          ; restore old HL
+8B84: C9      		ret
               	
               	; ***************************************************************************************
               	;
@@ -2653,17 +2685,17 @@
               	;
               	; ***************************************************************************************
               	
-8B5B:         	COMPMacroExpand:
-8B5B: E3      		ex   (sp),hl        ; HL is the address, old HL on top of stack
-8B5C: 23      		inc  hl          ; skip over the LD B,xx opcode
-8B5D: 46      		ld   b,(hl)         ; read count
-8B5E:         	__COMPMExLoop:
-8B5E: 23      		inc  hl          ; get next byte to copy
-8B5F: 7E      		ld   a,(hl)
-8B60: CD7D86  		call  FARCompileByte       ; compile that
-8B63: 10F9    		djnz  __COMPMExLoop      ; do it B times.
-8B65: E1      		pop  hl          ; restore old HL
-8B66: C9      		ret
+8B85:         	COMPMacroExpand:
+8B85: E3      		ex   (sp),hl        ; HL is the address, old HL on top of stack
+8B86: 23      		inc  hl          ; skip over the LD B,xx opcode
+8B87: 46      		ld   b,(hl)         ; read count
+8B88:         	__COMPMExLoop:
+8B88: 23      		inc  hl          ; get next byte to copy
+8B89: 7E      		ld   a,(hl)
+8B8A: CD7D86  		call  FARCompileByte       ; compile that
+8B8D: 10F9    		djnz  __COMPMExLoop      ; do it B times.
+8B8F: E1      		pop  hl          ; restore old HL
+8B90: C9      		ret
               	
               	
               	
@@ -2685,22 +2717,22 @@
               	;
               	; ***************************************************************************************
               	
-8B67:         	SystemInformation:
+8B91:         	SystemInformation:
               	
-8B67:         	Here:												; +0 	Here 
-8B67: A18B    			dw 		FreeMemory
-8B69:         	HerePage: 											; +2	Here.Page
-8B69: 2A00    			db 		FirstCodePage,0
-8B6B:         	NextFreePage: 										; +4 	Next available code page (2 8k pages/page)
-8B6B: 2C000000			db 		FirstCodePage+2,0,0,0
-8B6F:         	DisplayInfo: 										; +8 	Display information
-8B6F: 7B8B0000			dw 		DisplayInformation,0		
-8B73:         	BootAddress:										; +12 	Boot Address
-8B73: 2D80    			dw 		BootDefault
-8B75:         	BootPage:											; +14 	Boot Page
-8B75: 2A00    			db 		FirstCodePage,0
-8B77:         	Parameter:	 										; +16 	3rd Parameter
-8B77: 00000000			dw 		0,0		
+8B91:         	Here:												; +0 	Here 
+8B91: CB8B    			dw 		FreeMemory
+8B93:         	HerePage: 											; +2	Here.Page
+8B93: 2A00    			db 		FirstCodePage,0
+8B95:         	NextFreePage: 										; +4 	Next available code page (2 8k pages/page)
+8B95: 2C000000			db 		FirstCodePage+2,0,0,0
+8B99:         	DisplayInfo: 										; +8 	Display information
+8B99: A58B0000			dw 		DisplayInformation,0		
+8B9D:         	BootAddress:										; +12 	Boot Address
+8B9D: 2D80    			dw 		BootDefault
+8B9F:         	BootPage:											; +14 	Boot Page
+8B9F: 2A00    			db 		FirstCodePage,0
+8BA1:         	Parameter:	 										; +16 	3rd Parameter
+8BA1: 00000000			dw 		0,0		
               	
               	; ***************************************************************************************
               	;
@@ -2708,20 +2740,20 @@
               	;
               	; ***************************************************************************************
               	
-8B7B:         	DisplayInformation:
+8BA5:         	DisplayInformation:
               	
-8B7B:         	SIScreenWidth: 										; +0 	screen width
-8B7B: 00000000			db 		0,0,0,0	
-8B7F:         	SIScreenHeight:										; +4 	screen height
-8B7F: 00000000			db 		0,0,0,0
-8B83:         	SIScreenSize:										; +8 	char size of screen
-8B83: 00000000			dw 		0,0		
-8B87:         	SIScreenMode:										; +12 	current mode
-8B87: 00000000			db 		0,0,0,0
-8B8B:         	SIFontBase:											; font in use
-8B8B: 0B82    			dw 		AlternateFont
-8B8D:         	SIScreenDriver:										; Screen Driver
-8B8D: 0000    			dw 		0	
+8BA5:         	SIScreenWidth: 										; +0 	screen width
+8BA5: 00000000			db 		0,0,0,0	
+8BA9:         	SIScreenHeight:										; +4 	screen height
+8BA9: 00000000			db 		0,0,0,0
+8BAD:         	SIScreenSize:										; +8 	char size of screen
+8BAD: 00000000			dw 		0,0		
+8BB1:         	SIScreenMode:										; +12 	current mode
+8BB1: 00000000			db 		0,0,0,0
+8BB5:         	SIFontBase:											; font in use
+8BB5: 0B82    			dw 		AlternateFont
+8BB7:         	SIScreenDriver:										; Screen Driver
+8BB7: 0000    			dw 		0	
               	
               	; ***************************************************************************************
               	;
@@ -2729,18 +2761,18 @@
               	;
               	; ***************************************************************************************
               	
-8B8F:         	__PAGEStackPointer: 								; stack used for switching pages
-8B8F: 0000    			dw 		0
-8B91:         	__PAGEStackBase:
-8B91: FFFFFFFF			ds 		16
-8B95: FF...   	
+8BB9:         	__PAGEStackPointer: 								; stack used for switching pages
+8BB9: 0000    			dw 		0
+8BBB:         	__PAGEStackBase:
+8BBB: FFFFFFFF			ds 		16
+8BBF: FF...   	
               	
               	
               	
-8BA1:         	FreeMemory:											; free memory in $8000-$BFFF page.
+8BCB:         	FreeMemory:											; free memory in $8000-$BFFF page.
               	
-8BA1: FFFFFFFF			org 	$C000
-8BA5: FF...   	
+8BCB: FFFFFFFF			org 	$C000
+8BCF: FF...   	
               			include "temp/__dictionary.asm" 			; dictionary.
 C000: 06      		db 1+5
 C001: 20      		db $20
@@ -2768,13 +2800,13 @@ C017: 2B21    		db "+!"
               	
 C019: 07      		db 2+5
 C01A: 20      		db $20
-C01B: CA8A    		dw define_2b_2b
+C01B: F48A    		dw define_2b_2b
 C01D: 02      		db 2
 C01E: 2B2B    		db "++"
               	
 C020: 08      		db 3+5
 C021: 20      		db $20
-C022: D18A    		dw define_2b_2b_2b
+C022: FB8A    		dw define_2b_2b_2b
 C024: 03      		db 3
 C025: 2B2B2B  		db "+++"
               	
@@ -2792,13 +2824,13 @@ C033: 2D      		db "-"
               	
 C034: 07      		db 2+5
 C035: 20      		db $20
-C036: BB8A    		dw define_2d_2d
+C036: E58A    		dw define_2d_2d
 C038: 02      		db 2
 C039: 2D2D    		db "--"
               	
 C03B: 08      		db 3+5
 C03C: 20      		db $20
-C03D: C28A    		dw define_2d_2d_2d
+C03D: EC8A    		dw define_2d_2d_2d
 C03F: 03      		db 3
 C040: 2D2D2D  		db "---"
               	
@@ -2810,55 +2842,55 @@ C048: 2F      		db "/"
               	
 C049: 07      		db 2+5
 C04A: 20      		db $20
-C04B: D98A    		dw define_30_2d
+C04B: 038B    		dw define_30_2d
 C04D: 02      		db 2
 C04E: 302D    		db "0-"
               	
 C050: 07      		db 2+5
 C051: 20      		db $20
-C052: E48A    		dw define_30_3c
+C052: 0E8B    		dw define_30_3c
 C054: 02      		db 2
 C055: 303C    		db "0<"
               	
 C057: 07      		db 2+5
 C058: 20      		db $20
-C059: EF8A    		dw define_30_3d
+C059: 198B    		dw define_30_3d
 C05B: 02      		db 2
 C05C: 303D    		db "0="
               	
 C05E: 08      		db 3+5
 C05F: 20      		db $20
-C060: 128B    		dw define_31_36_2a
+C060: 3C8B    		dw define_31_36_2a
 C062: 03      		db 3
 C063: 31362A  		db "16*"
               	
 C066: 07      		db 2+5
 C067: 20      		db $20
-C068: FA8A    		dw define_32_2a
+C068: 248B    		dw define_32_2a
 C06A: 02      		db 2
 C06B: 322A    		db "2*"
               	
 C06D: 07      		db 2+5
 C06E: 20      		db $20
-C06F: 1C8B    		dw define_32_2f
+C06F: 468B    		dw define_32_2f
 C071: 02      		db 2
 C072: 322F    		db "2/"
               	
 C074: 07      		db 2+5
 C075: 20      		db $20
-C076: 018B    		dw define_34_2a
+C076: 2B8B    		dw define_34_2a
 C078: 02      		db 2
 C079: 342A    		db "4*"
               	
 C07B: 07      		db 2+5
 C07C: 20      		db $20
-C07D: 268B    		dw define_34_2f
+C07D: 508B    		dw define_34_2f
 C07F: 02      		db 2
 C080: 342F    		db "4/"
               	
 C082: 07      		db 2+5
 C083: 20      		db $20
-C084: 098B    		dw define_38_2a
+C084: 338B    		dw define_38_2a
 C086: 02      		db 2
 C087: 382A    		db "8*"
               	
@@ -2888,25 +2920,25 @@ C0A0: 40      		db "@"
               	
 C0A1: 08      		db 3+5
 C0A2: 20      		db $20
-C0A3: 688A    		dw define_61_3e_62
+C0A3: 928A    		dw define_61_3e_62
 C0A5: 03      		db 3
 C0A6: 613E62  		db "a>b"
               	
 C0A9: 08      		db 3+5
 C0AA: 20      		db $20
-C0AB: 898A    		dw define_61_3e_72
+C0AB: B38A    		dw define_61_3e_72
 C0AD: 03      		db 3
 C0AE: 613E72  		db "a>r"
               	
 C0B1: 09      		db 4+5
 C0B2: 20      		db $20
-C0B3: A98A    		dw define_61_62_3e_72
+C0B3: D38A    		dw define_61_62_3e_72
 C0B5: 04      		db 4
 C0B6: 61623E72		db "ab>r"
               	
 C0BA: 08      		db 3+5
 C0BB: 20      		db $20
-C0BC: 348B    		dw define_61_62_73
+C0BC: 5E8B    		dw define_61_62_73
 C0BE: 03      		db 3
 C0BF: 616273  		db "abs"
               	
@@ -2918,13 +2950,13 @@ C0C7: 616E64  		db "and"
               	
 C0CA: 08      		db 3+5
 C0CB: 20      		db $20
-C0CC: 708A    		dw define_62_3e_61
+C0CC: 9A8A    		dw define_62_3e_61
 C0CE: 03      		db 3
 C0CF: 623E61  		db "b>a"
               	
 C0D2: 08      		db 3+5
 C0D3: 20      		db $20
-C0D4: 998A    		dw define_62_3e_72
+C0D4: C38A    		dw define_62_3e_72
 C0D6: 03      		db 3
 C0D7: 623E72  		db "b>r"
               	
@@ -2937,7 +2969,7 @@ C0E3: 6B
               	
 C0E4: 0A      		db 5+5
 C0E5: 20      		db $20
-C0E6: 3D8B    		dw define_62_73_77_61_70
+C0E6: 678B    		dw define_62_73_77_61_70
 C0E8: 05      		db 5
 C0E9: 62737761		db "bswap"
 C0ED: 70      	
@@ -3036,7 +3068,7 @@ C189: 6D6F64  		db "mod"
               	
 C18C: 08      		db 3+5
 C18D: 20      		db $20
-C18E: 468B    		dw define_6e_6f_74
+C18E: 708B    		dw define_6e_6f_74
 C190: 03      		db 3
 C191: 6E6F74  		db "not"
               	
@@ -3067,37 +3099,37 @@ C1B2: 6D21
               	
 C1B4: 08      		db 3+5
 C1B5: 20      		db $20
-C1B6: 808A    		dw define_70_6f_70
+C1B6: AA8A    		dw define_70_6f_70
 C1B8: 03      		db 3
 C1B9: 706F70  		db "pop"
               	
 C1BC: 09      		db 4+5
 C1BD: 20      		db $20
-C1BE: 788A    		dw define_70_75_73_68
+C1BE: A28A    		dw define_70_75_73_68
 C1C0: 04      		db 4
 C1C1: 70757368		db "push"
               	
 C1C5: 08      		db 3+5
 C1C6: 20      		db $20
-C1C7: 918A    		dw define_72_3e_61
+C1C7: BB8A    		dw define_72_3e_61
 C1C9: 03      		db 3
 C1CA: 723E61  		db "r>a"
               	
 C1CD: 09      		db 4+5
 C1CE: 20      		db $20
-C1CF: B28A    		dw define_72_3e_61_62
+C1CF: DC8A    		dw define_72_3e_61_62
 C1D1: 04      		db 4
 C1D2: 723E6162		db "r>ab"
               	
 C1D6: 08      		db 3+5
 C1D7: 20      		db $20
-C1D8: A18A    		dw define_72_3e_62
+C1D8: CB8A    		dw define_72_3e_62
 C1DA: 03      		db 3
 C1DB: 723E62  		db "r>b"
               	
 C1DE: 09      		db 4+5
 C1DF: 20      		db $20
-C1E0: 618A    		dw define_73_77_61_70
+C1E0: 8B8A    		dw define_73_77_61_70
 C1E2: 04      		db 4
 C1E3: 73776170		db "swap"
               	
@@ -3119,19 +3151,19 @@ C1EF: 00      		db 0
 
 AlternateFont         = $820B = 33291          font.asm:1
 Boot                  = $8006 = 32774          kernel.asm:32
-BootAddress           = $8B73 = 35699          data.asm:28
+BootAddress           = $8B9D = 35741          data.asm:28
 BootDefault           = $802D = 32813          kernel.asm:50
-BootPage              = $8B75 = 35701          data.asm:30
-COMPCompileSelf       = $8B50 = 35664          wordaction.asm:18
-COMPMacroExpand       = $8B5B = 35675          wordaction.asm:32
+BootPage              = $8B9F = 35743          data.asm:30
+COMPCompileSelf       = $8B7A = 35706          wordaction.asm:18
+COMPMacroExpand       = $8B85 = 35717          wordaction.asm:32
 CONSTEvaluate         = $8797 = 34711          const.asm:18
 DICTAddWord           = $87D7 = 34775          dictionary.asm:19
 DICTCrunchDictionary  = $888C = 34956          dictionary.asm:170 (unused)
 DICTFindWord          = $882B = 34859          dictionary.asm:90
 DIVDivideMod16        = $8652 = 34386          divide.asm:18
 DictionaryPage        = $0020 =    32          kernel.asm:16
-DisplayInfo           = $8B6F = 35695          data.asm:26 (unused)
-DisplayInformation    = $8B7B = 35707          data.asm:41
+DisplayInfo           = $8B99 = 35737          data.asm:26 (unused)
+DisplayInformation    = $8BA5 = 35749          data.asm:41
 Div16_Loop1           = $865C = 34396          divide.asm:27
 Div16_Loop2           = $866D = 34413          divide.asm:41
 Div16_NoAdd1          = $8664 = 34404          divide.asm:33
@@ -3142,7 +3174,7 @@ FARCompileByte        = $867D = 34429          farmemory.asm:18
 FARCompileWord        = $8695 = 34453          farmemory.asm:40
 FirstCodePage         = $002A =    42          kernel.asm:20
 FirstSourcePage       = $0022 =    34          kernel.asm:17
-FreeMemory            = $8BA1 = 35745          kernel.asm:62
+FreeMemory            = $8BCB = 35787          kernel.asm:62
 GFXInitialise48k      = $8037 = 32823          screen48k.asm:19
 GFXInitialiseLayer2   = $80AF = 32943          screen_layer2.asm:19
 GFXInitialiseLowRes   = $8166 = 33126          screen_lores.asm:18
@@ -3153,8 +3185,8 @@ GFXPrintCharacterLowRes = $8190 = 33168          screen_lores.asm:50
 GFXWriteCharacter     = $8540 = 34112          graphics.asm:64
 GFXWriteHexWord       = $8553 = 34131          graphics.asm:87
 GFXWriteHexWordA      = $8555 = 34133          graphics.asm:89 (unused)
-Here                  = $8B67 = 35687          data.asm:20
-HerePage              = $8B69 = 35689          data.asm:22
+Here                  = $8B91 = 35729          data.asm:20
+HerePage              = $8B93 = 35731          data.asm:22
 IOScanKeyboard        = $8585 = 34181          keyboard.asm:19
 L2PClear              = $80B8 = 32952          screen_layer2.asm:26
 L2PClearBank          = $80C7 = 32967          screen_layer2.asm:34
@@ -3163,23 +3195,23 @@ LOADLoadPages         = $88CC = 35020          loader.asm:25
 LOADProcessPage       = $88E9 = 35049          loader.asm:50
 LowClearScreen        = $8179 = 33145          screen_lores.asm:30
 MULTMultiply16        = $86B0 = 34480          multiply.asm:18
-NextFreePage          = $8B6B = 35691          data.asm:24 (unused)
+NextFreePage          = $8B95 = 35733          data.asm:24 (unused)
 PAGEInitialise        = $86CA = 34506          paging.asm:18
 PAGERestore           = $86F5 = 34549          paging.asm:64
 PAGESwitch            = $86DC = 34524          paging.asm:36
 PROProcessTaggedWord  = $8A09 = 35337          process.asm:18
-Parameter             = $8B77 = 35703          data.asm:32
-SIFontBase            = $8B8B = 35723          data.asm:51
-SIScreenDriver        = $8B8D = 35725          data.asm:53
-SIScreenHeight        = $8B7F = 35711          data.asm:45
-SIScreenMode          = $8B87 = 35719          data.asm:49
-SIScreenSize          = $8B83 = 35715          data.asm:47
-SIScreenWidth         = $8B7B = 35707          data.asm:43
+Parameter             = $8BA1 = 35745          data.asm:32
+SIFontBase            = $8BB5 = 35765          data.asm:51
+SIScreenDriver        = $8BB7 = 35767          data.asm:53
+SIScreenHeight        = $8BA9 = 35753          data.asm:45
+SIScreenMode          = $8BB1 = 35761          data.asm:49
+SIScreenSize          = $8BAD = 35757          data.asm:47
+SIScreenWidth         = $8BA5 = 35749          data.asm:43
 SourcePageCount       = $0004 =     4          kernel.asm:18
 StackTop              = $7EFC = 32508          kernel.asm:25
 StopDefault           = $8033 = 32819          kernel.asm:54
-SystemInformation     = $8B67 = 35687          data.asm:18
-__COMPMExLoop         = $8B5E = 35678          wordaction.asm:36
+SystemInformation     = $8B91 = 35729          data.asm:18
+__COMPMExLoop         = $8B88 = 35720          wordaction.asm:36
 __CONSTCheckDigit     = $87B1 = 34737          const.asm:41
 __CONSTExit           = $87D2 = 34770          const.asm:71
 __CONSTFail           = $87D1 = 34769          const.asm:69
@@ -3225,14 +3257,16 @@ __LowNotLower2        = $81E5 = 33253          screen_lores.asm:119
 __LowNotReverse       = $81B2 = 33202          screen_lores.asm:79
 __LowNotSet           = $81F6 = 33270          screen_lores.asm:132
 __LowOuter            = $81E7 = 33255          screen_lores.asm:121
-__PAGEStackBase       = $8B91 = 35729          data.asm:64
-__PAGEStackPointer    = $8B8F = 35727          data.asm:62
-__PROCError           = $8A4F = 35407          process.asm:71
-__PROComTryConstant   = $8A37 = 35383          process.asm:55
-__PROCompilation      = $8A29 = 35369          process.asm:44
-__PRODefinition       = $8A15 = 35349          process.asm:29
-__PROExecute          = $8A51 = 35409          process.asm:76
-__PROExecuteContinue  = $8A5C = 35420          process.asm:84
+__PAGEStackBase       = $8BBB = 35771          data.asm:64
+__PAGEStackPointer    = $8BB9 = 35769          data.asm:62
+__PROCError           = $8A79 = 35449          process.asm:103
+__PROComTryConstant   = $8A3B = 35387          process.asm:57
+__PROCompilation      = $8A2D = 35373          process.asm:46
+__PRODefinition       = $8A19 = 35353          process.asm:31
+__PROExeTryConstant   = $8A6F = 35439          process.asm:92
+__PROExecuteContinue  = $8A86 = 35462          process.asm:116
+__PROExecuteEHL       = $8A7B = 35451          process.asm:108
+__PROExecution        = $8A51 = 35409          process.asm:72
 __ZXWCCopy            = $80A3 = 32931          screen48k.asm:115
 __ZXWCExit            = $80AA = 32938          screen48k.asm:122
 ___kr4                = $85B6 = 34230          keyboard.asm:50
@@ -3252,42 +3286,42 @@ __kr_shift_table      = $8602 = 34306          keyboard.asm:101
 __kr_symbol_shift_table = $862A = 34346          keyboard.asm:107
 __less_returnc        = $871C = 34588          binary.asm:32
 __less_samesign       = $8717 = 34583          binary.asm:27
-__negate              = $8ADC = 35548          unary.asm:76
+__negate              = $8B06 = 35590          unary.asm:76
 _end                  = $C1F0 = 49648          kernel.asm:26 (unused)
 _size                 = $41F0 = 16880          kernel.asm:26 (unused)
 define_21             = $895C = 35164          memory.asm:16
 define_2a             = $873C = 34620          binary.asm:79
 define_2b             = $874C = 34636          binary.asm:103
 define_2b_21          = $8970 = 35184          memory.asm:50
-define_2b_2b          = $8ACA = 35530          unary.asm:45
-define_2b_2b_2b       = $8AD1 = 35537          unary.asm:59
+define_2b_2b          = $8AF4 = 35572          unary.asm:45
+define_2b_2b_2b       = $8AFB = 35579          unary.asm:59
 define_2c             = $89A0 = 35232          miscellany.asm:16
 define_2d             = $8732 = 34610          binary.asm:64
-define_2d_2d          = $8ABB = 35515          unary.asm:16
-define_2d_2d_2d       = $8AC2 = 35522          unary.asm:30
+define_2d_2d          = $8AE5 = 35557          unary.asm:16
+define_2d_2d_2d       = $8AEC = 35564          unary.asm:30
 define_2f             = $8742 = 34626          binary.asm:89
-define_30_2d          = $8AD9 = 35545          unary.asm:74
-define_30_3c          = $8AE4 = 35556          unary.asm:92
-define_30_3d          = $8AEF = 35567          unary.asm:106
-define_31_36_2a       = $8B12 = 35602          unary.asm:160
-define_32_2a          = $8AFA = 35578          unary.asm:121
-define_32_2f          = $8B1C = 35612          unary.asm:177
-define_34_2a          = $8B01 = 35585          unary.asm:133
-define_34_2f          = $8B26 = 35622          unary.asm:190
-define_38_2a          = $8B09 = 35593          unary.asm:146
+define_30_2d          = $8B03 = 35587          unary.asm:74
+define_30_3c          = $8B0E = 35598          unary.asm:92
+define_30_3d          = $8B19 = 35609          unary.asm:106
+define_31_36_2a       = $8B3C = 35644          unary.asm:160
+define_32_2a          = $8B24 = 35620          unary.asm:121
+define_32_2f          = $8B46 = 35654          unary.asm:177
+define_34_2a          = $8B2B = 35627          unary.asm:133
+define_34_2f          = $8B50 = 35664          unary.asm:190
+define_38_2a          = $8B33 = 35635          unary.asm:146
 define_3b             = $89A7 = 35239          miscellany.asm:27
 define_3c             = $870B = 34571          binary.asm:18
 define_3d             = $8723 = 34595          binary.asm:45
 define_40             = $8966 = 35174          memory.asm:33
-define_61_3e_62       = $8A68 = 35432          register.asm:30
-define_61_3e_72       = $8A89 = 35465          stack.asm:45
-define_61_62_3e_72    = $8AA9 = 35497          stack.asm:101
-define_61_62_73       = $8B34 = 35636          unary.asm:207
+define_61_3e_62       = $8A92 = 35474          register.asm:30
+define_61_3e_72       = $8AB3 = 35507          stack.asm:45
+define_61_62_3e_72    = $8AD3 = 35539          stack.asm:101
+define_61_62_73       = $8B5E = 35678          unary.asm:207
 define_61_6e_64       = $8753 = 34643          binary.asm:117
-define_62_3e_61       = $8A70 = 35440          register.asm:44
-define_62_3e_72       = $8A99 = 35481          stack.asm:73
+define_62_3e_61       = $8A9A = 35482          register.asm:44
+define_62_3e_72       = $8AC3 = 35523          stack.asm:73
 define_62_72_65_61_6b = $8A00 = 35328          miscellany.asm:145
-define_62_73_77_61_70 = $8B3D = 35645          unary.asm:219
+define_62_73_77_61_70 = $8B67 = 35687          unary.asm:219
 define_63_21          = $897C = 35196          memory.asm:68
 define_63_2c          = $89AF = 35247          miscellany.asm:42
 define_63_40          = $8983 = 35203          memory.asm:82
@@ -3301,79 +3335,79 @@ define_66_69_6c_6c    = $89E1 = 35297          miscellany.asm:104
 define_68_61_6c_74    = $89F8 = 35320          miscellany.asm:131
 define_6c_6f_61_64_66_72_6f_6d = $88C9 = 35017          loader.asm:22
 define_6d_6f_64       = $875D = 34653          binary.asm:133
-define_6e_6f_74       = $8B46 = 35654          unary.asm:235
+define_6e_6f_74       = $8B70 = 35696          unary.asm:235
 define_6f_72          = $8766 = 34662          binary.asm:146
 define_70_21          = $8996 = 35222          memory.asm:111
 define_70_40          = $898C = 35212          memory.asm:97
 define_70_61_72_61_6d_21 = $89B7 = 35255          miscellany.asm:54
-define_70_6f_70       = $8A80 = 35456          stack.asm:29
-define_70_75_73_68    = $8A78 = 35448          stack.asm:16
-define_72_3e_61       = $8A91 = 35473          stack.asm:58
-define_72_3e_61_62    = $8AB2 = 35506          stack.asm:115
-define_72_3e_62       = $8AA1 = 35489          stack.asm:86
-define_73_77_61_70    = $8A61 = 35425          register.asm:16
+define_70_6f_70       = $8AAA = 35498          stack.asm:29
+define_70_75_73_68    = $8AA2 = 35490          stack.asm:16
+define_72_3e_61       = $8ABB = 35515          stack.asm:58
+define_72_3e_61_62    = $8ADC = 35548          stack.asm:115
+define_72_3e_62       = $8ACB = 35531          stack.asm:86
+define_73_77_61_70    = $8A8B = 35467          register.asm:16
 define_78_6f_72       = $8770 = 34672          binary.asm:162
 end_21                = $8965 = 35173          memory.asm:24
 end_2b                = $8752 = 34642          binary.asm:108
-end_2b_2b             = $8AD0 = 35536          unary.asm:50
-end_2b_2b_2b          = $8AD8 = 35544          unary.asm:65
-end_2d_2d             = $8AC1 = 35521          unary.asm:21
-end_2d_2d_2d          = $8AC9 = 35529          unary.asm:36
-end_31_36_2a          = $8B1B = 35611          unary.asm:168
-end_32_2a             = $8B00 = 35584          unary.asm:126
-end_32_2f             = $8B25 = 35621          unary.asm:183
-end_34_2a             = $8B08 = 35592          unary.asm:139
-end_34_2f             = $8B33 = 35635          unary.asm:198
-end_38_2a             = $8B11 = 35601          unary.asm:153
+end_2b_2b             = $8AFA = 35578          unary.asm:50
+end_2b_2b_2b          = $8B02 = 35586          unary.asm:65
+end_2d_2d             = $8AEB = 35563          unary.asm:21
+end_2d_2d_2d          = $8AF3 = 35571          unary.asm:36
+end_31_36_2a          = $8B45 = 35653          unary.asm:168
+end_32_2a             = $8B2A = 35626          unary.asm:126
+end_32_2f             = $8B4F = 35663          unary.asm:183
+end_34_2a             = $8B32 = 35634          unary.asm:139
+end_34_2f             = $8B5D = 35677          unary.asm:198
+end_38_2a             = $8B3B = 35643          unary.asm:153
 end_3b                = $89AE = 35246          miscellany.asm:33
 end_40                = $896F = 35183          memory.asm:41
-end_61_3e_62          = $8A6F = 35439          register.asm:36
-end_61_3e_72          = $8A90 = 35472          stack.asm:51
-end_61_62_3e_72       = $8AB1 = 35505          stack.asm:108
-end_62_3e_61          = $8A77 = 35447          register.asm:50
-end_62_3e_72          = $8AA0 = 35488          stack.asm:79
+end_61_3e_62          = $8A99 = 35481          register.asm:36
+end_61_3e_72          = $8ABA = 35514          stack.asm:51
+end_61_62_3e_72       = $8ADB = 35547          stack.asm:108
+end_62_3e_61          = $8AA1 = 35489          register.asm:50
+end_62_3e_72          = $8ACA = 35530          stack.asm:79
 end_62_72_65_61_6b    = $8A08 = 35336          miscellany.asm:151
-end_62_73_77_61_70    = $8B45 = 35653          unary.asm:226
+end_62_73_77_61_70    = $8B6F = 35695          unary.asm:226
 end_63_21             = $8982 = 35202          memory.asm:73
 end_63_40             = $898B = 35211          memory.asm:88
 end_70_21             = $899F = 35231          memory.asm:118
-end_70_6f_70          = $8A88 = 35464          stack.asm:36
-end_70_75_73_68       = $8A7F = 35455          stack.asm:22
-end_72_3e_61          = $8A98 = 35480          stack.asm:64
-end_72_3e_61_62       = $8ABA = 35514          stack.asm:122
-end_72_3e_62          = $8AA8 = 35496          stack.asm:92
-end_73_77_61_70       = $8A67 = 35431          register.asm:21
+end_70_6f_70          = $8AB2 = 35506          stack.asm:36
+end_70_75_73_68       = $8AA9 = 35497          stack.asm:22
+end_72_3e_61          = $8AC2 = 35522          stack.asm:64
+end_72_3e_61_62       = $8AE4 = 35556          stack.asm:122
+end_72_3e_62          = $8AD2 = 35538          stack.asm:92
+end_73_77_61_70       = $8A91 = 35473          register.asm:21
 start_21              = $8961 = 35169          memory.asm:19
 start_2b              = $8751 = 34641          binary.asm:106
-start_2b_2b           = $8ACF = 35535          unary.asm:48
-start_2b_2b_2b        = $8AD6 = 35542          unary.asm:62
-start_2d_2d           = $8AC0 = 35520          unary.asm:19
-start_2d_2d_2d        = $8AC7 = 35527          unary.asm:33
-start_31_36_2a        = $8B17 = 35607          unary.asm:163
-start_32_2a           = $8AFF = 35583          unary.asm:124
-start_32_2f           = $8B21 = 35617          unary.asm:180
-start_34_2a           = $8B06 = 35590          unary.asm:136
-start_34_2f           = $8B2B = 35627          unary.asm:193
-start_38_2a           = $8B0E = 35598          unary.asm:149
+start_2b_2b           = $8AF9 = 35577          unary.asm:48
+start_2b_2b_2b        = $8B00 = 35584          unary.asm:62
+start_2d_2d           = $8AEA = 35562          unary.asm:19
+start_2d_2d_2d        = $8AF1 = 35569          unary.asm:33
+start_31_36_2a        = $8B41 = 35649          unary.asm:163
+start_32_2a           = $8B29 = 35625          unary.asm:124
+start_32_2f           = $8B4B = 35659          unary.asm:180
+start_34_2a           = $8B30 = 35632          unary.asm:136
+start_34_2f           = $8B55 = 35669          unary.asm:193
+start_38_2a           = $8B38 = 35640          unary.asm:149
 start_3b              = $89AD = 35245          miscellany.asm:31
 start_40              = $896B = 35179          memory.asm:36
-start_61_3e_62        = $8A6D = 35437          register.asm:33
-start_61_3e_72        = $8A8F = 35471          stack.asm:49
-start_61_62_3e_72     = $8AAF = 35503          stack.asm:105
-start_62_3e_61        = $8A75 = 35445          register.asm:47
-start_62_3e_72        = $8A9F = 35487          stack.asm:77
+start_61_3e_62        = $8A97 = 35479          register.asm:33
+start_61_3e_72        = $8AB9 = 35513          stack.asm:49
+start_61_62_3e_72     = $8AD9 = 35545          stack.asm:105
+start_62_3e_61        = $8A9F = 35487          register.asm:47
+start_62_3e_72        = $8AC9 = 35529          stack.asm:77
 start_62_72_65_61_6b  = $8A06 = 35334          miscellany.asm:149
-start_62_73_77_61_70  = $8B42 = 35650          unary.asm:222
+start_62_73_77_61_70  = $8B6C = 35692          unary.asm:222
 start_63_21           = $8981 = 35201          memory.asm:71
 start_63_40           = $8988 = 35208          memory.asm:85
 start_70_21           = $899B = 35227          memory.asm:114
-start_70_6f_70        = $8A86 = 35462          stack.asm:33
-start_70_75_73_68     = $8A7E = 35454          stack.asm:20
-start_72_3e_61        = $8A97 = 35479          stack.asm:62
-start_72_3e_61_62     = $8AB8 = 35512          stack.asm:119
-start_72_3e_62        = $8AA7 = 35495          stack.asm:90
-start_73_77_61_70     = $8A66 = 35430          register.asm:19
+start_70_6f_70        = $8AB0 = 35504          stack.asm:33
+start_70_75_73_68     = $8AA8 = 35496          stack.asm:20
+start_72_3e_61        = $8AC1 = 35521          stack.asm:62
+start_72_3e_61_62     = $8AE2 = 35554          stack.asm:119
+start_72_3e_62        = $8AD1 = 35537          stack.asm:90
+start_73_77_61_70     = $8A90 = 35472          register.asm:19
 
 
-total time: 0.0111 sec.
+total time: 0.0110 sec.
 no errors

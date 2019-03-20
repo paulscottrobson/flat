@@ -18,9 +18,11 @@
 PROProcessTaggedWord:
 		ld 		a,(ix+0)							; Check type
 		and 	$C0 								; strip off length leaving tag
-		jr 		z,__PRODefinition 					; $00 is a RED definition
-		cp 		$40 								; $40 is a GREEN compilation
+		jr 		z,__PRODefinition 					; $00 is RED definition
+		cp 		$40 								; $40 is GREEN compilation
 		jr 		z,__PROCompilation
+		cp 		$80 								; $80 is YELLOW execution
+		jr 		z,__PROExecution
 		ret
 ;
 ;		Handle a RED word (definition), by adding a dictionary reference and a self-compile
@@ -38,7 +40,7 @@ __PRODefinition:
 		pop 	hl		
 		ret 
 ;
-;		Handle a Green word, by calling it if it exists to self compile, otherwise try as a 
+;		Handle a GREEN word, by calling it if it exists to self compile, otherwise try as a 
 ;		constant, compiling load constant code.
 ;
 __PROCompilation:
@@ -48,12 +50,11 @@ __PROCompilation:
 		call 	DICTFindWord 						; look it up.
 		jr 		c,__PROComTryConstant 				; not found, try as a constant.
 ;
-		call 	__PROExecute 						; Execute E:HL with the a values in the alternate register
+		call 	__PROExecuteEHL 					; Execute E:HL with the a values in the alternate register
 		exx 										; restore the AB values
 		ret
 ;
 __PROComTryConstant:		
-		db 		$DD,$01
 		call 	CONSTEvaluate 						; evaluate as a constant.
 		jr 		c,__PROCError						; not evaluatable as a constant.
 		ld 		a,$EB 								; compile EX DE,HL
@@ -66,6 +67,37 @@ __PROComTryConstant:
 		exx 										; get AB back
 		ret
 ;
+;		Handle a YELLOW word, executing it directly.
+;
+__PROExecution:
+		db 		$DD,$01
+		exx 										; temporarily put AB in alternate registers.
+		push 	ix 									; put the word address in BC
+		pop 	bc
+		call 	DICTFindWord 						; look it up.
+		jr 		c,__PROExeTryConstant 				; not found, try as a constant.
+		ld 		a,e 								; switch to page
+		call 	PAGESwitch
+		ld 		a,(hl) 								; read first byte and switch back.
+		call 	PAGERestore
+		or 		a 									; if it is zero, (NOP) you cannot execute this.
+		jr 		z,__PROCError 						; because it is verboten :)
+		inc 	hl 									; skip over the compile-caller to the actual code.
+		inc 	hl
+		inc 	hl
+		call 	__PROExecuteEHL 					; and execute that.
+		exx  										; restore A/B and exit.
+		ret
+;
+__PROExeTryConstant:
+		call 	CONSTEvaluate 						; evaluate as a constant.
+		jr 		c,__PROCError						; not evaluatable as a constant.
+		push 	bc 									; save result
+		exx 										; get A B back
+		ex 		de,hl 								; put A into B
+		pop 	hl 									; copy new value into A
+		ret 	
+;
 ;		Error
 ;
 __PROCError: 										; can't process word.
@@ -73,7 +105,7 @@ __PROCError: 										; can't process word.
 ;
 ;		Execute E:HL using A/B values in HL' and DE'
 ;
-__PROExecute:
+__PROExecuteEHL:
 		ld 		a,e  								; switch to the correct page
 		call 	PAGESwitch
 		ld 		bc,__PROExecuteContinue 			; return to here.
