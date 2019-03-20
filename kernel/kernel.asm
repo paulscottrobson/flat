@@ -32,8 +32,6 @@ StackTop = $7EFC 									;      -$7EFC Top of stack
 Boot:	ld 		sp,StackTop							; reset Z80 Stack
 		di											; disable interrupts
 	
-		db 		$DD,$01
-
 		db 		$ED,$91,7,2							; set turbo port (7) to 2 (14Mhz speed)
 		ld 		a,FirstCodePage 					; get the page to start
 		call 	PAGEInitialise
@@ -48,6 +46,10 @@ Boot:	ld 		sp,StackTop							; reset Z80 Stack
 		ld 		de,0
 		ld 		(Parameter),hl 						; clear parameter
 		jp 		(ix) 								; and execute.
+
+BootDefault:
+		ld 		hl,$0000 							; start from page 0
+		call 	LOADLoadPages 						; load pages till we stop.
 
 StopDefault:	
 		jp 		StopDefault

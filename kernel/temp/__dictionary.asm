@@ -262,6 +262,12 @@
 	db 4
 	db "halt"
 
+	db 8+5
+	db $20
+	dw define_6c_6f_61_64_66_72_6f_6d
+	db 8
+	db "loadfrom"
+
 	db 3+5
 	db $20
 	dw define_6d_6f_64
