@@ -1,7 +1,8 @@
 TODO
-	Runtime Library
-	Core library ; variables !! @@ && structures min max
-	Libraries etc. adding functionality as needed.
+	Runtime Library Port complete.
+	Crunching dictionary.
+	Comment Console
+	Better keyboard handler
 	Warm Start
 	Proper Error message for compiler/interpreter.
 		

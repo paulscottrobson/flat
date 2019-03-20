@@ -1,215 +1,110 @@
-// ***************************************************************************************************************
-// ***************************************************************************************************************
-//
-//		Name : 		standard.flat
-//		Author :	Paul Robson (paul@robsons.org.uk)
-//		Date : 		20th March 2019
-//		Purpose :	Standard word support set for Flat Colour Forth.
-//
-// ***************************************************************************************************************
-// ***************************************************************************************************************
 
-// *****************************************************************************************************
-//
-//								Get address of system.info area from $8004
-//
-// *****************************************************************************************************
+:__con.colour 	variable 									// Writing colour in high byte.
+:__con.pos 		variable 									// Screen position
+:__con.base 	variable 									// Integer display base.
 
-:system.info a>r 32772 @ r>b ;
+:con.colour ab>r 7 and bswap __con.colour !! r>ab ;
 
-// *****************************************************************************************************
-//
-//											Address of here
-//
-// *****************************************************************************************************
-:h system.info ; 		
+:con.blue ab>r 1 con.colour r>ab  ;
+:con.red ab>r  2 con.colour r>ab  ;
+:con.magenta ab>r  3 con.colour r>ab  ;
+:con.green ab>r  4 con.colour r>ab  ;
+:con.cyan ab>r  5 con.colour r>ab  ;
+:con.yellow ab>r  6 con.colour r>ab  ;
+:con.white ab>r 7 con.colour r>ab ;
 
-// *****************************************************************************************************
-//
-//									Here value, current address of program
-//
-// *****************************************************************************************************
+:con.home ab>r 0 __con.pos !! r>ab ;
 
-:here h @ ;
-
-// *****************************************************************************************************
-//
-//	 Make a word "compiles". This means when compiled it executes rather than compiling a call to itself
-//
-// *****************************************************************************************************
-
-:compiles
-	[here] [3] [-] [h] [!]										// hack makes this compiles
-	here 3 - h !												// what the word does.
+:con.clear 
+	ab>r
+		display.info 12 + @ con.raw.setmode
+		con.white 0 con.home 
+	r>ab
 ;
 
-// *****************************************************************************************************
-//
-//			Compiles code to get the code address of the preceeding word as a constant.
-//
-// *****************************************************************************************************
-
-:get.address 
-	compiles 													// executed compilesly.
-	here 3 - h !  												// unpick the code.
-	here ++ @ a>r												// address of the routine.
-	235 c, 33 c, r>a ,
+:con.emit.raw
+	255 and __con.colour @@ + __con.pos @@ con.raw.char! 
+	1 __con.pos +!	
+	display.info 8 + @ 64- + __con.pos @@ = if con.clear then 
 ;
 
-// *****************************************************************************************************
-//
-//			Code that is executed for variable <name> <variable> produces ex de,hl ; ld hl,xxxx
-//
-// *****************************************************************************************************
-
-:__variable.compile 
-	235 c, 														// compile ex de,hl
-	33 c, r>a , 												// compile ld hl,<address at tos>
+:con.cr
+	ab>r 
+	begin 
+		32 con.emit.raw 
+		display.info @ -- __con.pos @@ and 0=
+	until
+	r>ab
 ;
 
-// *****************************************************************************************************
-//
-//								Converts a word definition into a variable
-//
-// *****************************************************************************************************
-
-:variable 
-	compiles 													// executed compilesly.
-	here 3 - h ! 												// makes the current word compiles.
-	0 c, 														// word is not executable.
-	205 c, __variable.compile get.address , 					// code to call variable-compile executable.
-	0 , 														// Storage.
+:__con.emit
+	128 and if ; then
+	swap 13 = if con.cr ; then
+	swap 32 < if ; then	
+	swap con.emit.raw
 ;
 
-// *****************************************************************************************************
-//					
-//									Optimisers for variable read/write
-//
-// *****************************************************************************************************
+:con.emit ab>r __con.emit r>ab ;
 
-:@@ 
-	compiles 													// operates compilesly
-	here a>r  													// get here and save on stack
-	3 - h ! 42 c, 												// convert to ex de,hl ; ld hl,(xxxx)
-	r>a h ! 													// fix here back.
+:con.space ab>r 32 con.emit r>ab ;
+:con.spaces ab>r if for con.space next then r>ab ;
+
+:_con.print.string
+	swap
+	begin
+		b>a c@ 0= if ; then
+		b>a c@ con.emit
+		swap ++ swap
+	again
 ;
 
-:!! 
-	compiles 													// operates compilesly
-	here a>r  													// get here and save on stack
-	4 - h ! 0 c, 34 c, 											// convert to nop ; ld (xxxx),hl
-	r>a h ! 													// fix here back.
+:con.print.string ab>r _con.print.string r>ab ;
+
+:__con.digit	
+	10 < 0= if swap 39 + swap then swap 48 + con.emit 
 ;
 
-// *****************************************************************************************************
-//
-//										If/-If/Then words
-//
-// *****************************************************************************************************
+:__con.rec.print 
+	ab>r __con.base @@ / if __con.rec.print then r>ab __con.base @@ mod __con.digit ;
 
-:_if.branch variable
+:__con.print -if - __con.rec.print 45 con.emit ; then  __con.rec.print ;
 
-:if 
-	compiles
-	124 c, 181 c, 												// Compiles LD A,H ; OR L
-	202 c, 														// JZ xxxx
-	here _if.branch !! 											// save the branch address.
-	0 , 														// dummy branch.
+:con.print.hex
+	ab>r a>r 16 __con.base !! r>a __con.print r>ab ;
+:con.print.dec
+	ab>r a>r 10 __con.base !! r>a __con.print r>ab ;
+:con.print.bin
+	ab>r a>r 2 __con.base !! r>a __con.print r>ab ;
+
+
+:__con.print.nibble 15 and __con.digit ;
+
+:con.print.byte ab>r a>r 2/ 2/ 2/ 2/ __con.print.nibble r>a __con.print.nibble r>ab ;
+
+:con.print.word bswap con.print.byte bswap con.print.byte ;
+
+:_con.keyboard.state variable
+
+:_con.get.change
+	begin con.raw.inkey _con.keyboard.state @@ = 0= until swap _con.keyboard.state !! ;
+:con.get
+	begin _con.get.change until ;
+
+:test
+	con.clear con.cyan
+	42 con.emit con.emit
+	13 con.emit con.green
+	43 con.emit
+	con.cr
+	44 con.emit 10 con.spaces 45 con.emit con.cr
+	32766 con.yellow
+	con.print.hex con.cr
+	con.print.dec con.cr
+	con.print.bin con.cr
+	con.print.word con.cr
+	con.print.byte con.cr
+	con.get 
+	con.print.byte
 ;
 
-:-if 
-	compiles
-	203 c, 124 c, 												// Compiles BIT 7,H
-	202 c, 														// JZ xxxx
-	here _if.branch !! 											// save the branch address.
-	0 , 														// dummy branch.
-;
-
-:then 
-	compiles
-	here a>r 													// save current here 
-	_if.branch @@ h ! r>a , 									// set position to branch address, compile here as address
-	h ! 	 													// restore here
-;
-
-// *****************************************************************************************************
-//
-//									    Begin/Until/-Until/Again words
-//
-// *****************************************************************************************************
-
-:_begin.loop variable
-
-:begin 
-	compiles
-	here _begin.loop !! 										// save current posiion
-;
-
-:again 
-	compiles
-	195 c, _begin.loop @@ , 									// compile jump back
-;
-
-:until 
-	compiles
-	124 c, 181 c, 												// Compiles LD A,H ; OR L
-	202 c, _begin.loop @@ , 									// JZ <back>
-
-;
-
-:-until 
-	compiles
-	203 c, 124 c, 												// Compiles BIT 7,H
-	202 c, _begin.loop @@ , 									// JZ <back>
-
-;
-
-// *****************************************************************************************************
-//
-//											For/Next/I words
-//
-// *****************************************************************************************************
-
-:_for.address variable 
-
-:for 
-	compiles
-	here _for.address !! 										// Save loop address
-	43 c, 229 c, 												// DEC HL, PUSH HL
-;
-
-:next 
-	compiles
-	225 c, 														// POP HL
-	124 c, 181 c, 												// Compiles LD A,H ; OR L
-	194 c, _for.address @@ , 									// JNZ <back>
-;
-
-:i  
-	compiles
-	235 c, 225 c, 229 c, 										// EX DE,HL ; POP HL ; PUSH HL
-;
-
-// *****************************************************************************************************
-//
-//												Min/Max words
-//
-// *****************************************************************************************************
-
-:min ab>r < if r>ab b>a ; then r>ab ;
-:max ab>r < if r>ab ; then r>ab b>a ;
-
-
-:test2
-	2- 2 max 0 con.raw.hex! 
-	2 2- max 32 con.raw.hex! 
-	2 4 max 64 con.raw.hex! 
-	12 4 max 128 con.raw.hex! 
-	2- 4- max 160 con.raw.hex! 
-	12- 4- max 192 con.raw.hex!
-;
-
-[test2]
-
-
-
+[test]
