@@ -24,6 +24,9 @@ LOADLoadPages:
 		push 	ix
 		call 	LOADGetPageAndAddress 				; convert to page and address
 
+		ld 		hl,$AA01
+		ld 		de,$BB02
+		
 __LOADPageLoop:
 		call 	LOADProcessPage 					; process Page A from IX to End.
 		ld 		ix,$C000 							; reset IX to start of next buffer
@@ -66,8 +69,8 @@ __LOADPDoLoop:
 		cp 		$80 								; end ?
 		jr 		z,__LOADPDoExit 					; then exit
 
-		db 		$DD,$01
-
+		call 	PROProcessTaggedWord 				; do - something with it.
+		
 		ld 		a,(ix+0)							; get length into BC
 		and 	$3F
 		ld 		c,a
