@@ -23,7 +23,7 @@
 
 @word 	c,	lock
 		ld 		a,l
-		jp 		FARCompileWord
+		jp 		FARCompileByte
 @end
 
 ; ***************************************************************************************

@@ -43,7 +43,7 @@ define_63_2c:
 	nop
 	call COMPCompileSelf
 	ld   a,l
-	jp   FARCompileWord
+	jp   FARCompileByte
 
 ; ***************************************************************************************
 

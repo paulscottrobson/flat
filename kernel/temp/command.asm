@@ -63,6 +63,7 @@ __CLIPrompt:           ; write prompt / message / etc.
 	inc  bc
 	inc  hl
 	jr   __CLIPrompt
+
 __CLIPromptExit:
 	ld   hl,(__ARegister)      ; load A/B in
 	ld   de,(__BRegister)      ; update that part of the display.

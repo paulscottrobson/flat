@@ -116,6 +116,15 @@ __PROExecuteContinue:
 ;
 __PROCError: 										; can't process word.
 		push 	ix
+		ld 		a,(ix+0)
+		and 	$3F
+		ld 		c,a
+		ld 		b,0
+		add 	ix,bc
+		ld 		(ix+1),' '
+		ld 		(ix+2),'?'
+		ld 		(ix+3),'?'
+		ld 		(ix+4),$80
 		pop 	hl
 		inc 	hl
 		jp 		ErrorHandler
