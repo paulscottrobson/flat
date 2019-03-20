@@ -244,6 +244,12 @@
 	db 4
 	db "copy"
 
+	db 5+5
+	db $20
+	dw define_64_65_62_75_67
+	db 5
+	db "debug"
+
 	db 11+5
 	db $20
 	dw define_64_69_63_74_2e_63_72_75_6e_63_68
@@ -339,6 +345,12 @@
 	dw define_73_77_61_70
 	db 4
 	db "swap"
+
+	db 4+5
+	db $20
+	dw define_77_61_72_6d
+	db 4
+	db "warm"
 
 	db 3+5
 	db $20

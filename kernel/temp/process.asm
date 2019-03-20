@@ -70,7 +70,6 @@ __PROComTryConstant:
 ;  Handle a YELLOW word, executing it directly.
 ;
 __PROExecution:
-	db   $DD,$01
 	exx           ; temporarily put AB in alternate registers.
 	push  ix          ; put the word address in BC
 	pop  bc
@@ -98,11 +97,6 @@ __PROExeTryConstant:
 	pop  hl          ; copy new value into A
 	ret
 ;
-;  Error
-;
-__PROCError:           ; can't process word.
-	jr   __PROCError
-;
 ;  Execute E:HL using A/B values in HL' and DE'
 ;
 __PROExecuteEHL:
@@ -117,3 +111,11 @@ __PROExecuteContinue:
 	exx           ; save A/B back in HL' DE'
 	call  PAGERestore       ; back to the original page.
 	ret
+;
+;  Error
+;
+__PROCError:           ; can't process word.
+	push  ix
+	pop  hl
+	inc  hl
+	jp   ErrorHandler

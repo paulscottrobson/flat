@@ -112,8 +112,8 @@ define_70_21:
 	call COMPMacroExpand
 	ld b,end_70_21-start_70_21
 start_70_21:
-	ld   b,d
-	ld   c,e
-	out  (c),l
+	ld   b,h
+	ld   c,l
+	out  (c),e
 end_70_21:
 	ret

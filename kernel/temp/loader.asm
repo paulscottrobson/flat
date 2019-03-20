@@ -38,7 +38,7 @@ __LOADPageLoop:
 	add  a,2         ; go to next 16k page pair.
 	cp   FirstSourcePage+SourcePageCount  ; reached the end.
 	jr   nz,__LOADPageLoop      ; go back.
-	jp   StopDefault       ; end (will be warmstart !)
+	jp   CommandLineStart
 
 
 ; ***************************************************************************************
