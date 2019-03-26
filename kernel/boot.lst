@@ -1,6 +1,6 @@
               	; --------------------------------------
               	; zasm: assemble "kernel.asm"
-              	; date: 2019-03-25 21:23:39
+              	; date: 2019-03-20 22:54:24
               	; --------------------------------------
 
 
@@ -3714,5 +3714,5 @@ start_72_3e_62        = $8C3B = 35899          stack.asm:90
 start_73_77_61_70     = $8BFA = 35834          register.asm:19
 
 
-total time: 0.0098 sec.
+total time: 0.0122 sec.
 no errors
