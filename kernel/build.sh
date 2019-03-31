@@ -13,4 +13,4 @@ popd
 #		Build the source files
 #
 python3 ../scripts/processcore.py
-../bin/zasm -buw kernel.asm -l boot.lst -o boot.img
+zasm -buw kernel.asm -l boot.lst -o boot.img
