@@ -1,4 +1,4 @@
-﻿#CSpect V2.3.2 ZXSpectrum emulator by Mike Dailly
+﻿#CSpect V2.3.3 ZXSpectrum emulator by Mike Dailly
 (c)1998-2018 All rights reserved
 
 Be aware...emulator is far from well tested, might crash for any reason!
@@ -39,6 +39,17 @@ Command Line Options
 
 Whats new
 ======================================================================================
+V2.3.3
+------
+Fixed 512 tile mode. ULA Disabled bit has moved to Reg 0x68, bit 7.
+Border can now be transparent and will use the fallback colour.
+NEX format file expanded. Default 16k RAM bank at  $C000 now set.
+NEX format file can now set the file handle on request.
+Added more window scaling options (-w1 to -w10 now available).
+Updated 512 tile mode to use NextReg $6B (bits 0 and 1) properly.
+core version now set to 28 (2.0.28)
+Layer2 demo cleaned up a little - removed old macros
+
 V2.3.2
 ------
 Screen size changed to 320x256 to allow for full tilemap+sprites display (640x512 actual)
@@ -46,11 +57,13 @@ Fixed Tiles under ULA screen when in border area (now also under border). Same a
 Added 2 player Joysticks (first pass)
 Added MegaDrive joysticks (first pass)
 
+
 V2.3.1
 ------
 Sprite over border clipping fixed
 Sprite over border *2 on coords fixed
 Fixed a rasterline reading issue when read at the bottom of the screen.
+
 
 V2.3.0
 ------
@@ -58,9 +71,11 @@ F_FSTAT($A1) and F_STAT($AC) now implemented again
 -fullscreen added to start in fullscreen mode
 Fixed loading of NEX files that have pre-set tiles
 
+
 V2.2.3
 ------
 Minor update for tilemap indexing
+
 
 V2.2.3
 ------
